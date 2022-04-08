@@ -57,9 +57,9 @@ t_GREATER_THAN      = r'>'
 t_LESS_THAN         = r'<'
 t_EQUAL_TO          = r'=='
 t_NOT_EQUAL_TO      = r'!='
-t_BOOL_VALUE        = r'(true)|(false)'
 t_DOT               = r'\.'
 t_AT_CLASS          = r'@class'
+t_COLON             = r':'
 
 # Reserved words
 reserved = {
@@ -93,19 +93,25 @@ tokens += list(reserved.values())
 t_ignore  = ' \t\n'
 
 # ID check for reserved words
+def t_BOOL_VALUE(t):
+    r'true|false'
+    t.type = reserved.get(t.value, 'BOOL_VALUE')
+    return t
+    
+
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
     t.type = reserved.get(t.value,'ID')    # Check for reserved words
     return t
 
-def t_INT_VALUE(t):
-    r'[0-9]+'
-    t.type = reserved.get(t.value, 'INT_VALUE')
-    return t
-
 def t_FLOAT_VALUE(t):
     r'[0-9]+\.[0-9]+'
     t.type = reserved.get(t.value, 'FLOAT_VALUE')
+    return t
+
+def t_INT_VALUE(t):
+    r'[0-9]+'
+    t.type = reserved.get(t.value, 'INT_VALUE')
     return t
 
 def t_STRING_VALUE(t):
@@ -120,5 +126,3 @@ def t_error(t):
     
 # Build the lexer
 lexer = lex.lex()
-
-
