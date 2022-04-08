@@ -1,0 +1,17 @@
+program hello_pecan_py;
+
+var int a;
+var float b;
+var string my_string;
+var bool is_seattle;
+
+group arr = float[10];
+
+obj person = Persona();
+obj person = Persona(3 * i, 10 + 1.0, nombre);
+
+main() {
+    write("Hello, Pecan Py!");
+    obj student =  Student("A00824758");
+    student.estudiar(3);
+}

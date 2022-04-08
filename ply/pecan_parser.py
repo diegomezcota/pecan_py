@@ -1,9 +1,10 @@
 from ast import Pass
 import ply.yacc as yacc
+from lexer import tokens
 
 def p_program(p):
     '''
-    program : PROGRAM ID SEMICOLON program1 MAIN OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_KEY program2 CLOSE_KEY
+    program : PROGRAM ID SEMICOLON program1 MAIN OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY
     '''
     pass
 
@@ -120,11 +121,9 @@ def p_variable_declaration(p):
 
 def p_variable_declaration1(p):
     '''
-    variable_declaration1   : parameter
+    variable_declaration1   : hyper_exp_loop
                             | epsilon
-
     '''
-    pass
 
 def p_statement(p):
     '''
@@ -207,6 +206,8 @@ def p_factor(p):
     factor  : function_call
             | FLOAT_VALUE
             | INT_VALUE
+            | BOOL_VALUE
+            | STRING_VALUE
             | variable
             | OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS
     '''
@@ -223,7 +224,7 @@ def p_data_type(p):
 
 def p_class_function_declaration(p):
     '''
-    class_fnction_declaration : FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg SEMICOLON
+    class_function_declaration : FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg SEMICOLON
     '''
     pass
 
@@ -237,6 +238,7 @@ def p_return_arg(p):
 def p_parameter(p):
     '''
     parameter   : data_type ID parameter1
+                | epsilon
     '''
     pass
 
@@ -327,14 +329,14 @@ def p_function_call1(p):
 
 def p_class_function(p):
     '''
-    class_function  : FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS AT_CLASS ID RETURNS return_arg OPEN_KEY statement_loop function_return CLOSE_KEY
+    class_function  : FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS AT_CLASS ID RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
 
     '''
     pass
 
 def p_function_declaration(p):
     '''
-    function_declaration    : FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY statement_loop function_return CLOSE_KEY
+    function_declaration    : FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
     '''
     pass
 
@@ -344,7 +346,23 @@ def p_function_return(p):
                     | epsilon
     '''
     pass
+
+def p_function_statement_loop(p):
+    '''
+    function_statement_loop  : statement_loop
+                    | epsilon
+    '''
+    pass
     
 def p_epsilon(p):
     '''epsilon :'''
     pass
+
+class SyntaxError(Exception):
+    pass
+
+def p_error(p):
+    print('syntax error', p)
+    raise SyntaxError
+
+parser = yacc.yacc()

@@ -1,0 +1,14 @@
+class Student is Person {
+    var string nombre;
+    function saludar(string saludo) returns string;
+    function estudiar() returns void;
+};
+
+constructor Student(string matricula) {
+    nombre = "Diego";
+    read(apellido, calificacion);
+}
+
+function estudiar() @class Student returns void {
+    return 3;
+}
