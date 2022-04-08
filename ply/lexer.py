@@ -84,7 +84,8 @@ reserved = {
     'for' : 'FOR',
     'in' : 'IN',
     'while' : 'WHILE',
-    'return' : 'RETURN'
+    'return' : 'RETURN',
+    'obj' : 'OBJ'
 }
 
 tokens += list(reserved.values())
