@@ -316,13 +316,20 @@ def p_hyper_exp_loop1(p):
 
 def p_function_call(p):
     '''
-    function_call   : ID function_call1 OPEN_PARENTHESIS hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
+    function_call   : ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     '''
     pass
 
 def p_function_call1(p):
     '''
     function_call1  : DOT ID
+                    | epsilon
+    '''
+    pass
+
+def p_function_call2(p):
+    '''
+    function_call2  : hyper_exp_loop
                     | epsilon
     '''
     pass

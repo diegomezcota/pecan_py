@@ -13,5 +13,5 @@ obj person = Persona(3 * i, 10 + 1.0, nombre);
 main() {
     write("Hello, Pecan Py!");
     obj student =  Student("A00824758");
-    student.estudiar(3);
+    student.estudiar();
 }
