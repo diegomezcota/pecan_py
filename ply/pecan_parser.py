@@ -4,14 +4,15 @@ from lexer import tokens
 
 def p_program(p):
     '''
-    program : PROGRAM ID SEMICOLON program1 MAIN OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY
+    program : PROGRAM ID SEMICOLON declaration_loop MAIN OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY
     '''
     pass
 
-def p_program1(p):
+
+def p_declaration_loop(p):
     '''
-    program1    : declaration statement_loop
-                | epsilon
+    declaration_loop : declaration declaration_loop
+                     | epsilon
     '''
     pass
 

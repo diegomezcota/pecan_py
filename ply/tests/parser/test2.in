@@ -10,6 +10,22 @@ group arr = float[10];
 obj person = Persona();
 obj person = Persona(3 * i, 10 + 1.0, nombre);
 
+class Student is Person {
+    var string nombre;
+    function saludar(string saludo) returns string;
+    function estudiar() returns void;
+};
+
+constructor Student(string matricula) {
+    nombre = "Diego";
+    read(apellido, calificacion);
+}
+
+function estudiar() @class Student returns void {
+    return 3;
+}
+
+
 main() {
     write("Hello, Pecan Py!");
     obj student =  Student("A00824758");
