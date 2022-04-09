@@ -1,3 +1,4 @@
+// Test 2: probando declaraciones (variables, clases, funciones)
 program hello_pecan_py;
 
 var int a;
@@ -21,10 +22,13 @@ constructor Student(string matricula) {
     read(apellido, calificacion);
 }
 
-function estudiar() @class Student returns void {
+@class Student function estudiar() returns void {
     return 3;
 }
 
+function create() returns string {
+    return "creado";
+}
 
 main() {
     write("Hello, Pecan Py!");

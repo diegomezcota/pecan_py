@@ -97,7 +97,7 @@ Rule 91    function_call1 -> DOT ID
 Rule 92    function_call1 -> epsilon
 Rule 93    function_call2 -> hyper_exp_loop
 Rule 94    function_call2 -> epsilon
-Rule 95    class_function -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS AT_CLASS ID RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+Rule 95    class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
 Rule 96    function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
 Rule 97    function_return -> RETURN hyper_exp SEMICOLON
 Rule 98    function_return -> epsilon
@@ -2453,18 +2453,16 @@ state 156
     (14) class_declaration -> CLASS ID class_declaration1 OPEN_KEY class_body CLOSE_KEY SEMICOLON constructor . class_declaration2
     (17) class_declaration2 -> . class_function class_declaration2
     (18) class_declaration2 -> . epsilon
-    (95) class_function -> . FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS AT_CLASS ID RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+    (95) class_function -> . AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
     (101) epsilon -> .
 
-  ! shift/reduce conflict for FUNCTION resolved as shift
-    FUNCTION        shift and go to state 194
+    AT_CLASS        shift and go to state 194
     CLASS           reduce using rule 101 (epsilon -> .)
     VAR             reduce using rule 101 (epsilon -> .)
     GROUP           reduce using rule 101 (epsilon -> .)
     OBJ             reduce using rule 101 (epsilon -> .)
+    FUNCTION        reduce using rule 101 (epsilon -> .)
     MAIN            reduce using rule 101 (epsilon -> .)
-
-  ! FUNCTION        [ reduce using rule 101 (epsilon -> .) ]
 
     class_declaration2             shift and go to state 191
     class_function                 shift and go to state 192
@@ -2961,18 +2959,16 @@ state 192
     (17) class_declaration2 -> class_function . class_declaration2
     (17) class_declaration2 -> . class_function class_declaration2
     (18) class_declaration2 -> . epsilon
-    (95) class_function -> . FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS AT_CLASS ID RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+    (95) class_function -> . AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
     (101) epsilon -> .
 
-  ! shift/reduce conflict for FUNCTION resolved as shift
-    FUNCTION        shift and go to state 194
+    AT_CLASS        shift and go to state 194
     CLASS           reduce using rule 101 (epsilon -> .)
     VAR             reduce using rule 101 (epsilon -> .)
     GROUP           reduce using rule 101 (epsilon -> .)
     OBJ             reduce using rule 101 (epsilon -> .)
+    FUNCTION        reduce using rule 101 (epsilon -> .)
     MAIN            reduce using rule 101 (epsilon -> .)
-
-  ! FUNCTION        [ reduce using rule 101 (epsilon -> .) ]
 
     class_function                 shift and go to state 192
     class_declaration2             shift and go to state 215
@@ -2992,7 +2988,7 @@ state 193
 
 state 194
 
-    (95) class_function -> FUNCTION . ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS AT_CLASS ID RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+    (95) class_function -> AT_CLASS . ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
 
     ID              shift and go to state 216
 
@@ -3310,9 +3306,9 @@ state 215
 
 state 216
 
-    (95) class_function -> FUNCTION ID . OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS AT_CLASS ID RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+    (95) class_function -> AT_CLASS ID . FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
 
-    OPEN_PARENTHESIS shift and go to state 227
+    FUNCTION        shift and go to state 227
 
 
 state 217
@@ -3452,24 +3448,10 @@ state 226
 
 state 227
 
-    (95) class_function -> FUNCTION ID OPEN_PARENTHESIS . parameter CLOSE_PARENTHESIS AT_CLASS ID RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
-    (72) parameter -> . data_type ID parameter1
-    (73) parameter -> . epsilon
-    (65) data_type -> . INT
-    (66) data_type -> . FLOAT
-    (67) data_type -> . STRING
-    (68) data_type -> . BOOL
-    (101) epsilon -> .
+    (95) class_function -> AT_CLASS ID FUNCTION . ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
 
-    INT             shift and go to state 20
-    FLOAT           shift and go to state 21
-    STRING          shift and go to state 22
-    BOOL            shift and go to state 23
-    CLOSE_PARENTHESIS reduce using rule 101 (epsilon -> .)
+    ID              shift and go to state 235
 
-    parameter                      shift and go to state 235
-    data_type                      shift and go to state 42
-    epsilon                        shift and go to state 43
 
 state 228
 
@@ -3575,9 +3557,9 @@ state 234
 
 state 235
 
-    (95) class_function -> FUNCTION ID OPEN_PARENTHESIS parameter . CLOSE_PARENTHESIS AT_CLASS ID RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+    (95) class_function -> AT_CLASS ID FUNCTION ID . OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
 
-    CLOSE_PARENTHESIS shift and go to state 242
+    OPEN_PARENTHESIS shift and go to state 242
 
 
 state 236
@@ -3644,10 +3626,24 @@ state 241
 
 state 242
 
-    (95) class_function -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS . AT_CLASS ID RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+    (95) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS . parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+    (72) parameter -> . data_type ID parameter1
+    (73) parameter -> . epsilon
+    (65) data_type -> . INT
+    (66) data_type -> . FLOAT
+    (67) data_type -> . STRING
+    (68) data_type -> . BOOL
+    (101) epsilon -> .
 
-    AT_CLASS        shift and go to state 246
+    INT             shift and go to state 20
+    FLOAT           shift and go to state 21
+    STRING          shift and go to state 22
+    BOOL            shift and go to state 23
+    CLOSE_PARENTHESIS reduce using rule 101 (epsilon -> .)
 
+    parameter                      shift and go to state 246
+    data_type                      shift and go to state 42
+    epsilon                        shift and go to state 43
 
 state 243
 
@@ -3747,9 +3743,9 @@ state 245
 
 state 246
 
-    (95) class_function -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS AT_CLASS . ID RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+    (95) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter . CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
 
-    ID              shift and go to state 249
+    CLOSE_PARENTHESIS shift and go to state 249
 
 
 state 247
@@ -3768,7 +3764,7 @@ state 248
 
 state 249
 
-    (95) class_function -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS AT_CLASS ID . RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+    (95) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS . RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
 
     RETURNS         shift and go to state 252
 
@@ -3777,11 +3773,12 @@ state 250
 
     (26) constructor -> CONSTRUCTOR ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY .
 
-    FUNCTION        reduce using rule 26 (constructor -> CONSTRUCTOR ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY .)
+    AT_CLASS        reduce using rule 26 (constructor -> CONSTRUCTOR ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY .)
     CLASS           reduce using rule 26 (constructor -> CONSTRUCTOR ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY .)
     VAR             reduce using rule 26 (constructor -> CONSTRUCTOR ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY .)
     GROUP           reduce using rule 26 (constructor -> CONSTRUCTOR ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY .)
     OBJ             reduce using rule 26 (constructor -> CONSTRUCTOR ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY .)
+    FUNCTION        reduce using rule 26 (constructor -> CONSTRUCTOR ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY .)
     MAIN            reduce using rule 26 (constructor -> CONSTRUCTOR ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY .)
 
 
@@ -3804,7 +3801,7 @@ state 251
 
 state 252
 
-    (95) class_function -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS AT_CLASS ID RETURNS . return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+    (95) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS . return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
     (70) return_arg -> . data_type
     (71) return_arg -> . VOID
     (65) data_type -> . INT
@@ -3823,14 +3820,14 @@ state 252
 
 state 253
 
-    (95) class_function -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS AT_CLASS ID RETURNS return_arg . OPEN_KEY function_statement_loop function_return CLOSE_KEY
+    (95) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg . OPEN_KEY function_statement_loop function_return CLOSE_KEY
 
     OPEN_KEY        shift and go to state 254
 
 
 state 254
 
-    (95) class_function -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS AT_CLASS ID RETURNS return_arg OPEN_KEY . function_statement_loop function_return CLOSE_KEY
+    (95) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY . function_statement_loop function_return CLOSE_KEY
     (99) function_statement_loop -> . statement_loop
     (100) function_statement_loop -> . epsilon
     (4) statement_loop -> . statement statement_loop1
@@ -3881,7 +3878,7 @@ state 254
 
 state 255
 
-    (95) class_function -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS AT_CLASS ID RETURNS return_arg OPEN_KEY function_statement_loop . function_return CLOSE_KEY
+    (95) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop . function_return CLOSE_KEY
     (97) function_return -> . RETURN hyper_exp SEMICOLON
     (98) function_return -> . epsilon
     (101) epsilon -> .
@@ -3894,24 +3891,20 @@ state 255
 
 state 256
 
-    (95) class_function -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS AT_CLASS ID RETURNS return_arg OPEN_KEY function_statement_loop function_return . CLOSE_KEY
+    (95) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return . CLOSE_KEY
 
     CLOSE_KEY       shift and go to state 257
 
 
 state 257
 
-    (95) class_function -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS AT_CLASS ID RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .
+    (95) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .
 
-    FUNCTION        reduce using rule 95 (class_function -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS AT_CLASS ID RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
-    CLASS           reduce using rule 95 (class_function -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS AT_CLASS ID RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
-    VAR             reduce using rule 95 (class_function -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS AT_CLASS ID RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
-    GROUP           reduce using rule 95 (class_function -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS AT_CLASS ID RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
-    OBJ             reduce using rule 95 (class_function -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS AT_CLASS ID RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
-    MAIN            reduce using rule 95 (class_function -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS AT_CLASS ID RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
+    AT_CLASS        reduce using rule 95 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
+    CLASS           reduce using rule 95 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
+    VAR             reduce using rule 95 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
+    GROUP           reduce using rule 95 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
+    OBJ             reduce using rule 95 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
+    FUNCTION        reduce using rule 95 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
+    MAIN            reduce using rule 95 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
 
-WARNING: 
-WARNING: Conflicts:
-WARNING: 
-WARNING: shift/reduce conflict for FUNCTION in state 156 resolved as shift
-WARNING: shift/reduce conflict for FUNCTION in state 192 resolved as shift

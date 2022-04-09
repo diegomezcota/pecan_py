@@ -1,3 +1,4 @@
+// test1: Hello world
 program hello_pecan_py;
 main() {
     write("Hello, Pecan Py!");
