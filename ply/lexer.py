@@ -90,6 +90,7 @@ tokens += list(reserved.values())
 
 # A string containing ignored characters (spaces and tabs)
 t_ignore  = ' \t\n'
+t_ignore_COMMENT = r'//.*'
 
 # ID check for reserved words
 def t_BOOL_VALUE(t):
