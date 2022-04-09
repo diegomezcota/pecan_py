@@ -337,7 +337,7 @@ def p_function_call2(p):
 
 def p_class_function(p):
     '''
-    class_function  : FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS AT_CLASS ID RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+    class_function  : AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
 
     '''
     pass
