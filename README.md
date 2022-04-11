@@ -11,3 +11,10 @@ Este tiene el documento del Avance #0, que contiene:
 - Las principales consideraciones semánticas
 
 ## PLY
+En este directorio se tienen todos los archivos en el que desarrollamos
+el análisis léxico y sintáctico de PecanPy. Cuenta con la siguiente
+estructura
+
+### tests
+Se definen los tests para asegurarnos que se reconozcan tanto los tókens
+(carpeta lexer) como las reglas gramaticales (carpeta parser)
