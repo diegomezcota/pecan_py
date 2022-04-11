@@ -5,9 +5,9 @@ principales, los cuales son descritos a continuación.
 
 ## Documentación
 Este tiene el documento del Avance #0, que contiene:
- Markup :   *Lista de Tokens
-            *Diagramas de Sintaxis
-            *Gramática Formal
-            *Las principales consideraciones semánticas
+- Lista de Tokens
+- Diagramas de Sintaxis
+- Gramática Formal
+- Las principales consideraciones semánticas
 
 ## PLY
