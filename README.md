@@ -13,8 +13,15 @@ Este tiene el documento del Avance #0, que contiene:
 ## PLY
 En este directorio se tienen todos los archivos en el que desarrollamos
 el análisis léxico y sintáctico de PecanPy. Cuenta con la siguiente
-estructura
+estructura:
 
-### tests
+### tests/
 Se definen los tests para asegurarnos que se reconozcan tanto los tókens
 (carpeta lexer) como las reglas gramaticales (carpeta parser)
+
+### lexer_tests.py, parser_tests.py
+Archivos a correr para probar el lexer y el parser, respectivamente.
+
+### lexer.py, pecan_parser.py
+Archivos que utilizan PLY para definir los tókens y reglas gramaticales de PecanPy.
+pecan_parser.py utiliza la gramática formal descrita en documentación/.
