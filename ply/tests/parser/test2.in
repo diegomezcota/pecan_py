@@ -22,8 +22,15 @@ constructor Student(string matricula) {
     read(apellido, calificacion);
 }
 
-@class Student function estudiar() returns void {
+// class function with return statement
+@class Student function estudiar() returns int {
+    read(a, b, c);
     return 3;
+}
+
+// class function with no return statement
+@class Student function pedir_revision(float calificacion) returns void {
+    write("Me saque muy mala calificacion de:", calificacion);
 }
 
 function create() returns string {
