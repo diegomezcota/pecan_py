@@ -1,7 +1,7 @@
 from lexer import lexer
 
 no_tests = 2
-test_files = ['test' + str(i) + '.in' for i in range(1, no_tests + 1)]
+test_files = ['test' + str(i) + '.gmc' for i in range(1, no_tests + 1)]
 
 print("---PROBANDO ANALIZADOR LÉXICO---")
 

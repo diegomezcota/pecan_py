@@ -1,7 +1,7 @@
 from pecan_parser import parser
 
 no_tests = 6
-test_files = ['test' + str(i) + '.in' for i in range(1, no_tests + 1)]
+test_files = ['test' + str(i) + '.gmc' for i in range(1, no_tests + 1)]
 
 print("---PROBANDO ANALIZADOR SINTÁCTICO---")
 
