@@ -9,7 +9,6 @@ def p_program(p):
     '''
     program : PROGRAM np_start_func_dir ID SEMICOLON declaration_loop MAIN OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY
     '''
-
     pass
 
 
@@ -18,7 +17,6 @@ def p_np_start_func_dir(p):
     np_start_func_dir : epsilon
     '''
     function_directory["global"] = {"type": "void", "vars_table": {}}
-    print(function_directory)
     pass
 
 
@@ -146,7 +144,13 @@ def p_variable_declaration(p):
                             | OBJ ID ASSIGN ID OPEN_PARENTHESIS variable_declaration1 CLOSE_PARENTHESIS SEMICOLON
 
     '''
-    pass
+    # Return info related to each variable type (var_type, data_type, ID)
+    if p[1] == 'var':
+        p[0] = (p[1], p[2], p[3])
+    elif p[1] == 'group':
+        p[0] = (p[1], p[4], p[2])
+    else:
+        p[0] = (p[1], p[4], p[2])
 
 
 def p_variable_declaration1(p):
@@ -262,7 +266,7 @@ def p_data_type(p):
                 | STRING
                 | BOOL
     '''
-    pass
+    p[0] = p[1]
 
 
 def p_class_function_declaration(p):
