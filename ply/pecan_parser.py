@@ -2,10 +2,23 @@ from ast import Pass
 import ply.yacc as yacc
 from lexer import tokens
 
+function_directory = {}
+
+
 def p_program(p):
     '''
-    program : PROGRAM ID SEMICOLON declaration_loop MAIN OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY
+    program : PROGRAM np_start_func_dir ID SEMICOLON declaration_loop MAIN OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY
     '''
+
+    pass
+
+
+def p_np_start_func_dir(p):
+    '''
+    np_start_func_dir : epsilon
+    '''
+    function_directory["global"] = {"type": "void", "vars_table": {}}
+    print(function_directory)
     pass
 
 
@@ -16,11 +29,13 @@ def p_declaration_loop(p):
     '''
     pass
 
+
 def p_statement_loop(p):
     '''
     statement_loop  : statement statement_loop1
     '''
     pass
+
 
 def p_statement_loop1(p):
     '''
@@ -28,6 +43,7 @@ def p_statement_loop1(p):
                     | epsilon
     '''
     pass
+
 
 def p_declaration(p):
     '''
@@ -37,11 +53,13 @@ def p_declaration(p):
     '''
     pass
 
+
 def p_variable(p):
     '''
     variable    : ID variable1
     '''
     pass
+
 
 def p_variable1(p):
     '''
@@ -52,11 +70,13 @@ def p_variable1(p):
     '''
     pass
 
+
 def p_class_declaration(p):
     '''
     class_declaration   : CLASS ID class_declaration1 OPEN_KEY class_body CLOSE_KEY SEMICOLON constructor class_declaration2
     '''
     pass
+
 
 def p_class_declaration1(p):
     '''
@@ -65,6 +85,7 @@ def p_class_declaration1(p):
     '''
     pass
 
+
 def p_class_declaration2(p):
     '''
     class_declaration2  : class_function class_declaration2
@@ -72,17 +93,20 @@ def p_class_declaration2(p):
     '''
     pass
 
+
 def p_class_body(p):
     '''
     class_body  : class_body1 class_body3
     '''
     pass
 
+
 def p_class_body1(p):
     '''
     class_body1 : variable_declaration class_body2
     '''
     pass
+
 
 def p_class_body2(p):
     '''
@@ -91,11 +115,13 @@ def p_class_body2(p):
     '''
     pass
 
+
 def p_class_body3(p):
     '''
     class_body3 : class_function_declaration class_body4
     '''
     pass
+
 
 def p_class_body4(p):
     '''
@@ -105,11 +131,13 @@ def p_class_body4(p):
     '''
     pass
 
+
 def p_constructor(p):
     '''
     constructor : CONSTRUCTOR ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY
     '''
     pass
+
 
 def p_variable_declaration(p):
     '''
@@ -120,11 +148,13 @@ def p_variable_declaration(p):
     '''
     pass
 
+
 def p_variable_declaration1(p):
     '''
     variable_declaration1   : hyper_exp_loop
                             | epsilon
     '''
+
 
 def p_statement(p):
     '''
@@ -138,17 +168,20 @@ def p_statement(p):
     '''
     pass
 
+
 def p_assignment(p):
     '''
     assignment  : variable ASSIGN hyper_exp SEMICOLON
     '''
     pass
 
+
 def p_hyper_exp(p):
     '''
     hyper_exp   : super_exp hyper_exp1
     '''
     pass
+
 
 def p_hyper_exp1(p):
     '''
@@ -158,11 +191,13 @@ def p_hyper_exp1(p):
     '''
     pass
 
+
 def p_super_exp(p):
     '''
     super_exp   : exp super_exp1
     '''
     pass
+
 
 def p_super_exp1(p):
     '''
@@ -174,11 +209,13 @@ def p_super_exp1(p):
     '''
     pass
 
+
 def p_exp(p):
     '''
     exp : term exp1
     '''
     pass
+
 
 def p_exp1(p):
     '''
@@ -188,11 +225,13 @@ def p_exp1(p):
     '''
     pass
 
+
 def p_term(p):
     '''
     term    : factor term1
     '''
     pass
+
 
 def p_term1(p):
     '''
@@ -201,6 +240,7 @@ def p_term1(p):
             | epsilon
     '''
     pass
+
 
 def p_factor(p):
     '''
@@ -214,6 +254,7 @@ def p_factor(p):
     '''
     pass
 
+
 def p_data_type(p):
     '''
     data_type   : INT
@@ -223,11 +264,13 @@ def p_data_type(p):
     '''
     pass
 
+
 def p_class_function_declaration(p):
     '''
     class_function_declaration : FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg SEMICOLON
     '''
     pass
+
 
 def p_return_arg(p):
     '''
@@ -236,12 +279,14 @@ def p_return_arg(p):
     '''
     pass
 
+
 def p_parameter(p):
     '''
     parameter   : data_type ID parameter1
                 | epsilon
     '''
     pass
+
 
 def p_parameter1(p):
     '''
@@ -250,11 +295,13 @@ def p_parameter1(p):
     '''
     pass
 
+
 def p_conditional(p):
     '''
     conditional : IF OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY conditional1
     '''
     pass
+
 
 def p_conditional1(p):
     '''
@@ -263,6 +310,7 @@ def p_conditional1(p):
     '''
     pass
 
+
 def p_cycle(p):
     '''
     cycle   : FOR OPEN_PARENTHESIS ID IN ID CLOSE_PARENTHESIS cycle1
@@ -270,11 +318,13 @@ def p_cycle(p):
     '''
     pass
 
+
 def p_cycle1(p):
     '''
     cycle1  : OPEN_KEY statement_loop CLOSE_KEY
     '''
     pass
+
 
 def p_read(p):
     '''
@@ -282,11 +332,13 @@ def p_read(p):
     '''
     pass
 
+
 def p_variable_loop(p):
     '''
     variable_loop   : variable variable_loop1
     '''
     pass
+
 
 def p_variable_loop1(p):
     '''
@@ -295,17 +347,20 @@ def p_variable_loop1(p):
     '''
     pass
 
+
 def p_write(p):
     '''
     write   : WRITE OPEN_PARENTHESIS hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
     '''
     pass
 
+
 def p_hyper_exp_loop(p):
     '''
     hyper_exp_loop  : hyper_exp hyper_exp_loop1
     '''
     pass
+
 
 def p_hyper_exp_loop1(p):
     '''
@@ -315,11 +370,13 @@ def p_hyper_exp_loop1(p):
     '''
     pass
 
+
 def p_function_call(p):
     '''
     function_call   : ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     '''
     pass
+
 
 def p_function_call1(p):
     '''
@@ -328,12 +385,14 @@ def p_function_call1(p):
     '''
     pass
 
+
 def p_function_call2(p):
     '''
     function_call2  : hyper_exp_loop
                     | epsilon
     '''
     pass
+
 
 def p_class_function(p):
     '''
@@ -342,11 +401,13 @@ def p_class_function(p):
     '''
     pass
 
+
 def p_function_declaration(p):
     '''
     function_declaration    : FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
     '''
     pass
+
 
 def p_function_return(p):
     '''
@@ -355,22 +416,27 @@ def p_function_return(p):
     '''
     pass
 
+
 def p_function_statement_loop(p):
     '''
     function_statement_loop  : statement_loop
                     | epsilon
     '''
     pass
-    
+
+
 def p_epsilon(p):
     '''epsilon :'''
     pass
 
+
 class SyntaxError(Exception):
     pass
+
 
 def p_error(p):
     print('syntax error', p)
     raise SyntaxError
+
 
 parser = yacc.yacc()
