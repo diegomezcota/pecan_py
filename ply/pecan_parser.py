@@ -2,6 +2,8 @@ from ast import Pass
 import ply.yacc as yacc
 from lexer import tokens
 
+import json
+
 function_directory = {}
 
 
@@ -9,6 +11,7 @@ def p_program(p):
     '''
     program : PROGRAM np_start_func_dir ID SEMICOLON declaration_loop MAIN OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY
     '''
+    print (json.dumps(function_directory, indent=2))
     pass
 
 
@@ -16,7 +19,7 @@ def p_np_start_func_dir(p):
     '''
     np_start_func_dir : epsilon
     '''
-    function_directory["global"] = {"type": "void", "vars_table": {}}
+    function_directory["global"] = {"function_type": "void", "vars_table": {}}
     pass
 
 
@@ -25,6 +28,12 @@ def p_declaration_loop(p):
     declaration_loop : declaration declaration_loop
                      | epsilon
     '''
+    # Up to this point, we know we are in global scope
+    if len(p) == 3:
+        # If the declaration is a variable one
+        if p[1] and p[1][0] == 'variable_declaration':
+            _, var_type, var_data_type, var_name = p[1]
+            function_directory['global']['vars_table'][var_name] = {'var_data_type' : var_data_type, 'var_type' : var_type}
     pass
 
 
@@ -49,6 +58,7 @@ def p_declaration(p):
                 | variable_declaration
                 | function_declaration
     '''
+    p[0] = p[1]
     pass
 
 
@@ -146,12 +156,11 @@ def p_variable_declaration(p):
     '''
     # Return info related to each variable type (var_type, data_type, ID)
     if p[1] == 'var':
-        p[0] = (p[1], p[2], p[3])
+        p[0] = ('variable_declaration', p[1], p[2], p[3])
     elif p[1] == 'group':
-        p[0] = (p[1], p[4], p[2])
+        p[0] = ('variable_declaration', p[1], p[4], p[2])
     else:
-        p[0] = (p[1], p[4], p[2])
-
+        p[0] = ('variable_declaration', p[1], p[4], p[2])
 
 def p_variable_declaration1(p):
     '''
