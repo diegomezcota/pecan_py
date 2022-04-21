@@ -6,6 +6,18 @@ import json
 
 function_directory = {}
 
+# TODO: main scope and their variables, class scope
+# ideas: main function part be their own function to add to the function directory in an easier way
+# class scope:
+#   class_scopes: {function_name -> function_type, vars_table}
+# scopes
+#   global
+#   functions
+#   main
+#   class
+#       name -> function
+# to fix? no permitir que una funcion se llame "global", o guardarla como 0_global o algo así que sea imposible llamarse
+
 def p_program(p):
     '''
     program : PROGRAM np_start_func_dir ID SEMICOLON declaration_loop MAIN OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY
@@ -422,6 +434,7 @@ def p_function_declaration(p):
     function_declaration    : FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
     '''
     # Register each variable in function directory
+    # TODO: This should be changed in order to analyze each statement in order
     if p[9] != 'epsilon': # get nonempty function_statement_loops
         function_variables = list(filter(lambda x : x and x[0] == 'variable_declaration', p[9]))
         function_name, function_type = p[2], p[7]
