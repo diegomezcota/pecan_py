@@ -2,6 +2,7 @@
 program test5;
 
 function sayHi(string text) returns void {
+    var int times;
     write(text);
 }
 
