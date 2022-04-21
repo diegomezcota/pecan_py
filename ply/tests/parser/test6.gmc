@@ -40,6 +40,9 @@ function makeCalculations(float factor) returns float {
 
 // function sin parametros
 function writeVariables() returns void {
+    var string a;
+    group my_list = string[5];
+    obj perro = Animal();
     write("Mis variables son:", a, b, c);
 }
 

@@ -2,11 +2,37 @@ from ast import Pass
 import ply.yacc as yacc
 from lexer import tokens
 
+import json
+
+function_directory = {}
+
+# TODO: main scope and their variables, class scope
+# ideas: main function part be their own function to add to the function directory in an easier way
+# class scope:
+#   class_scopes: {function_name -> function_type, vars_table}
+# scopes
+#   global
+#   functions
+#   main
+#   class
+#       name -> function
+# to fix? no permitir que una funcion se llame "global", o guardarla como 0_global o algo así que sea imposible llamarse
+
 def p_program(p):
     '''
-    program : PROGRAM ID SEMICOLON declaration_loop MAIN OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY
+    program : PROGRAM np_start_func_dir ID SEMICOLON declaration_loop MAIN OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY
     '''
+    print (json.dumps(function_directory, indent=2))
     pass
+
+
+def p_np_start_func_dir(p):
+    '''
+    np_start_func_dir : epsilon
+    '''
+    global function_directory 
+    function_directory = {}
+    function_directory["global"] = {"function_type": "void", "vars_table": {}}
 
 
 def p_declaration_loop(p):
@@ -14,20 +40,30 @@ def p_declaration_loop(p):
     declaration_loop : declaration declaration_loop
                      | epsilon
     '''
-    pass
+    # Up to this point, we know we are in global scope
+    if len(p) == 3:
+        # If the declaration is a variable one
+        if p[1] and p[1][0] == 'variable_declaration':
+            _, var_type, var_data_type, var_name = p[1]
+            function_directory['global']['vars_table'][var_name] = {'var_data_type' : var_data_type, 'var_type' : var_type}
+
 
 def p_statement_loop(p):
     '''
     statement_loop  : statement statement_loop1
     '''
-    pass
+    p[0] = [p[1]] + p[2]
+
 
 def p_statement_loop1(p):
     '''
     statement_loop1 : statement statement_loop1
                     | epsilon
     '''
-    pass
+    if len(p) == 3:
+        p[0] = [p[1]] + p[2]
+    else:
+        p[0] = []
 
 def p_declaration(p):
     '''
@@ -35,13 +71,16 @@ def p_declaration(p):
                 | variable_declaration
                 | function_declaration
     '''
+    p[0] = p[1]
     pass
+
 
 def p_variable(p):
     '''
     variable    : ID variable1
     '''
     pass
+
 
 def p_variable1(p):
     '''
@@ -52,11 +91,13 @@ def p_variable1(p):
     '''
     pass
 
+
 def p_class_declaration(p):
     '''
     class_declaration   : CLASS ID class_declaration1 OPEN_KEY class_body CLOSE_KEY SEMICOLON constructor class_declaration2
     '''
     pass
+
 
 def p_class_declaration1(p):
     '''
@@ -65,6 +106,7 @@ def p_class_declaration1(p):
     '''
     pass
 
+
 def p_class_declaration2(p):
     '''
     class_declaration2  : class_function class_declaration2
@@ -72,17 +114,20 @@ def p_class_declaration2(p):
     '''
     pass
 
+
 def p_class_body(p):
     '''
     class_body  : class_body1 class_body3
     '''
     pass
 
+
 def p_class_body1(p):
     '''
     class_body1 : variable_declaration class_body2
     '''
     pass
+
 
 def p_class_body2(p):
     '''
@@ -91,11 +136,13 @@ def p_class_body2(p):
     '''
     pass
 
+
 def p_class_body3(p):
     '''
     class_body3 : class_function_declaration class_body4
     '''
     pass
+
 
 def p_class_body4(p):
     '''
@@ -105,11 +152,13 @@ def p_class_body4(p):
     '''
     pass
 
+
 def p_constructor(p):
     '''
     constructor : CONSTRUCTOR ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY
     '''
     pass
+
 
 def p_variable_declaration(p):
     '''
@@ -118,13 +167,20 @@ def p_variable_declaration(p):
                             | OBJ ID ASSIGN ID OPEN_PARENTHESIS variable_declaration1 CLOSE_PARENTHESIS SEMICOLON
 
     '''
-    pass
+    # Return info related to each variable type (var_type, data_type, ID)
+    if p[1] == 'var':
+        p[0] = ('variable_declaration', p[1], p[2], p[3])
+    elif p[1] == 'group':
+        p[0] = ('variable_declaration', p[1], p[4], p[2])
+    else:
+        p[0] = ('variable_declaration', p[1], p[4], p[2])
 
 def p_variable_declaration1(p):
     '''
     variable_declaration1   : hyper_exp_loop
                             | epsilon
     '''
+
 
 def p_statement(p):
     '''
@@ -136,7 +192,9 @@ def p_statement(p):
                 | function_call
                 | variable_declaration
     '''
+    p[0] = p[1]
     pass
+
 
 def p_assignment(p):
     '''
@@ -144,11 +202,13 @@ def p_assignment(p):
     '''
     pass
 
+
 def p_hyper_exp(p):
     '''
     hyper_exp   : super_exp hyper_exp1
     '''
     pass
+
 
 def p_hyper_exp1(p):
     '''
@@ -158,11 +218,13 @@ def p_hyper_exp1(p):
     '''
     pass
 
+
 def p_super_exp(p):
     '''
     super_exp   : exp super_exp1
     '''
     pass
+
 
 def p_super_exp1(p):
     '''
@@ -174,11 +236,13 @@ def p_super_exp1(p):
     '''
     pass
 
+
 def p_exp(p):
     '''
     exp : term exp1
     '''
     pass
+
 
 def p_exp1(p):
     '''
@@ -188,11 +252,13 @@ def p_exp1(p):
     '''
     pass
 
+
 def p_term(p):
     '''
     term    : factor term1
     '''
     pass
+
 
 def p_term1(p):
     '''
@@ -201,6 +267,7 @@ def p_term1(p):
             | epsilon
     '''
     pass
+
 
 def p_factor(p):
     '''
@@ -214,6 +281,7 @@ def p_factor(p):
     '''
     pass
 
+
 def p_data_type(p):
     '''
     data_type   : INT
@@ -221,7 +289,8 @@ def p_data_type(p):
                 | STRING
                 | BOOL
     '''
-    pass
+    p[0] = p[1]
+
 
 def p_class_function_declaration(p):
     '''
@@ -229,12 +298,14 @@ def p_class_function_declaration(p):
     '''
     pass
 
+
 def p_return_arg(p):
     '''
     return_arg  : data_type
                 | VOID
     '''
-    pass
+    p[0] = p[1]
+
 
 def p_parameter(p):
     '''
@@ -243,6 +314,7 @@ def p_parameter(p):
     '''
     pass
 
+
 def p_parameter1(p):
     '''
     parameter1  : COMMA data_type ID parameter1
@@ -250,11 +322,13 @@ def p_parameter1(p):
     '''
     pass
 
+
 def p_conditional(p):
     '''
     conditional : IF OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY conditional1
     '''
     pass
+
 
 def p_conditional1(p):
     '''
@@ -263,6 +337,7 @@ def p_conditional1(p):
     '''
     pass
 
+
 def p_cycle(p):
     '''
     cycle   : FOR OPEN_PARENTHESIS ID IN ID CLOSE_PARENTHESIS cycle1
@@ -270,11 +345,13 @@ def p_cycle(p):
     '''
     pass
 
+
 def p_cycle1(p):
     '''
     cycle1  : OPEN_KEY statement_loop CLOSE_KEY
     '''
     pass
+
 
 def p_read(p):
     '''
@@ -282,11 +359,13 @@ def p_read(p):
     '''
     pass
 
+
 def p_variable_loop(p):
     '''
     variable_loop   : variable variable_loop1
     '''
     pass
+
 
 def p_variable_loop1(p):
     '''
@@ -295,17 +374,20 @@ def p_variable_loop1(p):
     '''
     pass
 
+
 def p_write(p):
     '''
     write   : WRITE OPEN_PARENTHESIS hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
     '''
     pass
 
+
 def p_hyper_exp_loop(p):
     '''
     hyper_exp_loop  : hyper_exp hyper_exp_loop1
     '''
     pass
+
 
 def p_hyper_exp_loop1(p):
     '''
@@ -315,11 +397,13 @@ def p_hyper_exp_loop1(p):
     '''
     pass
 
+
 def p_function_call(p):
     '''
     function_call   : ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     '''
     pass
+
 
 def p_function_call1(p):
     '''
@@ -328,12 +412,14 @@ def p_function_call1(p):
     '''
     pass
 
+
 def p_function_call2(p):
     '''
     function_call2  : hyper_exp_loop
                     | epsilon
     '''
     pass
+
 
 def p_class_function(p):
     '''
@@ -342,11 +428,22 @@ def p_class_function(p):
     '''
     pass
 
+
 def p_function_declaration(p):
     '''
     function_declaration    : FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
     '''
-    pass
+    # Register each variable in function directory
+    # TODO: This should be changed in order to analyze each statement in order
+    if p[9] != 'epsilon': # get nonempty function_statement_loops
+        function_variables = list(filter(lambda x : x and x[0] == 'variable_declaration', p[9]))
+        function_name, function_type = p[2], p[7]
+        # add to function directory
+        function_directory[function_name] = {"function_type": function_type, "vars_table": {}}
+        # add vars to function directory
+        for variable in function_variables:
+            _, var_type, var_data_type, var_name = variable
+            function_directory[function_name]['vars_table'][var_name] = {'var_data_type' : var_data_type, 'var_type' : var_type}
 
 def p_function_return(p):
     '''
@@ -355,19 +452,23 @@ def p_function_return(p):
     '''
     pass
 
+
 def p_function_statement_loop(p):
     '''
     function_statement_loop  : statement_loop
                     | epsilon
     '''
-    pass
-    
+    p[0] = p[1]
+
+
 def p_epsilon(p):
     '''epsilon :'''
-    pass
+    p[0] = 'epsilon'
+
 
 class SyntaxError(Exception):
     pass
+
 
 def p_error(p):
     print('syntax error', p)
