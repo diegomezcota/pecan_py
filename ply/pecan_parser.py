@@ -6,7 +6,6 @@ import json
 
 function_directory = {}
 
-
 def p_program(p):
     '''
     program : PROGRAM np_start_func_dir ID SEMICOLON declaration_loop MAIN OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY
@@ -19,8 +18,9 @@ def p_np_start_func_dir(p):
     '''
     np_start_func_dir : epsilon
     '''
+    global function_directory 
+    function_directory = {}
     function_directory["global"] = {"function_type": "void", "vars_table": {}}
-    pass
 
 
 def p_declaration_loop(p):
@@ -34,14 +34,13 @@ def p_declaration_loop(p):
         if p[1] and p[1][0] == 'variable_declaration':
             _, var_type, var_data_type, var_name = p[1]
             function_directory['global']['vars_table'][var_name] = {'var_data_type' : var_data_type, 'var_type' : var_type}
-    pass
 
 
 def p_statement_loop(p):
     '''
     statement_loop  : statement statement_loop1
     '''
-    pass
+    p[0] = [p[1]] + p[2]
 
 
 def p_statement_loop1(p):
@@ -49,8 +48,10 @@ def p_statement_loop1(p):
     statement_loop1 : statement statement_loop1
                     | epsilon
     '''
-    pass
-
+    if len(p) == 3:
+        p[0] = [p[1]] + p[2]
+    else:
+        p[0] = []
 
 def p_declaration(p):
     '''
@@ -179,6 +180,7 @@ def p_statement(p):
                 | function_call
                 | variable_declaration
     '''
+    p[0] = p[1]
     pass
 
 
@@ -290,7 +292,7 @@ def p_return_arg(p):
     return_arg  : data_type
                 | VOID
     '''
-    pass
+    p[0] = p[1]
 
 
 def p_parameter(p):
@@ -419,8 +421,16 @@ def p_function_declaration(p):
     '''
     function_declaration    : FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
     '''
-    pass
-
+    # Register each variable in function directory
+    if p[9] != 'epsilon': # get nonempty function_statement_loops
+        function_variables = list(filter(lambda x : x and x[0] == 'variable_declaration', p[9]))
+        function_name, function_type = p[2], p[7]
+        # add to function directory
+        function_directory[function_name] = {"function_type": function_type, "vars_table": {}}
+        # add vars to function directory
+        for variable in function_variables:
+            _, var_type, var_data_type, var_name = variable
+            function_directory[function_name]['vars_table'][var_name] = {'var_data_type' : var_data_type, 'var_type' : var_type}
 
 def p_function_return(p):
     '''
@@ -435,12 +445,12 @@ def p_function_statement_loop(p):
     function_statement_loop  : statement_loop
                     | epsilon
     '''
-    pass
+    p[0] = p[1]
 
 
 def p_epsilon(p):
     '''epsilon :'''
-    pass
+    p[0] = 'epsilon'
 
 
 class SyntaxError(Exception):
@@ -450,6 +460,5 @@ class SyntaxError(Exception):
 def p_error(p):
     print('syntax error', p)
     raise SyntaxError
-
 
 parser = yacc.yacc()
