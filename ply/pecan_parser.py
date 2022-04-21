@@ -6,7 +6,7 @@ import json
 
 function_directory = {}
 
-# TODO: main scope and their variables, class scope
+# TODO: main scope and their variables, meternos al los statements
 # ideas: main function part be their own function to add to the function directory in an easier way
 # class scope:
 #   class_scopes: {function_name -> function_type, vars_table}
@@ -18,19 +18,38 @@ function_directory = {}
 #       name -> function
 # to fix? no permitir que una funcion se llame "global", o guardarla como 0_global o algo así que sea imposible llamarse
 
+
 def p_program(p):
     '''
-    program : PROGRAM np_start_func_dir ID SEMICOLON declaration_loop MAIN OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY
+    program : PROGRAM np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
-    print (json.dumps(function_directory, indent=2))
+    print(json.dumps(function_directory, indent=2))
     pass
+
+
+def p_main_function(p):
+    '''
+    main_function : MAIN OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY
+    '''
+    if p[5] != 'epsilon':  # get nonempty function_statement_loops
+        function_variables = list(
+            filter(lambda x: x and x[0] == 'variable_declaration', p[5]))
+        function_name, function_type = p[1], 'void'
+        # add to function directory
+        function_directory[function_name] = {
+            "function_type": function_type, "vars_table": {}}
+        # add vars to function directory
+        for variable in function_variables:
+            _, var_type, var_data_type, var_name = variable
+            function_directory[function_name]['vars_table'][var_name] = {
+                'var_data_type': var_data_type, 'var_type': var_type}
 
 
 def p_np_start_func_dir(p):
     '''
     np_start_func_dir : epsilon
     '''
-    global function_directory 
+    global function_directory
     function_directory = {}
     function_directory["global"] = {"function_type": "void", "vars_table": {}}
 
@@ -45,7 +64,8 @@ def p_declaration_loop(p):
         # If the declaration is a variable one
         if p[1] and p[1][0] == 'variable_declaration':
             _, var_type, var_data_type, var_name = p[1]
-            function_directory['global']['vars_table'][var_name] = {'var_data_type' : var_data_type, 'var_type' : var_type}
+            function_directory['global']['vars_table'][var_name] = {
+                'var_data_type': var_data_type, 'var_type': var_type}
 
 
 def p_statement_loop(p):
@@ -64,6 +84,7 @@ def p_statement_loop1(p):
         p[0] = [p[1]] + p[2]
     else:
         p[0] = []
+
 
 def p_declaration(p):
     '''
@@ -174,6 +195,7 @@ def p_variable_declaration(p):
         p[0] = ('variable_declaration', p[1], p[4], p[2])
     else:
         p[0] = ('variable_declaration', p[1], p[4], p[2])
+
 
 def p_variable_declaration1(p):
     '''
@@ -435,15 +457,19 @@ def p_function_declaration(p):
     '''
     # Register each variable in function directory
     # TODO: This should be changed in order to analyze each statement in order
-    if p[9] != 'epsilon': # get nonempty function_statement_loops
-        function_variables = list(filter(lambda x : x and x[0] == 'variable_declaration', p[9]))
+    if p[9] != 'epsilon':  # get nonempty function_statement_loops
+        function_variables = list(
+            filter(lambda x: x and x[0] == 'variable_declaration', p[9]))
         function_name, function_type = p[2], p[7]
         # add to function directory
-        function_directory[function_name] = {"function_type": function_type, "vars_table": {}}
+        function_directory[function_name] = {
+            "function_type": function_type, "vars_table": {}}
         # add vars to function directory
         for variable in function_variables:
             _, var_type, var_data_type, var_name = variable
-            function_directory[function_name]['vars_table'][var_name] = {'var_data_type' : var_data_type, 'var_type' : var_type}
+            function_directory[function_name]['vars_table'][var_name] = {
+                'var_data_type': var_data_type, 'var_type': var_type}
+
 
 def p_function_return(p):
     '''
@@ -473,5 +499,6 @@ class SyntaxError(Exception):
 def p_error(p):
     print('syntax error', p)
     raise SyntaxError
+
 
 parser = yacc.yacc()
