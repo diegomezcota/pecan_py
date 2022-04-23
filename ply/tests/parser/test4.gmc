@@ -2,6 +2,7 @@
 program flujos_de_control;
 
 main() {
+    var string hola;
     if (a > b && c) {
         b = 10 || c;
         write(a, b, 3 * 10);
@@ -13,7 +14,6 @@ main() {
     }
 
     if (1 + 3 + 5 * 10 && c) {
-        var string hola;
         hola = "que paso";
     }
 }

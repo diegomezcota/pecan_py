@@ -38,7 +38,7 @@ function create() returns string {
 }
 
 main() {
-    write("Hello, Pecan Py!");
     obj student =  Student("A00824758");
+    write("Hello, Pecan Py!");
     student.estudiar();
 }
