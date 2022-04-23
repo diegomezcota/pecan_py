@@ -29,7 +29,7 @@ def p_program(p):
 
 def p_main_function(p):
     '''
-    main_function : MAIN OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY
+    main_function : MAIN OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_KEY variable_declaration_loop statement_loop CLOSE_KEY
     '''
     if p[5] != 'epsilon':  # get nonempty function_statement_loops
         function_variables = list(
@@ -181,6 +181,17 @@ def p_constructor(p):
     pass
 
 
+def p_variable_declaration_loop(p):
+    '''
+    variable_declaration_loop : variable_declaration variable_declaration_loop
+                                | epsilon
+    '''
+    if len(p) == 3:
+        p[0] = [p[1]] + p[2]
+    else:
+        p[0] = []
+
+
 def p_variable_declaration(p):
     '''
     variable_declaration    : VAR data_type ID SEMICOLON
@@ -212,7 +223,6 @@ def p_statement(p):
                 | read
                 | write
                 | function_call
-                | variable_declaration
     '''
     p[0] = p[1]
     pass
@@ -453,7 +463,7 @@ def p_class_function(p):
 
 def p_function_declaration(p):
     '''
-    function_declaration    : FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+    function_declaration    : FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
     '''
     # Register each variable in function directory
     # TODO: This should be changed in order to analyze each statement in order

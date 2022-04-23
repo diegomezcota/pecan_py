@@ -24,11 +24,11 @@ main() {
     var int a;
     var float b;
     var string c;
+    obj saludador = Saludador();
 
     read(a, b, c);
     write(6 * 14.3 + a || c, c, b);
 
     sayHi("Como estan todos?");
-    obj saludador = Saludador();
     saludador.run("Hola", 4); 
 }
