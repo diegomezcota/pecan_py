@@ -2,6 +2,8 @@ class FunctionDirectory:
     def __init__(self):
         self.table = {}
 
+    # TODO: Init function scope also (for the case when a function has no variables)
+        
     def init_global_scope(self):
         self.table = {}
         self.table["global"] = {
@@ -13,7 +15,7 @@ class FunctionDirectory:
             'var_data_type': var_data_type, 'var_type': var_type}
 
     def add_function_with_variables(self, function_variables, function_name, function_type):
-        if function_variables != 'epsilon':  # get nonempty function_statement_loops
+        if function_variables != 'epsilon':  # get nonempty variable declaration loop
             # add to function directory
             self.table[function_name] = {
                 "function_type": function_type, "vars_table": {}}
