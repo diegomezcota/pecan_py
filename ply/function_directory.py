@@ -15,12 +15,11 @@ class FunctionDirectory:
             'var_data_type': var_data_type, 'var_type': var_type}
 
     def add_function_with_variables(self, function_variables, function_name, function_type):
-        if function_variables != 'epsilon':  # get nonempty variable declaration loop
-            # add to function directory
-            self.table[function_name] = {
-                "function_type": function_type, "vars_table": {}}
-            # add vars to function directory
-            for variable in function_variables:
-                _, var_type, var_data_type, var_name = variable
-                self.table[function_name]['vars_table'][var_name] = {
-                    'var_data_type': var_data_type, 'var_type': var_type}
+        # add to function directory
+        self.table[function_name] = {
+            "function_type": function_type, "vars_table": {}}
+        # add vars to function directory
+        for variable in function_variables:
+            _, var_type, var_data_type, var_name = variable
+            self.table[function_name]['vars_table'][var_name] = {
+                'var_data_type': var_data_type, 'var_type': var_type}
