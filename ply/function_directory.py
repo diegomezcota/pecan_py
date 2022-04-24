@@ -1,8 +1,6 @@
 class FunctionDirectory:
     def __init__(self):
         self.table = {}
-
-    # TODO: Init function scope also (for the case when a function has no variables)
         
     def init_global_scope(self):
         self.table = {}
