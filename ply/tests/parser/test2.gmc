@@ -13,11 +13,11 @@ obj person = Persona(3 * i, 10 + 1.0, nombre);
 
 class Student is Person {
     var string nombre;
-    function saludar(string saludo) returns string;
+    function saludar(var string saludo) returns string;
     function estudiar() returns void;
 };
 
-constructor Student(string matricula) {
+constructor Student(var string matricula) {
     nombre = "Diego";
     read(apellido, calificacion);
 }
@@ -29,7 +29,7 @@ constructor Student(string matricula) {
 }
 
 // class function with no return statement
-@class Student function pedir_revision(float calificacion) returns void {
+@class Student function pedir_revision(var float calificacion) returns void {
     write("Me saque muy mala calificacion de:", calificacion);
 }
 

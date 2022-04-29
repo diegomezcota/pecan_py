@@ -7,7 +7,7 @@ class Animal {
     var bool isOviparo;
     var int speed_limit;
     function makeSound() returns void; // sin parámetros
-    function run(int speed) returns bool; // con parámetros
+    function run(var int speed) returns bool; // con parámetros
 };
 
 // sin parámetros
@@ -22,12 +22,12 @@ constructor Animal() {
     write("Grrrrr");
 }
 
-@class Animal function run(int s) returns bool {
+@class Animal function run(var int s) returns bool {
     return s > speed_limit;
 }
 
 // function con parametros
-function makeCalculations(float factor) returns float {
+function makeCalculations(var float factor) returns float {
     currentResult = 0;
     currentResult = currentResult + 104 * 100 - 4 / 2.0;
     if (currentResult > 4) {
