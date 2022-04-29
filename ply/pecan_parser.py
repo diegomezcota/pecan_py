@@ -18,6 +18,7 @@ function_directory = FunctionDirectory()
 #   class
 #       name -> function
 # to fix? no permitir que una funcion se llame "global", o guardarla como 0_global o algo así que sea imposible llamarse
+# TODO: Check how are the function parameters handled
 
 
 def p_program(p):
@@ -195,6 +196,13 @@ def p_variable_declaration(p):
     else:
         p[0] = ('variable_declaration', p[1], p[4], p[2])
 
+def p_var_type(p):
+    '''
+    var_type    : VAR
+                | GROUP
+                | OBJ
+    '''
+    p[0] = p[1]
 
 def p_variable_declaration1(p):
     '''
@@ -232,8 +240,8 @@ def p_hyper_exp(p):
 
 def p_hyper_exp1(p):
     '''
-    hyper_exp1  : AND super_exp
-                | OR super_exp
+    hyper_exp1  : AND super_exp hyper_exp1
+                | OR super_exp hyper_exp1
                 | epsilon
     '''
     pass
@@ -248,10 +256,10 @@ def p_super_exp(p):
 
 def p_super_exp1(p):
     '''
-    super_exp1  : GREATER_THAN exp
-                | LESS_THAN exp
-                | EQUAL_TO exp
-                | NOT_EQUAL_TO exp
+    super_exp1  : GREATER_THAN exp super_exp1
+                | LESS_THAN exp super_exp1
+                | EQUAL_TO exp super_exp1
+                | NOT_EQUAL_TO exp super_exp1
                 | epsilon
     '''
     pass
@@ -329,10 +337,13 @@ def p_return_arg(p):
 
 def p_parameter(p):
     '''
-    parameter   : data_type ID parameter1
+    parameter   : var_type data_type ID parameter1
                 | epsilon
     '''
-    pass
+    if len(p) == 4:
+        p[0] = [(p[1], p[2])] + p[3]
+    else:
+        p[0] = []
 
 
 def p_parameter1(p):
@@ -340,7 +351,10 @@ def p_parameter1(p):
     parameter1  : COMMA data_type ID parameter1
                 | epsilon
     '''
-    pass
+    if len(p) == 5:
+        p[0] = [(p[2], p[3])] + p[4]
+    else:
+        p[0] = []
 
 
 def p_conditional(p):
