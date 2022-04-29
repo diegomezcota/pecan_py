@@ -1,7 +1,7 @@
 // Test 5: dedicado a usar llamadas a funciones (read, write, funciones definidas o de clase)
 program test5;
 
-function sayHi(string text) returns void {
+function sayHi(var string text) returns void {
     var int times;
     write(text);
 }
@@ -9,14 +9,14 @@ function sayHi(string text) returns void {
 // Requisito para la clase es que tenga atributos y funciones
 class Saludador {
     var float a;
-    function run(string text, int times) returns void;
+    function run(var string text, var int times) returns void;
 };
 
 constructor Saludador() {
     a = b;
 }
 
-@class Saludador function run(string text, int times) returns void {
+@class Saludador function run(var string text, var int times) returns void {
     return a;
 }
 
