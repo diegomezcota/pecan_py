@@ -1,4 +1,5 @@
 class SemanticCube:
+    # TODO: Add a get_result_type() function that handles tuples that don't exist and returns None
     def __init__(self):
         self.table = {
             ('int', 'int', '*'): 'int',

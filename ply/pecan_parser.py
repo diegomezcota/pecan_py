@@ -341,7 +341,7 @@ def p_parameter(p):
                 | epsilon
     '''
     if len(p) == 5:
-        p[0] = [(p[1], p[2])] + p[3]
+        p[0] = [(p[1], p[2], p[3])] + p[4]
     else:
         p[0] = []
 
@@ -352,7 +352,7 @@ def p_parameter1(p):
                 | epsilon
     '''
     if len(p) == 6:
-        p[0] = [(p[2], p[3])] + p[4]
+        p[0] = [(p[2], p[3], p[4])] + p[5]
     else:
         p[0] = []
 
@@ -468,7 +468,7 @@ def p_function_declaration(p):
     function_declaration    : FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
     '''
     function_directory.add_function_with_variables(
-        function_variables=p[9], function_name=p[2], function_type=p[7])
+        function_parameters=p[4], function_variables=p[9], function_name=p[2], function_type=p[7])
 
 
 def p_function_return(p):
