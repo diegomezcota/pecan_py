@@ -348,7 +348,7 @@ def p_parameter(p):
 
 def p_parameter1(p):
     '''
-    parameter1  : COMMA data_type ID parameter1
+    parameter1  : COMMA var_type data_type ID parameter1
                 | epsilon
     '''
     if len(p) == 5:
