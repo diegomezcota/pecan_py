@@ -340,7 +340,7 @@ def p_parameter(p):
     parameter   : var_type data_type ID parameter1
                 | epsilon
     '''
-    if len(p) == 4:
+    if len(p) == 5:
         p[0] = [(p[1], p[2])] + p[3]
     else:
         p[0] = []
@@ -351,7 +351,7 @@ def p_parameter1(p):
     parameter1  : COMMA var_type data_type ID parameter1
                 | epsilon
     '''
-    if len(p) == 5:
+    if len(p) == 6:
         p[0] = [(p[2], p[3])] + p[4]
     else:
         p[0] = []
