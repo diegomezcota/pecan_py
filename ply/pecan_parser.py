@@ -1,11 +1,15 @@
+from function_directory import FunctionDirectory
+from avail import Avail
+from quadruples import Quadruples
 from ast import Pass
 import ply.yacc as yacc
 from lexer import tokens
 
 import json
 
-from function_directory import FunctionDirectory
 function_directory = FunctionDirectory()
+avail = Avail()
+quads = Quadruples()
 
 # TODO: main scope and their variables, meternos al los statements
 # ideas: main function part be their own function to add to the function directory in an easier way
@@ -196,6 +200,7 @@ def p_variable_declaration(p):
     else:
         p[0] = ('variable_declaration', p[1], p[4], p[2])
 
+
 def p_var_type(p):
     '''
     var_type    : VAR
@@ -203,6 +208,7 @@ def p_var_type(p):
                 | OBJ
     '''
     p[0] = p[1]
+
 
 def p_variable_declaration1(p):
     '''
