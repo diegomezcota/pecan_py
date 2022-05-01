@@ -102,47 +102,51 @@ Rule 96    read -> READ OPEN_PARENTHESIS variable_loop CLOSE_PARENTHESIS SEMICOL
 Rule 97    variable_loop -> variable variable_loop1
 Rule 98    variable_loop1 -> COMMA variable variable_loop1
 Rule 99    variable_loop1 -> epsilon
-Rule 100   write -> WRITE OPEN_PARENTHESIS hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
-Rule 101   hyper_exp_loop -> hyper_exp hyper_exp_loop1
-Rule 102   hyper_exp_loop1 -> COMMA hyper_exp hyper_exp_loop1
-Rule 103   hyper_exp_loop1 -> epsilon
-Rule 104   function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
-Rule 105   function_call1 -> DOT ID
-Rule 106   function_call1 -> epsilon
-Rule 107   function_call2 -> hyper_exp_loop
-Rule 108   function_call2 -> epsilon
-Rule 109   class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
-Rule 110   function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
-Rule 111   function_return -> RETURN hyper_exp SEMICOLON
-Rule 112   function_return -> epsilon
-Rule 113   function_statement_loop -> statement_loop
-Rule 114   function_statement_loop -> epsilon
-Rule 115   epsilon -> <empty>
+Rule 100   write -> WRITE OPEN_PARENTHESIS write_hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
+Rule 101   write_hyper_exp_loop -> hyper_exp np_add_write_quad write_hyper_exp_loop1
+Rule 102   write_hyper_exp_loop1 -> COMMA hyper_exp np_add_write_quad write_hyper_exp_loop1
+Rule 103   write_hyper_exp_loop1 -> epsilon
+Rule 104   np_add_write_quad -> epsilon
+Rule 105   hyper_exp_loop -> hyper_exp hyper_exp_loop1
+Rule 106   hyper_exp_loop1 -> COMMA hyper_exp hyper_exp_loop1
+Rule 107   hyper_exp_loop1 -> epsilon
+Rule 108   function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+Rule 109   function_call1 -> DOT ID
+Rule 110   function_call1 -> epsilon
+Rule 111   function_call2 -> hyper_exp_loop
+Rule 112   function_call2 -> epsilon
+Rule 113   class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+Rule 114   function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
+Rule 115   function_return -> RETURN hyper_exp SEMICOLON
+Rule 116   function_return -> epsilon
+Rule 117   function_statement_loop -> statement_loop
+Rule 118   function_statement_loop -> epsilon
+Rule 119   epsilon -> <empty>
 
 Terminals, with rules where they appear
 
 AND                  : 47
 ASSIGN               : 32 33 44
-AT_CLASS             : 109
+AT_CLASS             : 113
 BOOL                 : 80
 BOOL_VALUE           : 71
 CLASS                : 16
 CLOSE_BRACKET        : 13 32
-CLOSE_KEY            : 2 16 28 90 91 95 109 110
-CLOSE_PARENTHESIS    : 2 28 33 74 81 90 93 94 96 100 104 109 110
-COMMA                : 87 88 98 102
+CLOSE_KEY            : 2 16 28 90 91 95 113 114
+CLOSE_PARENTHESIS    : 2 28 33 74 81 90 93 94 96 100 108 113 114
+COMMA                : 87 88 98 102 106
 CONSTRUCTOR          : 28
 DIVISION             : 65
-DOT                  : 14 105
+DOT                  : 14 109
 ELSE                 : 91
 EQUAL_TO             : 54
 FLOAT                : 78
 FLOAT_VALUE          : 69
 FOR                  : 93
-FUNCTION             : 81 109 110
+FUNCTION             : 81 113 114
 GREATER_THAN         : 52
 GROUP                : 32 35
-ID                   : 1 12 14 16 17 28 31 32 33 33 81 84 85 85 87 88 88 93 93 104 105 109 109 110
+ID                   : 1 12 14 16 17 28 31 32 33 33 81 84 85 85 87 88 88 93 93 108 109 113 113 114
 IF                   : 90
 IN                   : 93
 INT                  : 77
@@ -155,15 +159,15 @@ MULTIPLICATION       : 64
 NOT_EQUAL_TO         : 55
 OBJ                  : 33 85 88
 OPEN_BRACKET         : 13 32
-OPEN_KEY             : 2 16 28 90 91 95 109 110
-OPEN_PARENTHESIS     : 2 28 33 74 81 90 93 94 96 100 104 109 110
+OPEN_KEY             : 2 16 28 90 91 95 113 114
+OPEN_PARENTHESIS     : 2 28 33 74 81 90 93 94 96 100 108 113 114
 OR                   : 48
 PLUS                 : 59
 PROGRAM              : 1
 READ                 : 96
-RETURN               : 111
-RETURNS              : 81 109 110
-SEMICOLON            : 1 16 31 32 33 44 81 96 100 104 111
+RETURN               : 115
+RETURNS              : 81 113 114
+SEMICOLON            : 1 16 31 32 33 44 81 96 100 108 115
 STRING               : 79
 STRING_VALUE         : 72
 VAR                  : 31 34
@@ -194,36 +198,37 @@ cycle1               : 93 94
 data_type            : 31 32 82 84 87
 declaration          : 4
 declaration_loop     : 1 4
-epsilon              : 3 5 8 15 18 20 24 27 30 37 45 49 50 56 57 61 62 66 67 75 76 86 89 92 99 103 106 108 112 114
+epsilon              : 3 5 8 15 18 20 24 27 30 37 45 49 50 56 57 61 62 66 67 75 76 86 89 92 99 103 104 107 110 112 116 118
 exp                  : 51 52 53 54 55
 exp1                 : 58 59 60
 factor               : 63 64 65
 function_call        : 43 68
-function_call1       : 104
-function_call2       : 104
+function_call1       : 108
+function_call2       : 108
 function_declaration : 11
-function_return      : 109 110
-function_statement_loop : 109 110
-hyper_exp            : 13 44 74 90 94 101 102 111
+function_return      : 113 114
+function_statement_loop : 113 114
+hyper_exp            : 13 44 74 90 94 101 102 105 106 115
 hyper_exp1           : 46 47 48
-hyper_exp_loop       : 36 100 107
-hyper_exp_loop1      : 101 102
+hyper_exp_loop       : 36 111
+hyper_exp_loop1      : 105 106
 main_function        : 1
 np_add_open_parenthesis : 74
 np_add_operator      : 47 48 52 53 54 55 59 60 64 65
+np_add_write_quad    : 101 102
 np_exp               : 58 59 60
 np_hyper_exp         : 46 47 48
 np_remove_open_parenthesis : 74
 np_start_func_dir    : 1
 np_super_exp         : 51 52 53 54 55
 np_term              : 63 64 65
-parameter            : 28 81 109 110
+parameter            : 28 81 113 114
 parameter1           : 84 85 87 88
 program              : 0
 read                 : 41
-return_arg           : 81 109 110
+return_arg           : 81 113 114
 statement            : 6 7
-statement_loop       : 2 28 90 91 95 113
+statement_loop       : 2 28 90 91 95 117
 statement_loop1      : 6 7
 super_exp            : 46 47 48
 super_exp1           : 51 52 53 54 55
@@ -233,10 +238,12 @@ variable             : 44 73 97 98
 variable1            : 12
 variable_declaration : 10 22 23 29
 variable_declaration1 : 33
-variable_declaration_loop : 2 29 110
+variable_declaration_loop : 2 29 114
 variable_loop        : 96
 variable_loop1       : 97 98
 write                : 42
+write_hyper_exp_loop : 100
+write_hyper_exp_loop1 : 101 102
 
 Parsing method: LALR
 
@@ -259,9 +266,9 @@ state 2
 
     (1) program -> PROGRAM . np_start_func_dir ID SEMICOLON declaration_loop main_function
     (3) np_start_func_dir -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
-    ID              reduce using rule 115 (epsilon -> .)
+    ID              reduce using rule 119 (epsilon -> .)
 
     np_start_func_dir              shift and go to state 3
     epsilon                        shift and go to state 4
@@ -295,14 +302,14 @@ state 6
     (9) declaration -> . class_declaration
     (10) declaration -> . variable_declaration
     (11) declaration -> . function_declaration
-    (115) epsilon -> .
+    (119) epsilon -> .
     (16) class_declaration -> . CLASS ID class_declaration1 OPEN_KEY class_body CLOSE_KEY SEMICOLON constructor class_declaration2
     (31) variable_declaration -> . VAR data_type ID SEMICOLON
     (32) variable_declaration -> . GROUP ID ASSIGN data_type OPEN_BRACKET INT_VALUE CLOSE_BRACKET SEMICOLON
     (33) variable_declaration -> . OBJ ID ASSIGN ID OPEN_PARENTHESIS variable_declaration1 CLOSE_PARENTHESIS SEMICOLON
-    (110) function_declaration -> . FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
+    (114) function_declaration -> . FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
 
-    MAIN            reduce using rule 115 (epsilon -> .)
+    MAIN            reduce using rule 119 (epsilon -> .)
     CLASS           shift and go to state 13
     VAR             shift and go to state 14
     GROUP           shift and go to state 15
@@ -333,14 +340,14 @@ state 8
     (9) declaration -> . class_declaration
     (10) declaration -> . variable_declaration
     (11) declaration -> . function_declaration
-    (115) epsilon -> .
+    (119) epsilon -> .
     (16) class_declaration -> . CLASS ID class_declaration1 OPEN_KEY class_body CLOSE_KEY SEMICOLON constructor class_declaration2
     (31) variable_declaration -> . VAR data_type ID SEMICOLON
     (32) variable_declaration -> . GROUP ID ASSIGN data_type OPEN_BRACKET INT_VALUE CLOSE_BRACKET SEMICOLON
     (33) variable_declaration -> . OBJ ID ASSIGN ID OPEN_PARENTHESIS variable_declaration1 CLOSE_PARENTHESIS SEMICOLON
-    (110) function_declaration -> . FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
+    (114) function_declaration -> . FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
 
-    MAIN            reduce using rule 115 (epsilon -> .)
+    MAIN            reduce using rule 119 (epsilon -> .)
     CLASS           shift and go to state 13
     VAR             shift and go to state 14
     GROUP           shift and go to state 15
@@ -435,7 +442,7 @@ state 16
 
 state 17
 
-    (110) function_declaration -> FUNCTION . ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
+    (114) function_declaration -> FUNCTION . ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
 
     ID              shift and go to state 29
 
@@ -466,10 +473,10 @@ state 21
     (16) class_declaration -> CLASS ID . class_declaration1 OPEN_KEY class_body CLOSE_KEY SEMICOLON constructor class_declaration2
     (17) class_declaration1 -> . IS ID
     (18) class_declaration1 -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     IS              shift and go to state 32
-    OPEN_KEY        reduce using rule 115 (epsilon -> .)
+    OPEN_KEY        reduce using rule 119 (epsilon -> .)
 
     class_declaration1             shift and go to state 31
     epsilon                        shift and go to state 33
@@ -537,7 +544,7 @@ state 28
 
 state 29
 
-    (110) function_declaration -> FUNCTION ID . OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
+    (114) function_declaration -> FUNCTION ID . OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
 
     OPEN_PARENTHESIS shift and go to state 37
 
@@ -601,18 +608,18 @@ state 36
 
 state 37
 
-    (110) function_declaration -> FUNCTION ID OPEN_PARENTHESIS . parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
+    (114) function_declaration -> FUNCTION ID OPEN_PARENTHESIS . parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
     (84) parameter -> . atomic_var_type data_type ID parameter1
     (85) parameter -> . OBJ ID ID parameter1
     (86) parameter -> . epsilon
     (34) atomic_var_type -> . VAR
     (35) atomic_var_type -> . GROUP
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     OBJ             shift and go to state 46
     VAR             shift and go to state 48
     GROUP           shift and go to state 49
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
 
     parameter                      shift and go to state 44
     atomic_var_type                shift and go to state 45
@@ -685,7 +692,7 @@ state 43
 
 state 44
 
-    (110) function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter . CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
+    (114) function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter . CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
 
     CLOSE_PARENTHESIS shift and go to state 56
 
@@ -747,17 +754,17 @@ state 50
     (31) variable_declaration -> . VAR data_type ID SEMICOLON
     (32) variable_declaration -> . GROUP ID ASSIGN data_type OPEN_BRACKET INT_VALUE CLOSE_BRACKET SEMICOLON
     (33) variable_declaration -> . OBJ ID ASSIGN ID OPEN_PARENTHESIS variable_declaration1 CLOSE_PARENTHESIS SEMICOLON
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     VAR             shift and go to state 14
     GROUP           shift and go to state 15
     OBJ             shift and go to state 16
-    IF              reduce using rule 115 (epsilon -> .)
-    FOR             reduce using rule 115 (epsilon -> .)
-    WHILE           reduce using rule 115 (epsilon -> .)
-    READ            reduce using rule 115 (epsilon -> .)
-    WRITE           reduce using rule 115 (epsilon -> .)
-    ID              reduce using rule 115 (epsilon -> .)
+    IF              reduce using rule 119 (epsilon -> .)
+    FOR             reduce using rule 119 (epsilon -> .)
+    WHILE           reduce using rule 119 (epsilon -> .)
+    READ            reduce using rule 119 (epsilon -> .)
+    WRITE           reduce using rule 119 (epsilon -> .)
+    ID              reduce using rule 119 (epsilon -> .)
 
     variable_declaration_loop      shift and go to state 59
     variable_declaration           shift and go to state 60
@@ -789,12 +796,12 @@ state 53
     (31) variable_declaration -> . VAR data_type ID SEMICOLON
     (32) variable_declaration -> . GROUP ID ASSIGN data_type OPEN_BRACKET INT_VALUE CLOSE_BRACKET SEMICOLON
     (33) variable_declaration -> . OBJ ID ASSIGN ID OPEN_PARENTHESIS variable_declaration1 CLOSE_PARENTHESIS SEMICOLON
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     VAR             shift and go to state 14
     GROUP           shift and go to state 15
     OBJ             shift and go to state 16
-    FUNCTION        reduce using rule 115 (epsilon -> .)
+    FUNCTION        reduce using rule 119 (epsilon -> .)
 
     variable_declaration           shift and go to state 66
     class_body2                    shift and go to state 67
@@ -812,8 +819,8 @@ state 55
     (33) variable_declaration -> OBJ ID ASSIGN ID OPEN_PARENTHESIS . variable_declaration1 CLOSE_PARENTHESIS SEMICOLON
     (36) variable_declaration1 -> . hyper_exp_loop
     (37) variable_declaration1 -> . epsilon
-    (101) hyper_exp_loop -> . hyper_exp hyper_exp_loop1
-    (115) epsilon -> .
+    (105) hyper_exp_loop -> . hyper_exp hyper_exp_loop1
+    (119) epsilon -> .
     (46) hyper_exp -> . super_exp np_hyper_exp hyper_exp1
     (51) super_exp -> . exp np_super_exp super_exp1
     (58) exp -> . term np_exp exp1
@@ -825,10 +832,10 @@ state 55
     (72) factor -> . STRING_VALUE
     (73) factor -> . variable
     (74) factor -> . OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     (12) variable -> . ID variable1
 
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
     FLOAT_VALUE     shift and go to state 81
     INT_VALUE       shift and go to state 82
     BOOL_VALUE      shift and go to state 83
@@ -849,7 +856,7 @@ state 55
 
 state 56
 
-    (110) function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS . RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
+    (114) function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS . RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
 
     RETURNS         shift and go to state 86
 
@@ -883,8 +890,8 @@ state 59
     (93) cycle -> . FOR OPEN_PARENTHESIS ID IN ID CLOSE_PARENTHESIS cycle1
     (94) cycle -> . WHILE OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS cycle1
     (96) read -> . READ OPEN_PARENTHESIS variable_loop CLOSE_PARENTHESIS SEMICOLON
-    (100) write -> . WRITE OPEN_PARENTHESIS hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (100) write -> . WRITE OPEN_PARENTHESIS write_hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     (12) variable -> . ID variable1
 
     IF              shift and go to state 98
@@ -912,19 +919,19 @@ state 60
     (31) variable_declaration -> . VAR data_type ID SEMICOLON
     (32) variable_declaration -> . GROUP ID ASSIGN data_type OPEN_BRACKET INT_VALUE CLOSE_BRACKET SEMICOLON
     (33) variable_declaration -> . OBJ ID ASSIGN ID OPEN_PARENTHESIS variable_declaration1 CLOSE_PARENTHESIS SEMICOLON
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     VAR             shift and go to state 14
     GROUP           shift and go to state 15
     OBJ             shift and go to state 16
-    IF              reduce using rule 115 (epsilon -> .)
-    FOR             reduce using rule 115 (epsilon -> .)
-    WHILE           reduce using rule 115 (epsilon -> .)
-    READ            reduce using rule 115 (epsilon -> .)
-    WRITE           reduce using rule 115 (epsilon -> .)
-    ID              reduce using rule 115 (epsilon -> .)
-    RETURN          reduce using rule 115 (epsilon -> .)
-    CLOSE_KEY       reduce using rule 115 (epsilon -> .)
+    IF              reduce using rule 119 (epsilon -> .)
+    FOR             reduce using rule 119 (epsilon -> .)
+    WHILE           reduce using rule 119 (epsilon -> .)
+    READ            reduce using rule 119 (epsilon -> .)
+    WRITE           reduce using rule 119 (epsilon -> .)
+    ID              reduce using rule 119 (epsilon -> .)
+    RETURN          reduce using rule 119 (epsilon -> .)
+    CLOSE_KEY       reduce using rule 119 (epsilon -> .)
 
     variable_declaration           shift and go to state 60
     variable_declaration_loop      shift and go to state 103
@@ -964,10 +971,10 @@ state 64
     (26) class_body4 -> . class_function_declaration class_body4
     (27) class_body4 -> . epsilon
     (81) class_function_declaration -> . FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg SEMICOLON
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     FUNCTION        shift and go to state 65
-    CLOSE_KEY       reduce using rule 115 (epsilon -> .)
+    CLOSE_KEY       reduce using rule 119 (epsilon -> .)
 
     class_function_declaration     shift and go to state 105
     class_body4                    shift and go to state 106
@@ -988,12 +995,12 @@ state 66
     (31) variable_declaration -> . VAR data_type ID SEMICOLON
     (32) variable_declaration -> . GROUP ID ASSIGN data_type OPEN_BRACKET INT_VALUE CLOSE_BRACKET SEMICOLON
     (33) variable_declaration -> . OBJ ID ASSIGN ID OPEN_PARENTHESIS variable_declaration1 CLOSE_PARENTHESIS SEMICOLON
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     VAR             shift and go to state 14
     GROUP           shift and go to state 15
     OBJ             shift and go to state 16
-    FUNCTION        reduce using rule 115 (epsilon -> .)
+    FUNCTION        reduce using rule 119 (epsilon -> .)
 
     variable_declaration           shift and go to state 66
     class_body2                    shift and go to state 109
@@ -1022,33 +1029,33 @@ state 69
 
 state 70
 
-    (104) function_call -> ID . function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (108) function_call -> ID . function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     (12) variable -> ID . variable1
-    (105) function_call1 -> . DOT ID
-    (106) function_call1 -> . epsilon
+    (109) function_call1 -> . DOT ID
+    (110) function_call1 -> . epsilon
     (13) variable1 -> . OPEN_BRACKET hyper_exp CLOSE_BRACKET
     (14) variable1 -> . DOT ID
     (15) variable1 -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     DOT             shift and go to state 113
     OPEN_BRACKET    shift and go to state 115
-    OPEN_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    MULTIPLICATION  reduce using rule 115 (epsilon -> .)
-    DIVISION        reduce using rule 115 (epsilon -> .)
-    PLUS            reduce using rule 115 (epsilon -> .)
-    MINUS           reduce using rule 115 (epsilon -> .)
-    GREATER_THAN    reduce using rule 115 (epsilon -> .)
-    LESS_THAN       reduce using rule 115 (epsilon -> .)
-    EQUAL_TO        reduce using rule 115 (epsilon -> .)
-    NOT_EQUAL_TO    reduce using rule 115 (epsilon -> .)
-    AND             reduce using rule 115 (epsilon -> .)
-    OR              reduce using rule 115 (epsilon -> .)
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    ASSIGN          reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
+    OPEN_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    MULTIPLICATION  reduce using rule 119 (epsilon -> .)
+    DIVISION        reduce using rule 119 (epsilon -> .)
+    PLUS            reduce using rule 119 (epsilon -> .)
+    MINUS           reduce using rule 119 (epsilon -> .)
+    GREATER_THAN    reduce using rule 119 (epsilon -> .)
+    LESS_THAN       reduce using rule 119 (epsilon -> .)
+    EQUAL_TO        reduce using rule 119 (epsilon -> .)
+    NOT_EQUAL_TO    reduce using rule 119 (epsilon -> .)
+    AND             reduce using rule 119 (epsilon -> .)
+    OR              reduce using rule 119 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    ASSIGN          reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
     function_call1                 shift and go to state 111
     variable1                      shift and go to state 112
@@ -1058,14 +1065,14 @@ state 71
 
     (74) factor -> OPEN_PARENTHESIS . np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
     (75) np_add_open_parenthesis -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
-    FLOAT_VALUE     reduce using rule 115 (epsilon -> .)
-    INT_VALUE       reduce using rule 115 (epsilon -> .)
-    BOOL_VALUE      reduce using rule 115 (epsilon -> .)
-    STRING_VALUE    reduce using rule 115 (epsilon -> .)
-    OPEN_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    ID              reduce using rule 115 (epsilon -> .)
+    FLOAT_VALUE     reduce using rule 119 (epsilon -> .)
+    INT_VALUE       reduce using rule 119 (epsilon -> .)
+    BOOL_VALUE      reduce using rule 119 (epsilon -> .)
+    STRING_VALUE    reduce using rule 119 (epsilon -> .)
+    OPEN_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    ID              reduce using rule 119 (epsilon -> .)
 
     np_add_open_parenthesis        shift and go to state 116
     epsilon                        shift and go to state 117
@@ -1093,13 +1100,13 @@ state 74
 
 state 75
 
-    (101) hyper_exp_loop -> hyper_exp . hyper_exp_loop1
-    (102) hyper_exp_loop1 -> . COMMA hyper_exp hyper_exp_loop1
-    (103) hyper_exp_loop1 -> . epsilon
-    (115) epsilon -> .
+    (105) hyper_exp_loop -> hyper_exp . hyper_exp_loop1
+    (106) hyper_exp_loop1 -> . COMMA hyper_exp hyper_exp_loop1
+    (107) hyper_exp_loop1 -> . epsilon
+    (119) epsilon -> .
 
     COMMA           shift and go to state 120
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
 
     hyper_exp_loop1                shift and go to state 119
     epsilon                        shift and go to state 121
@@ -1108,14 +1115,14 @@ state 76
 
     (46) hyper_exp -> super_exp . np_hyper_exp hyper_exp1
     (50) np_hyper_exp -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
-    AND             reduce using rule 115 (epsilon -> .)
-    OR              reduce using rule 115 (epsilon -> .)
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
+    AND             reduce using rule 119 (epsilon -> .)
+    OR              reduce using rule 119 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
     np_hyper_exp                   shift and go to state 122
     epsilon                        shift and go to state 123
@@ -1124,18 +1131,18 @@ state 77
 
     (51) super_exp -> exp . np_super_exp super_exp1
     (57) np_super_exp -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
-    GREATER_THAN    reduce using rule 115 (epsilon -> .)
-    LESS_THAN       reduce using rule 115 (epsilon -> .)
-    EQUAL_TO        reduce using rule 115 (epsilon -> .)
-    NOT_EQUAL_TO    reduce using rule 115 (epsilon -> .)
-    AND             reduce using rule 115 (epsilon -> .)
-    OR              reduce using rule 115 (epsilon -> .)
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
+    GREATER_THAN    reduce using rule 119 (epsilon -> .)
+    LESS_THAN       reduce using rule 119 (epsilon -> .)
+    EQUAL_TO        reduce using rule 119 (epsilon -> .)
+    NOT_EQUAL_TO    reduce using rule 119 (epsilon -> .)
+    AND             reduce using rule 119 (epsilon -> .)
+    OR              reduce using rule 119 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
     np_super_exp                   shift and go to state 124
     epsilon                        shift and go to state 125
@@ -1144,20 +1151,20 @@ state 78
 
     (58) exp -> term . np_exp exp1
     (62) np_exp -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
-    PLUS            reduce using rule 115 (epsilon -> .)
-    MINUS           reduce using rule 115 (epsilon -> .)
-    GREATER_THAN    reduce using rule 115 (epsilon -> .)
-    LESS_THAN       reduce using rule 115 (epsilon -> .)
-    EQUAL_TO        reduce using rule 115 (epsilon -> .)
-    NOT_EQUAL_TO    reduce using rule 115 (epsilon -> .)
-    AND             reduce using rule 115 (epsilon -> .)
-    OR              reduce using rule 115 (epsilon -> .)
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
+    PLUS            reduce using rule 119 (epsilon -> .)
+    MINUS           reduce using rule 119 (epsilon -> .)
+    GREATER_THAN    reduce using rule 119 (epsilon -> .)
+    LESS_THAN       reduce using rule 119 (epsilon -> .)
+    EQUAL_TO        reduce using rule 119 (epsilon -> .)
+    NOT_EQUAL_TO    reduce using rule 119 (epsilon -> .)
+    AND             reduce using rule 119 (epsilon -> .)
+    OR              reduce using rule 119 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
     np_exp                         shift and go to state 126
     epsilon                        shift and go to state 127
@@ -1166,22 +1173,22 @@ state 79
 
     (63) term -> factor . np_term term1
     (67) np_term -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
-    MULTIPLICATION  reduce using rule 115 (epsilon -> .)
-    DIVISION        reduce using rule 115 (epsilon -> .)
-    PLUS            reduce using rule 115 (epsilon -> .)
-    MINUS           reduce using rule 115 (epsilon -> .)
-    GREATER_THAN    reduce using rule 115 (epsilon -> .)
-    LESS_THAN       reduce using rule 115 (epsilon -> .)
-    EQUAL_TO        reduce using rule 115 (epsilon -> .)
-    NOT_EQUAL_TO    reduce using rule 115 (epsilon -> .)
-    AND             reduce using rule 115 (epsilon -> .)
-    OR              reduce using rule 115 (epsilon -> .)
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
+    MULTIPLICATION  reduce using rule 119 (epsilon -> .)
+    DIVISION        reduce using rule 119 (epsilon -> .)
+    PLUS            reduce using rule 119 (epsilon -> .)
+    MINUS           reduce using rule 119 (epsilon -> .)
+    GREATER_THAN    reduce using rule 119 (epsilon -> .)
+    LESS_THAN       reduce using rule 119 (epsilon -> .)
+    EQUAL_TO        reduce using rule 119 (epsilon -> .)
+    NOT_EQUAL_TO    reduce using rule 119 (epsilon -> .)
+    AND             reduce using rule 119 (epsilon -> .)
+    OR              reduce using rule 119 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
     np_term                        shift and go to state 128
     epsilon                        shift and go to state 129
@@ -1308,7 +1315,7 @@ state 85
 
 state 86
 
-    (110) function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS . return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
+    (114) function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS . return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
     (82) return_arg -> . data_type
     (83) return_arg -> . VOID
     (77) data_type -> . INT
@@ -1331,10 +1338,10 @@ state 87
     (87) parameter1 -> . COMMA atomic_var_type data_type ID parameter1
     (88) parameter1 -> . COMMA OBJ ID ID parameter1
     (89) parameter1 -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     COMMA           shift and go to state 134
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
 
     parameter1                     shift and go to state 133
     epsilon                        shift and go to state 135
@@ -1345,10 +1352,10 @@ state 88
     (87) parameter1 -> . COMMA atomic_var_type data_type ID parameter1
     (88) parameter1 -> . COMMA OBJ ID ID parameter1
     (89) parameter1 -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     COMMA           shift and go to state 134
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
 
     parameter1                     shift and go to state 136
     epsilon                        shift and go to state 135
@@ -1371,18 +1378,18 @@ state 90
     (41) statement -> . read
     (42) statement -> . write
     (43) statement -> . function_call
-    (115) epsilon -> .
+    (119) epsilon -> .
     (44) assignment -> . variable ASSIGN hyper_exp SEMICOLON
     (90) conditional -> . IF OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY conditional1
     (93) cycle -> . FOR OPEN_PARENTHESIS ID IN ID CLOSE_PARENTHESIS cycle1
     (94) cycle -> . WHILE OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS cycle1
     (96) read -> . READ OPEN_PARENTHESIS variable_loop CLOSE_PARENTHESIS SEMICOLON
-    (100) write -> . WRITE OPEN_PARENTHESIS hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (100) write -> . WRITE OPEN_PARENTHESIS write_hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     (12) variable -> . ID variable1
 
-    CLOSE_KEY       reduce using rule 115 (epsilon -> .)
-    RETURN          reduce using rule 115 (epsilon -> .)
+    CLOSE_KEY       reduce using rule 119 (epsilon -> .)
+    RETURN          reduce using rule 119 (epsilon -> .)
     IF              shift and go to state 98
     FOR             shift and go to state 99
     WHILE           shift and go to state 100
@@ -1522,7 +1529,7 @@ state 101
 
 state 102
 
-    (100) write -> WRITE . OPEN_PARENTHESIS hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
+    (100) write -> WRITE . OPEN_PARENTHESIS write_hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
 
     OPEN_PARENTHESIS shift and go to state 146
 
@@ -1556,10 +1563,10 @@ state 105
     (26) class_body4 -> . class_function_declaration class_body4
     (27) class_body4 -> . epsilon
     (81) class_function_declaration -> . FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg SEMICOLON
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     FUNCTION        shift and go to state 65
-    CLOSE_KEY       reduce using rule 115 (epsilon -> .)
+    CLOSE_KEY       reduce using rule 119 (epsilon -> .)
 
     class_function_declaration     shift and go to state 105
     class_body4                    shift and go to state 149
@@ -1602,7 +1609,7 @@ state 110
 
 state 111
 
-    (104) function_call -> ID function_call1 . OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (108) function_call -> ID function_call1 . OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
 
     OPEN_PARENTHESIS shift and go to state 152
 
@@ -1630,7 +1637,7 @@ state 112
 
 state 113
 
-    (105) function_call1 -> DOT . ID
+    (109) function_call1 -> DOT . ID
     (14) variable1 -> DOT . ID
 
     ID              shift and go to state 153
@@ -1638,10 +1645,10 @@ state 113
 
 state 114
 
-    (106) function_call1 -> epsilon .
+    (110) function_call1 -> epsilon .
     (15) variable1 -> epsilon .
 
-    OPEN_PARENTHESIS reduce using rule 106 (function_call1 -> epsilon .)
+    OPEN_PARENTHESIS reduce using rule 110 (function_call1 -> epsilon .)
     MULTIPLICATION  reduce using rule 15 (variable1 -> epsilon .)
     DIVISION        reduce using rule 15 (variable1 -> epsilon .)
     PLUS            reduce using rule 15 (variable1 -> epsilon .)
@@ -1673,7 +1680,7 @@ state 115
     (72) factor -> . STRING_VALUE
     (73) factor -> . variable
     (74) factor -> . OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     (12) variable -> . ID variable1
 
     FLOAT_VALUE     shift and go to state 81
@@ -1705,7 +1712,7 @@ state 116
     (72) factor -> . STRING_VALUE
     (73) factor -> . variable
     (74) factor -> . OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     (12) variable -> . ID variable1
 
     FLOAT_VALUE     shift and go to state 81
@@ -1744,14 +1751,14 @@ state 118
 
 state 119
 
-    (101) hyper_exp_loop -> hyper_exp hyper_exp_loop1 .
+    (105) hyper_exp_loop -> hyper_exp hyper_exp_loop1 .
 
-    CLOSE_PARENTHESIS reduce using rule 101 (hyper_exp_loop -> hyper_exp hyper_exp_loop1 .)
+    CLOSE_PARENTHESIS reduce using rule 105 (hyper_exp_loop -> hyper_exp hyper_exp_loop1 .)
 
 
 state 120
 
-    (102) hyper_exp_loop1 -> COMMA . hyper_exp hyper_exp_loop1
+    (106) hyper_exp_loop1 -> COMMA . hyper_exp hyper_exp_loop1
     (46) hyper_exp -> . super_exp np_hyper_exp hyper_exp1
     (51) super_exp -> . exp np_super_exp super_exp1
     (58) exp -> . term np_exp exp1
@@ -1763,7 +1770,7 @@ state 120
     (72) factor -> . STRING_VALUE
     (73) factor -> . variable
     (74) factor -> . OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     (12) variable -> . ID variable1
 
     FLOAT_VALUE     shift and go to state 81
@@ -1783,9 +1790,9 @@ state 120
 
 state 121
 
-    (103) hyper_exp_loop1 -> epsilon .
+    (107) hyper_exp_loop1 -> epsilon .
 
-    CLOSE_PARENTHESIS reduce using rule 103 (hyper_exp_loop1 -> epsilon .)
+    CLOSE_PARENTHESIS reduce using rule 107 (hyper_exp_loop1 -> epsilon .)
 
 
 state 122
@@ -1794,14 +1801,14 @@ state 122
     (47) hyper_exp1 -> . AND np_add_operator super_exp np_hyper_exp hyper_exp1
     (48) hyper_exp1 -> . OR np_add_operator super_exp np_hyper_exp hyper_exp1
     (49) hyper_exp1 -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     AND             shift and go to state 159
     OR              shift and go to state 160
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
     hyper_exp1                     shift and go to state 158
     epsilon                        shift and go to state 161
@@ -1826,18 +1833,18 @@ state 124
     (54) super_exp1 -> . EQUAL_TO np_add_operator exp np_super_exp super_exp1
     (55) super_exp1 -> . NOT_EQUAL_TO np_add_operator exp np_super_exp super_exp1
     (56) super_exp1 -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     GREATER_THAN    shift and go to state 163
     LESS_THAN       shift and go to state 164
     EQUAL_TO        shift and go to state 165
     NOT_EQUAL_TO    shift and go to state 166
-    AND             reduce using rule 115 (epsilon -> .)
-    OR              reduce using rule 115 (epsilon -> .)
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
+    AND             reduce using rule 119 (epsilon -> .)
+    OR              reduce using rule 119 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
     super_exp1                     shift and go to state 162
     epsilon                        shift and go to state 167
@@ -1864,20 +1871,20 @@ state 126
     (59) exp1 -> . PLUS np_add_operator term np_exp exp1
     (60) exp1 -> . MINUS np_add_operator term np_exp exp1
     (61) exp1 -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     PLUS            shift and go to state 169
     MINUS           shift and go to state 170
-    GREATER_THAN    reduce using rule 115 (epsilon -> .)
-    LESS_THAN       reduce using rule 115 (epsilon -> .)
-    EQUAL_TO        reduce using rule 115 (epsilon -> .)
-    NOT_EQUAL_TO    reduce using rule 115 (epsilon -> .)
-    AND             reduce using rule 115 (epsilon -> .)
-    OR              reduce using rule 115 (epsilon -> .)
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
+    GREATER_THAN    reduce using rule 119 (epsilon -> .)
+    LESS_THAN       reduce using rule 119 (epsilon -> .)
+    EQUAL_TO        reduce using rule 119 (epsilon -> .)
+    NOT_EQUAL_TO    reduce using rule 119 (epsilon -> .)
+    AND             reduce using rule 119 (epsilon -> .)
+    OR              reduce using rule 119 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
     exp1                           shift and go to state 168
     epsilon                        shift and go to state 171
@@ -1906,22 +1913,22 @@ state 128
     (64) term1 -> . MULTIPLICATION np_add_operator factor np_term term1
     (65) term1 -> . DIVISION np_add_operator factor np_term term1
     (66) term1 -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     MULTIPLICATION  shift and go to state 173
     DIVISION        shift and go to state 174
-    PLUS            reduce using rule 115 (epsilon -> .)
-    MINUS           reduce using rule 115 (epsilon -> .)
-    GREATER_THAN    reduce using rule 115 (epsilon -> .)
-    LESS_THAN       reduce using rule 115 (epsilon -> .)
-    EQUAL_TO        reduce using rule 115 (epsilon -> .)
-    NOT_EQUAL_TO    reduce using rule 115 (epsilon -> .)
-    AND             reduce using rule 115 (epsilon -> .)
-    OR              reduce using rule 115 (epsilon -> .)
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
+    PLUS            reduce using rule 119 (epsilon -> .)
+    MINUS           reduce using rule 119 (epsilon -> .)
+    GREATER_THAN    reduce using rule 119 (epsilon -> .)
+    LESS_THAN       reduce using rule 119 (epsilon -> .)
+    EQUAL_TO        reduce using rule 119 (epsilon -> .)
+    NOT_EQUAL_TO    reduce using rule 119 (epsilon -> .)
+    AND             reduce using rule 119 (epsilon -> .)
+    OR              reduce using rule 119 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
     term1                          shift and go to state 172
     epsilon                        shift and go to state 175
@@ -1948,7 +1955,7 @@ state 129
 
 state 130
 
-    (110) function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg . OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
+    (114) function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg . OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
 
     OPEN_KEY        shift and go to state 176
 
@@ -2021,18 +2028,18 @@ state 138
     (41) statement -> . read
     (42) statement -> . write
     (43) statement -> . function_call
-    (115) epsilon -> .
+    (119) epsilon -> .
     (44) assignment -> . variable ASSIGN hyper_exp SEMICOLON
     (90) conditional -> . IF OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY conditional1
     (93) cycle -> . FOR OPEN_PARENTHESIS ID IN ID CLOSE_PARENTHESIS cycle1
     (94) cycle -> . WHILE OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS cycle1
     (96) read -> . READ OPEN_PARENTHESIS variable_loop CLOSE_PARENTHESIS SEMICOLON
-    (100) write -> . WRITE OPEN_PARENTHESIS hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (100) write -> . WRITE OPEN_PARENTHESIS write_hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     (12) variable -> . ID variable1
 
-    CLOSE_KEY       reduce using rule 115 (epsilon -> .)
-    RETURN          reduce using rule 115 (epsilon -> .)
+    CLOSE_KEY       reduce using rule 119 (epsilon -> .)
+    RETURN          reduce using rule 119 (epsilon -> .)
     IF              shift and go to state 98
     FOR             shift and go to state 99
     WHILE           shift and go to state 100
@@ -2081,7 +2088,7 @@ state 141
     (72) factor -> . STRING_VALUE
     (73) factor -> . variable
     (74) factor -> . OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     (12) variable -> . ID variable1
 
     FLOAT_VALUE     shift and go to state 81
@@ -2113,7 +2120,7 @@ state 142
     (72) factor -> . STRING_VALUE
     (73) factor -> . variable
     (74) factor -> . OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     (12) variable -> . ID variable1
 
     FLOAT_VALUE     shift and go to state 81
@@ -2152,7 +2159,7 @@ state 144
     (72) factor -> . STRING_VALUE
     (73) factor -> . variable
     (74) factor -> . OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     (12) variable -> . ID variable1
 
     FLOAT_VALUE     shift and go to state 81
@@ -2183,8 +2190,8 @@ state 145
 
 state 146
 
-    (100) write -> WRITE OPEN_PARENTHESIS . hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
-    (101) hyper_exp_loop -> . hyper_exp hyper_exp_loop1
+    (100) write -> WRITE OPEN_PARENTHESIS . write_hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
+    (101) write_hyper_exp_loop -> . hyper_exp np_add_write_quad write_hyper_exp_loop1
     (46) hyper_exp -> . super_exp np_hyper_exp hyper_exp1
     (51) super_exp -> . exp np_super_exp super_exp1
     (58) exp -> . term np_exp exp1
@@ -2196,7 +2203,7 @@ state 146
     (72) factor -> . STRING_VALUE
     (73) factor -> . variable
     (74) factor -> . OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     (12) variable -> . ID variable1
 
     FLOAT_VALUE     shift and go to state 81
@@ -2206,8 +2213,8 @@ state 146
     OPEN_PARENTHESIS shift and go to state 71
     ID              shift and go to state 70
 
-    hyper_exp_loop                 shift and go to state 187
-    hyper_exp                      shift and go to state 75
+    write_hyper_exp_loop           shift and go to state 187
+    hyper_exp                      shift and go to state 188
     super_exp                      shift and go to state 76
     exp                            shift and go to state 77
     term                           shift and go to state 78
@@ -2220,26 +2227,26 @@ state 147
     (16) class_declaration -> CLASS ID class_declaration1 OPEN_KEY class_body CLOSE_KEY SEMICOLON constructor . class_declaration2
     (19) class_declaration2 -> . class_function class_declaration2
     (20) class_declaration2 -> . epsilon
-    (109) class_function -> . AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
-    (115) epsilon -> .
+    (113) class_function -> . AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+    (119) epsilon -> .
 
-    AT_CLASS        shift and go to state 191
-    CLASS           reduce using rule 115 (epsilon -> .)
-    VAR             reduce using rule 115 (epsilon -> .)
-    GROUP           reduce using rule 115 (epsilon -> .)
-    OBJ             reduce using rule 115 (epsilon -> .)
-    FUNCTION        reduce using rule 115 (epsilon -> .)
-    MAIN            reduce using rule 115 (epsilon -> .)
+    AT_CLASS        shift and go to state 192
+    CLASS           reduce using rule 119 (epsilon -> .)
+    VAR             reduce using rule 119 (epsilon -> .)
+    GROUP           reduce using rule 119 (epsilon -> .)
+    OBJ             reduce using rule 119 (epsilon -> .)
+    FUNCTION        reduce using rule 119 (epsilon -> .)
+    MAIN            reduce using rule 119 (epsilon -> .)
 
-    class_declaration2             shift and go to state 188
-    class_function                 shift and go to state 189
-    epsilon                        shift and go to state 190
+    class_declaration2             shift and go to state 189
+    class_function                 shift and go to state 190
+    epsilon                        shift and go to state 191
 
 state 148
 
     (28) constructor -> CONSTRUCTOR . ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY
 
-    ID              shift and go to state 192
+    ID              shift and go to state 193
 
 
 state 149
@@ -2257,14 +2264,14 @@ state 150
     (86) parameter -> . epsilon
     (34) atomic_var_type -> . VAR
     (35) atomic_var_type -> . GROUP
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     OBJ             shift and go to state 46
     VAR             shift and go to state 48
     GROUP           shift and go to state 49
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
 
-    parameter                      shift and go to state 193
+    parameter                      shift and go to state 194
     atomic_var_type                shift and go to state 45
     epsilon                        shift and go to state 47
 
@@ -2290,11 +2297,11 @@ state 151
 
 state 152
 
-    (104) function_call -> ID function_call1 OPEN_PARENTHESIS . function_call2 CLOSE_PARENTHESIS SEMICOLON
-    (107) function_call2 -> . hyper_exp_loop
-    (108) function_call2 -> . epsilon
-    (101) hyper_exp_loop -> . hyper_exp hyper_exp_loop1
-    (115) epsilon -> .
+    (108) function_call -> ID function_call1 OPEN_PARENTHESIS . function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (111) function_call2 -> . hyper_exp_loop
+    (112) function_call2 -> . epsilon
+    (105) hyper_exp_loop -> . hyper_exp hyper_exp_loop1
+    (119) epsilon -> .
     (46) hyper_exp -> . super_exp np_hyper_exp hyper_exp1
     (51) super_exp -> . exp np_super_exp super_exp1
     (58) exp -> . term np_exp exp1
@@ -2306,10 +2313,10 @@ state 152
     (72) factor -> . STRING_VALUE
     (73) factor -> . variable
     (74) factor -> . OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     (12) variable -> . ID variable1
 
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
     FLOAT_VALUE     shift and go to state 81
     INT_VALUE       shift and go to state 82
     BOOL_VALUE      shift and go to state 83
@@ -2317,9 +2324,9 @@ state 152
     OPEN_PARENTHESIS shift and go to state 71
     ID              shift and go to state 70
 
-    function_call2                 shift and go to state 194
-    hyper_exp_loop                 shift and go to state 195
-    epsilon                        shift and go to state 196
+    function_call2                 shift and go to state 195
+    hyper_exp_loop                 shift and go to state 196
+    epsilon                        shift and go to state 197
     hyper_exp                      shift and go to state 75
     super_exp                      shift and go to state 76
     exp                            shift and go to state 77
@@ -2330,10 +2337,10 @@ state 152
 
 state 153
 
-    (105) function_call1 -> DOT ID .
+    (109) function_call1 -> DOT ID .
     (14) variable1 -> DOT ID .
 
-    OPEN_PARENTHESIS reduce using rule 105 (function_call1 -> DOT ID .)
+    OPEN_PARENTHESIS reduce using rule 109 (function_call1 -> DOT ID .)
     MULTIPLICATION  reduce using rule 14 (variable1 -> DOT ID .)
     DIVISION        reduce using rule 14 (variable1 -> DOT ID .)
     PLUS            reduce using rule 14 (variable1 -> DOT ID .)
@@ -2355,14 +2362,14 @@ state 154
 
     (13) variable1 -> OPEN_BRACKET hyper_exp . CLOSE_BRACKET
 
-    CLOSE_BRACKET   shift and go to state 197
+    CLOSE_BRACKET   shift and go to state 198
 
 
 state 155
 
     (74) factor -> OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp . CLOSE_PARENTHESIS np_remove_open_parenthesis
 
-    CLOSE_PARENTHESIS shift and go to state 198
+    CLOSE_PARENTHESIS shift and go to state 199
 
 
 state 156
@@ -2387,15 +2394,15 @@ state 156
 
 state 157
 
-    (102) hyper_exp_loop1 -> COMMA hyper_exp . hyper_exp_loop1
-    (102) hyper_exp_loop1 -> . COMMA hyper_exp hyper_exp_loop1
-    (103) hyper_exp_loop1 -> . epsilon
-    (115) epsilon -> .
+    (106) hyper_exp_loop1 -> COMMA hyper_exp . hyper_exp_loop1
+    (106) hyper_exp_loop1 -> . COMMA hyper_exp hyper_exp_loop1
+    (107) hyper_exp_loop1 -> . epsilon
+    (119) epsilon -> .
 
     COMMA           shift and go to state 120
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
 
-    hyper_exp_loop1                shift and go to state 199
+    hyper_exp_loop1                shift and go to state 200
     epsilon                        shift and go to state 121
 
 state 158
@@ -2412,33 +2419,33 @@ state 159
 
     (47) hyper_exp1 -> AND . np_add_operator super_exp np_hyper_exp hyper_exp1
     (45) np_add_operator -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
-    FLOAT_VALUE     reduce using rule 115 (epsilon -> .)
-    INT_VALUE       reduce using rule 115 (epsilon -> .)
-    BOOL_VALUE      reduce using rule 115 (epsilon -> .)
-    STRING_VALUE    reduce using rule 115 (epsilon -> .)
-    OPEN_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    ID              reduce using rule 115 (epsilon -> .)
+    FLOAT_VALUE     reduce using rule 119 (epsilon -> .)
+    INT_VALUE       reduce using rule 119 (epsilon -> .)
+    BOOL_VALUE      reduce using rule 119 (epsilon -> .)
+    STRING_VALUE    reduce using rule 119 (epsilon -> .)
+    OPEN_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    ID              reduce using rule 119 (epsilon -> .)
 
-    np_add_operator                shift and go to state 200
-    epsilon                        shift and go to state 201
+    np_add_operator                shift and go to state 201
+    epsilon                        shift and go to state 202
 
 state 160
 
     (48) hyper_exp1 -> OR . np_add_operator super_exp np_hyper_exp hyper_exp1
     (45) np_add_operator -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
-    FLOAT_VALUE     reduce using rule 115 (epsilon -> .)
-    INT_VALUE       reduce using rule 115 (epsilon -> .)
-    BOOL_VALUE      reduce using rule 115 (epsilon -> .)
-    STRING_VALUE    reduce using rule 115 (epsilon -> .)
-    OPEN_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    ID              reduce using rule 115 (epsilon -> .)
+    FLOAT_VALUE     reduce using rule 119 (epsilon -> .)
+    INT_VALUE       reduce using rule 119 (epsilon -> .)
+    BOOL_VALUE      reduce using rule 119 (epsilon -> .)
+    STRING_VALUE    reduce using rule 119 (epsilon -> .)
+    OPEN_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    ID              reduce using rule 119 (epsilon -> .)
 
-    np_add_operator                shift and go to state 202
-    epsilon                        shift and go to state 201
+    np_add_operator                shift and go to state 203
+    epsilon                        shift and go to state 202
 
 state 161
 
@@ -2466,65 +2473,65 @@ state 163
 
     (52) super_exp1 -> GREATER_THAN . np_add_operator exp np_super_exp super_exp1
     (45) np_add_operator -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
-    FLOAT_VALUE     reduce using rule 115 (epsilon -> .)
-    INT_VALUE       reduce using rule 115 (epsilon -> .)
-    BOOL_VALUE      reduce using rule 115 (epsilon -> .)
-    STRING_VALUE    reduce using rule 115 (epsilon -> .)
-    OPEN_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    ID              reduce using rule 115 (epsilon -> .)
+    FLOAT_VALUE     reduce using rule 119 (epsilon -> .)
+    INT_VALUE       reduce using rule 119 (epsilon -> .)
+    BOOL_VALUE      reduce using rule 119 (epsilon -> .)
+    STRING_VALUE    reduce using rule 119 (epsilon -> .)
+    OPEN_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    ID              reduce using rule 119 (epsilon -> .)
 
-    np_add_operator                shift and go to state 203
-    epsilon                        shift and go to state 201
+    np_add_operator                shift and go to state 204
+    epsilon                        shift and go to state 202
 
 state 164
 
     (53) super_exp1 -> LESS_THAN . np_add_operator exp np_super_exp super_exp1
     (45) np_add_operator -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
-    FLOAT_VALUE     reduce using rule 115 (epsilon -> .)
-    INT_VALUE       reduce using rule 115 (epsilon -> .)
-    BOOL_VALUE      reduce using rule 115 (epsilon -> .)
-    STRING_VALUE    reduce using rule 115 (epsilon -> .)
-    OPEN_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    ID              reduce using rule 115 (epsilon -> .)
+    FLOAT_VALUE     reduce using rule 119 (epsilon -> .)
+    INT_VALUE       reduce using rule 119 (epsilon -> .)
+    BOOL_VALUE      reduce using rule 119 (epsilon -> .)
+    STRING_VALUE    reduce using rule 119 (epsilon -> .)
+    OPEN_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    ID              reduce using rule 119 (epsilon -> .)
 
-    np_add_operator                shift and go to state 204
-    epsilon                        shift and go to state 201
+    np_add_operator                shift and go to state 205
+    epsilon                        shift and go to state 202
 
 state 165
 
     (54) super_exp1 -> EQUAL_TO . np_add_operator exp np_super_exp super_exp1
     (45) np_add_operator -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
-    FLOAT_VALUE     reduce using rule 115 (epsilon -> .)
-    INT_VALUE       reduce using rule 115 (epsilon -> .)
-    BOOL_VALUE      reduce using rule 115 (epsilon -> .)
-    STRING_VALUE    reduce using rule 115 (epsilon -> .)
-    OPEN_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    ID              reduce using rule 115 (epsilon -> .)
+    FLOAT_VALUE     reduce using rule 119 (epsilon -> .)
+    INT_VALUE       reduce using rule 119 (epsilon -> .)
+    BOOL_VALUE      reduce using rule 119 (epsilon -> .)
+    STRING_VALUE    reduce using rule 119 (epsilon -> .)
+    OPEN_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    ID              reduce using rule 119 (epsilon -> .)
 
-    np_add_operator                shift and go to state 205
-    epsilon                        shift and go to state 201
+    np_add_operator                shift and go to state 206
+    epsilon                        shift and go to state 202
 
 state 166
 
     (55) super_exp1 -> NOT_EQUAL_TO . np_add_operator exp np_super_exp super_exp1
     (45) np_add_operator -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
-    FLOAT_VALUE     reduce using rule 115 (epsilon -> .)
-    INT_VALUE       reduce using rule 115 (epsilon -> .)
-    BOOL_VALUE      reduce using rule 115 (epsilon -> .)
-    STRING_VALUE    reduce using rule 115 (epsilon -> .)
-    OPEN_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    ID              reduce using rule 115 (epsilon -> .)
+    FLOAT_VALUE     reduce using rule 119 (epsilon -> .)
+    INT_VALUE       reduce using rule 119 (epsilon -> .)
+    BOOL_VALUE      reduce using rule 119 (epsilon -> .)
+    STRING_VALUE    reduce using rule 119 (epsilon -> .)
+    OPEN_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    ID              reduce using rule 119 (epsilon -> .)
 
-    np_add_operator                shift and go to state 206
-    epsilon                        shift and go to state 201
+    np_add_operator                shift and go to state 207
+    epsilon                        shift and go to state 202
 
 state 167
 
@@ -2558,33 +2565,33 @@ state 169
 
     (59) exp1 -> PLUS . np_add_operator term np_exp exp1
     (45) np_add_operator -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
-    FLOAT_VALUE     reduce using rule 115 (epsilon -> .)
-    INT_VALUE       reduce using rule 115 (epsilon -> .)
-    BOOL_VALUE      reduce using rule 115 (epsilon -> .)
-    STRING_VALUE    reduce using rule 115 (epsilon -> .)
-    OPEN_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    ID              reduce using rule 115 (epsilon -> .)
+    FLOAT_VALUE     reduce using rule 119 (epsilon -> .)
+    INT_VALUE       reduce using rule 119 (epsilon -> .)
+    BOOL_VALUE      reduce using rule 119 (epsilon -> .)
+    STRING_VALUE    reduce using rule 119 (epsilon -> .)
+    OPEN_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    ID              reduce using rule 119 (epsilon -> .)
 
-    np_add_operator                shift and go to state 207
-    epsilon                        shift and go to state 201
+    np_add_operator                shift and go to state 208
+    epsilon                        shift and go to state 202
 
 state 170
 
     (60) exp1 -> MINUS . np_add_operator term np_exp exp1
     (45) np_add_operator -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
-    FLOAT_VALUE     reduce using rule 115 (epsilon -> .)
-    INT_VALUE       reduce using rule 115 (epsilon -> .)
-    BOOL_VALUE      reduce using rule 115 (epsilon -> .)
-    STRING_VALUE    reduce using rule 115 (epsilon -> .)
-    OPEN_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    ID              reduce using rule 115 (epsilon -> .)
+    FLOAT_VALUE     reduce using rule 119 (epsilon -> .)
+    INT_VALUE       reduce using rule 119 (epsilon -> .)
+    BOOL_VALUE      reduce using rule 119 (epsilon -> .)
+    STRING_VALUE    reduce using rule 119 (epsilon -> .)
+    OPEN_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    ID              reduce using rule 119 (epsilon -> .)
 
-    np_add_operator                shift and go to state 208
-    epsilon                        shift and go to state 201
+    np_add_operator                shift and go to state 209
+    epsilon                        shift and go to state 202
 
 state 171
 
@@ -2624,33 +2631,33 @@ state 173
 
     (64) term1 -> MULTIPLICATION . np_add_operator factor np_term term1
     (45) np_add_operator -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
-    FLOAT_VALUE     reduce using rule 115 (epsilon -> .)
-    INT_VALUE       reduce using rule 115 (epsilon -> .)
-    BOOL_VALUE      reduce using rule 115 (epsilon -> .)
-    STRING_VALUE    reduce using rule 115 (epsilon -> .)
-    OPEN_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    ID              reduce using rule 115 (epsilon -> .)
+    FLOAT_VALUE     reduce using rule 119 (epsilon -> .)
+    INT_VALUE       reduce using rule 119 (epsilon -> .)
+    BOOL_VALUE      reduce using rule 119 (epsilon -> .)
+    STRING_VALUE    reduce using rule 119 (epsilon -> .)
+    OPEN_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    ID              reduce using rule 119 (epsilon -> .)
 
-    np_add_operator                shift and go to state 209
-    epsilon                        shift and go to state 201
+    np_add_operator                shift and go to state 210
+    epsilon                        shift and go to state 202
 
 state 174
 
     (65) term1 -> DIVISION . np_add_operator factor np_term term1
     (45) np_add_operator -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
-    FLOAT_VALUE     reduce using rule 115 (epsilon -> .)
-    INT_VALUE       reduce using rule 115 (epsilon -> .)
-    BOOL_VALUE      reduce using rule 115 (epsilon -> .)
-    STRING_VALUE    reduce using rule 115 (epsilon -> .)
-    OPEN_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    ID              reduce using rule 115 (epsilon -> .)
+    FLOAT_VALUE     reduce using rule 119 (epsilon -> .)
+    INT_VALUE       reduce using rule 119 (epsilon -> .)
+    BOOL_VALUE      reduce using rule 119 (epsilon -> .)
+    STRING_VALUE    reduce using rule 119 (epsilon -> .)
+    OPEN_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    ID              reduce using rule 119 (epsilon -> .)
 
-    np_add_operator                shift and go to state 210
-    epsilon                        shift and go to state 201
+    np_add_operator                shift and go to state 211
+    epsilon                        shift and go to state 202
 
 state 175
 
@@ -2672,27 +2679,27 @@ state 175
 
 state 176
 
-    (110) function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY . variable_declaration_loop function_statement_loop function_return CLOSE_KEY
+    (114) function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY . variable_declaration_loop function_statement_loop function_return CLOSE_KEY
     (29) variable_declaration_loop -> . variable_declaration variable_declaration_loop
     (30) variable_declaration_loop -> . epsilon
     (31) variable_declaration -> . VAR data_type ID SEMICOLON
     (32) variable_declaration -> . GROUP ID ASSIGN data_type OPEN_BRACKET INT_VALUE CLOSE_BRACKET SEMICOLON
     (33) variable_declaration -> . OBJ ID ASSIGN ID OPEN_PARENTHESIS variable_declaration1 CLOSE_PARENTHESIS SEMICOLON
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     VAR             shift and go to state 14
     GROUP           shift and go to state 15
     OBJ             shift and go to state 16
-    IF              reduce using rule 115 (epsilon -> .)
-    FOR             reduce using rule 115 (epsilon -> .)
-    WHILE           reduce using rule 115 (epsilon -> .)
-    READ            reduce using rule 115 (epsilon -> .)
-    WRITE           reduce using rule 115 (epsilon -> .)
-    ID              reduce using rule 115 (epsilon -> .)
-    RETURN          reduce using rule 115 (epsilon -> .)
-    CLOSE_KEY       reduce using rule 115 (epsilon -> .)
+    IF              reduce using rule 119 (epsilon -> .)
+    FOR             reduce using rule 119 (epsilon -> .)
+    WHILE           reduce using rule 119 (epsilon -> .)
+    READ            reduce using rule 119 (epsilon -> .)
+    WRITE           reduce using rule 119 (epsilon -> .)
+    ID              reduce using rule 119 (epsilon -> .)
+    RETURN          reduce using rule 119 (epsilon -> .)
+    CLOSE_KEY       reduce using rule 119 (epsilon -> .)
 
-    variable_declaration_loop      shift and go to state 211
+    variable_declaration_loop      shift and go to state 212
     variable_declaration           shift and go to state 60
     epsilon                        shift and go to state 61
 
@@ -2709,13 +2716,13 @@ state 177
     STRING          shift and go to state 25
     BOOL            shift and go to state 26
 
-    data_type                      shift and go to state 212
+    data_type                      shift and go to state 213
 
 state 178
 
     (88) parameter1 -> COMMA OBJ . ID ID parameter1
 
-    ID              shift and go to state 213
+    ID              shift and go to state 214
 
 
 state 179
@@ -2730,35 +2737,35 @@ state 180
 
     (44) assignment -> variable ASSIGN hyper_exp . SEMICOLON
 
-    SEMICOLON       shift and go to state 214
+    SEMICOLON       shift and go to state 215
 
 
 state 181
 
     (90) conditional -> IF OPEN_PARENTHESIS hyper_exp . CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY conditional1
 
-    CLOSE_PARENTHESIS shift and go to state 215
+    CLOSE_PARENTHESIS shift and go to state 216
 
 
 state 182
 
     (93) cycle -> FOR OPEN_PARENTHESIS ID . IN ID CLOSE_PARENTHESIS cycle1
 
-    IN              shift and go to state 216
+    IN              shift and go to state 217
 
 
 state 183
 
     (94) cycle -> WHILE OPEN_PARENTHESIS hyper_exp . CLOSE_PARENTHESIS cycle1
 
-    CLOSE_PARENTHESIS shift and go to state 217
+    CLOSE_PARENTHESIS shift and go to state 218
 
 
 state 184
 
     (96) read -> READ OPEN_PARENTHESIS variable_loop . CLOSE_PARENTHESIS SEMICOLON
 
-    CLOSE_PARENTHESIS shift and go to state 218
+    CLOSE_PARENTHESIS shift and go to state 219
 
 
 state 185
@@ -2766,13 +2773,13 @@ state 185
     (97) variable_loop -> variable . variable_loop1
     (98) variable_loop1 -> . COMMA variable variable_loop1
     (99) variable_loop1 -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
-    COMMA           shift and go to state 220
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
+    COMMA           shift and go to state 221
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
 
-    variable_loop1                 shift and go to state 219
-    epsilon                        shift and go to state 221
+    variable_loop1                 shift and go to state 220
+    epsilon                        shift and go to state 222
 
 state 186
 
@@ -2780,24 +2787,36 @@ state 186
     (13) variable1 -> . OPEN_BRACKET hyper_exp CLOSE_BRACKET
     (14) variable1 -> . DOT ID
     (15) variable1 -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     OPEN_BRACKET    shift and go to state 115
-    DOT             shift and go to state 222
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
+    DOT             shift and go to state 223
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
 
     variable1                      shift and go to state 112
-    epsilon                        shift and go to state 223
+    epsilon                        shift and go to state 224
 
 state 187
 
-    (100) write -> WRITE OPEN_PARENTHESIS hyper_exp_loop . CLOSE_PARENTHESIS SEMICOLON
+    (100) write -> WRITE OPEN_PARENTHESIS write_hyper_exp_loop . CLOSE_PARENTHESIS SEMICOLON
 
-    CLOSE_PARENTHESIS shift and go to state 224
+    CLOSE_PARENTHESIS shift and go to state 225
 
 
 state 188
+
+    (101) write_hyper_exp_loop -> hyper_exp . np_add_write_quad write_hyper_exp_loop1
+    (104) np_add_write_quad -> . epsilon
+    (119) epsilon -> .
+
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+
+    np_add_write_quad              shift and go to state 226
+    epsilon                        shift and go to state 227
+
+state 189
 
     (16) class_declaration -> CLASS ID class_declaration1 OPEN_KEY class_body CLOSE_KEY SEMICOLON constructor class_declaration2 .
 
@@ -2809,27 +2828,27 @@ state 188
     MAIN            reduce using rule 16 (class_declaration -> CLASS ID class_declaration1 OPEN_KEY class_body CLOSE_KEY SEMICOLON constructor class_declaration2 .)
 
 
-state 189
+state 190
 
     (19) class_declaration2 -> class_function . class_declaration2
     (19) class_declaration2 -> . class_function class_declaration2
     (20) class_declaration2 -> . epsilon
-    (109) class_function -> . AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
-    (115) epsilon -> .
+    (113) class_function -> . AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+    (119) epsilon -> .
 
-    AT_CLASS        shift and go to state 191
-    CLASS           reduce using rule 115 (epsilon -> .)
-    VAR             reduce using rule 115 (epsilon -> .)
-    GROUP           reduce using rule 115 (epsilon -> .)
-    OBJ             reduce using rule 115 (epsilon -> .)
-    FUNCTION        reduce using rule 115 (epsilon -> .)
-    MAIN            reduce using rule 115 (epsilon -> .)
+    AT_CLASS        shift and go to state 192
+    CLASS           reduce using rule 119 (epsilon -> .)
+    VAR             reduce using rule 119 (epsilon -> .)
+    GROUP           reduce using rule 119 (epsilon -> .)
+    OBJ             reduce using rule 119 (epsilon -> .)
+    FUNCTION        reduce using rule 119 (epsilon -> .)
+    MAIN            reduce using rule 119 (epsilon -> .)
 
-    class_function                 shift and go to state 189
-    class_declaration2             shift and go to state 225
-    epsilon                        shift and go to state 190
+    class_function                 shift and go to state 190
+    class_declaration2             shift and go to state 228
+    epsilon                        shift and go to state 191
 
-state 190
+state 191
 
     (20) class_declaration2 -> epsilon .
 
@@ -2841,49 +2860,49 @@ state 190
     MAIN            reduce using rule 20 (class_declaration2 -> epsilon .)
 
 
-state 191
-
-    (109) class_function -> AT_CLASS . ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
-
-    ID              shift and go to state 226
-
-
 state 192
 
-    (28) constructor -> CONSTRUCTOR ID . OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY
+    (113) class_function -> AT_CLASS . ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
 
-    OPEN_PARENTHESIS shift and go to state 227
+    ID              shift and go to state 229
 
 
 state 193
 
-    (81) class_function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter . CLOSE_PARENTHESIS RETURNS return_arg SEMICOLON
+    (28) constructor -> CONSTRUCTOR ID . OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY
 
-    CLOSE_PARENTHESIS shift and go to state 228
+    OPEN_PARENTHESIS shift and go to state 230
 
 
 state 194
 
-    (104) function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 . CLOSE_PARENTHESIS SEMICOLON
+    (81) class_function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter . CLOSE_PARENTHESIS RETURNS return_arg SEMICOLON
 
-    CLOSE_PARENTHESIS shift and go to state 229
+    CLOSE_PARENTHESIS shift and go to state 231
 
 
 state 195
 
-    (107) function_call2 -> hyper_exp_loop .
+    (108) function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 . CLOSE_PARENTHESIS SEMICOLON
 
-    CLOSE_PARENTHESIS reduce using rule 107 (function_call2 -> hyper_exp_loop .)
+    CLOSE_PARENTHESIS shift and go to state 232
 
 
 state 196
 
-    (108) function_call2 -> epsilon .
+    (111) function_call2 -> hyper_exp_loop .
 
-    CLOSE_PARENTHESIS reduce using rule 108 (function_call2 -> epsilon .)
+    CLOSE_PARENTHESIS reduce using rule 111 (function_call2 -> hyper_exp_loop .)
 
 
 state 197
+
+    (112) function_call2 -> epsilon .
+
+    CLOSE_PARENTHESIS reduce using rule 112 (function_call2 -> epsilon .)
+
+
+state 198
 
     (13) variable1 -> OPEN_BRACKET hyper_exp CLOSE_BRACKET .
 
@@ -2904,38 +2923,38 @@ state 197
     SEMICOLON       reduce using rule 13 (variable1 -> OPEN_BRACKET hyper_exp CLOSE_BRACKET .)
 
 
-state 198
+state 199
 
     (74) factor -> OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS . np_remove_open_parenthesis
     (76) np_remove_open_parenthesis -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
-    MULTIPLICATION  reduce using rule 115 (epsilon -> .)
-    DIVISION        reduce using rule 115 (epsilon -> .)
-    PLUS            reduce using rule 115 (epsilon -> .)
-    MINUS           reduce using rule 115 (epsilon -> .)
-    GREATER_THAN    reduce using rule 115 (epsilon -> .)
-    LESS_THAN       reduce using rule 115 (epsilon -> .)
-    EQUAL_TO        reduce using rule 115 (epsilon -> .)
-    NOT_EQUAL_TO    reduce using rule 115 (epsilon -> .)
-    AND             reduce using rule 115 (epsilon -> .)
-    OR              reduce using rule 115 (epsilon -> .)
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
+    MULTIPLICATION  reduce using rule 119 (epsilon -> .)
+    DIVISION        reduce using rule 119 (epsilon -> .)
+    PLUS            reduce using rule 119 (epsilon -> .)
+    MINUS           reduce using rule 119 (epsilon -> .)
+    GREATER_THAN    reduce using rule 119 (epsilon -> .)
+    LESS_THAN       reduce using rule 119 (epsilon -> .)
+    EQUAL_TO        reduce using rule 119 (epsilon -> .)
+    NOT_EQUAL_TO    reduce using rule 119 (epsilon -> .)
+    AND             reduce using rule 119 (epsilon -> .)
+    OR              reduce using rule 119 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
-    np_remove_open_parenthesis     shift and go to state 230
-    epsilon                        shift and go to state 231
-
-state 199
-
-    (102) hyper_exp_loop1 -> COMMA hyper_exp hyper_exp_loop1 .
-
-    CLOSE_PARENTHESIS reduce using rule 102 (hyper_exp_loop1 -> COMMA hyper_exp hyper_exp_loop1 .)
-
+    np_remove_open_parenthesis     shift and go to state 233
+    epsilon                        shift and go to state 234
 
 state 200
+
+    (106) hyper_exp_loop1 -> COMMA hyper_exp hyper_exp_loop1 .
+
+    CLOSE_PARENTHESIS reduce using rule 106 (hyper_exp_loop1 -> COMMA hyper_exp hyper_exp_loop1 .)
+
+
+state 201
 
     (47) hyper_exp1 -> AND np_add_operator . super_exp np_hyper_exp hyper_exp1
     (51) super_exp -> . exp np_super_exp super_exp1
@@ -2948,7 +2967,7 @@ state 200
     (72) factor -> . STRING_VALUE
     (73) factor -> . variable
     (74) factor -> . OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     (12) variable -> . ID variable1
 
     FLOAT_VALUE     shift and go to state 81
@@ -2958,14 +2977,14 @@ state 200
     OPEN_PARENTHESIS shift and go to state 71
     ID              shift and go to state 70
 
-    super_exp                      shift and go to state 232
+    super_exp                      shift and go to state 235
     exp                            shift and go to state 77
     term                           shift and go to state 78
     factor                         shift and go to state 79
     function_call                  shift and go to state 80
     variable                       shift and go to state 85
 
-state 201
+state 202
 
     (45) np_add_operator -> epsilon .
 
@@ -2977,7 +2996,7 @@ state 201
     ID              reduce using rule 45 (np_add_operator -> epsilon .)
 
 
-state 202
+state 203
 
     (48) hyper_exp1 -> OR np_add_operator . super_exp np_hyper_exp hyper_exp1
     (51) super_exp -> . exp np_super_exp super_exp1
@@ -2990,7 +3009,7 @@ state 202
     (72) factor -> . STRING_VALUE
     (73) factor -> . variable
     (74) factor -> . OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     (12) variable -> . ID variable1
 
     FLOAT_VALUE     shift and go to state 81
@@ -3000,14 +3019,14 @@ state 202
     OPEN_PARENTHESIS shift and go to state 71
     ID              shift and go to state 70
 
-    super_exp                      shift and go to state 233
+    super_exp                      shift and go to state 236
     exp                            shift and go to state 77
     term                           shift and go to state 78
     factor                         shift and go to state 79
     function_call                  shift and go to state 80
     variable                       shift and go to state 85
 
-state 203
+state 204
 
     (52) super_exp1 -> GREATER_THAN np_add_operator . exp np_super_exp super_exp1
     (58) exp -> . term np_exp exp1
@@ -3019,91 +3038,7 @@ state 203
     (72) factor -> . STRING_VALUE
     (73) factor -> . variable
     (74) factor -> . OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
-    (12) variable -> . ID variable1
-
-    FLOAT_VALUE     shift and go to state 81
-    INT_VALUE       shift and go to state 82
-    BOOL_VALUE      shift and go to state 83
-    STRING_VALUE    shift and go to state 84
-    OPEN_PARENTHESIS shift and go to state 71
-    ID              shift and go to state 70
-
-    exp                            shift and go to state 234
-    term                           shift and go to state 78
-    factor                         shift and go to state 79
-    function_call                  shift and go to state 80
-    variable                       shift and go to state 85
-
-state 204
-
-    (53) super_exp1 -> LESS_THAN np_add_operator . exp np_super_exp super_exp1
-    (58) exp -> . term np_exp exp1
-    (63) term -> . factor np_term term1
-    (68) factor -> . function_call
-    (69) factor -> . FLOAT_VALUE
-    (70) factor -> . INT_VALUE
-    (71) factor -> . BOOL_VALUE
-    (72) factor -> . STRING_VALUE
-    (73) factor -> . variable
-    (74) factor -> . OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
-    (12) variable -> . ID variable1
-
-    FLOAT_VALUE     shift and go to state 81
-    INT_VALUE       shift and go to state 82
-    BOOL_VALUE      shift and go to state 83
-    STRING_VALUE    shift and go to state 84
-    OPEN_PARENTHESIS shift and go to state 71
-    ID              shift and go to state 70
-
-    exp                            shift and go to state 235
-    term                           shift and go to state 78
-    factor                         shift and go to state 79
-    function_call                  shift and go to state 80
-    variable                       shift and go to state 85
-
-state 205
-
-    (54) super_exp1 -> EQUAL_TO np_add_operator . exp np_super_exp super_exp1
-    (58) exp -> . term np_exp exp1
-    (63) term -> . factor np_term term1
-    (68) factor -> . function_call
-    (69) factor -> . FLOAT_VALUE
-    (70) factor -> . INT_VALUE
-    (71) factor -> . BOOL_VALUE
-    (72) factor -> . STRING_VALUE
-    (73) factor -> . variable
-    (74) factor -> . OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
-    (12) variable -> . ID variable1
-
-    FLOAT_VALUE     shift and go to state 81
-    INT_VALUE       shift and go to state 82
-    BOOL_VALUE      shift and go to state 83
-    STRING_VALUE    shift and go to state 84
-    OPEN_PARENTHESIS shift and go to state 71
-    ID              shift and go to state 70
-
-    exp                            shift and go to state 236
-    term                           shift and go to state 78
-    factor                         shift and go to state 79
-    function_call                  shift and go to state 80
-    variable                       shift and go to state 85
-
-state 206
-
-    (55) super_exp1 -> NOT_EQUAL_TO np_add_operator . exp np_super_exp super_exp1
-    (58) exp -> . term np_exp exp1
-    (63) term -> . factor np_term term1
-    (68) factor -> . function_call
-    (69) factor -> . FLOAT_VALUE
-    (70) factor -> . INT_VALUE
-    (71) factor -> . BOOL_VALUE
-    (72) factor -> . STRING_VALUE
-    (73) factor -> . variable
-    (74) factor -> . OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     (12) variable -> . ID variable1
 
     FLOAT_VALUE     shift and go to state 81
@@ -3119,7 +3054,91 @@ state 206
     function_call                  shift and go to state 80
     variable                       shift and go to state 85
 
+state 205
+
+    (53) super_exp1 -> LESS_THAN np_add_operator . exp np_super_exp super_exp1
+    (58) exp -> . term np_exp exp1
+    (63) term -> . factor np_term term1
+    (68) factor -> . function_call
+    (69) factor -> . FLOAT_VALUE
+    (70) factor -> . INT_VALUE
+    (71) factor -> . BOOL_VALUE
+    (72) factor -> . STRING_VALUE
+    (73) factor -> . variable
+    (74) factor -> . OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (12) variable -> . ID variable1
+
+    FLOAT_VALUE     shift and go to state 81
+    INT_VALUE       shift and go to state 82
+    BOOL_VALUE      shift and go to state 83
+    STRING_VALUE    shift and go to state 84
+    OPEN_PARENTHESIS shift and go to state 71
+    ID              shift and go to state 70
+
+    exp                            shift and go to state 238
+    term                           shift and go to state 78
+    factor                         shift and go to state 79
+    function_call                  shift and go to state 80
+    variable                       shift and go to state 85
+
+state 206
+
+    (54) super_exp1 -> EQUAL_TO np_add_operator . exp np_super_exp super_exp1
+    (58) exp -> . term np_exp exp1
+    (63) term -> . factor np_term term1
+    (68) factor -> . function_call
+    (69) factor -> . FLOAT_VALUE
+    (70) factor -> . INT_VALUE
+    (71) factor -> . BOOL_VALUE
+    (72) factor -> . STRING_VALUE
+    (73) factor -> . variable
+    (74) factor -> . OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (12) variable -> . ID variable1
+
+    FLOAT_VALUE     shift and go to state 81
+    INT_VALUE       shift and go to state 82
+    BOOL_VALUE      shift and go to state 83
+    STRING_VALUE    shift and go to state 84
+    OPEN_PARENTHESIS shift and go to state 71
+    ID              shift and go to state 70
+
+    exp                            shift and go to state 239
+    term                           shift and go to state 78
+    factor                         shift and go to state 79
+    function_call                  shift and go to state 80
+    variable                       shift and go to state 85
+
 state 207
+
+    (55) super_exp1 -> NOT_EQUAL_TO np_add_operator . exp np_super_exp super_exp1
+    (58) exp -> . term np_exp exp1
+    (63) term -> . factor np_term term1
+    (68) factor -> . function_call
+    (69) factor -> . FLOAT_VALUE
+    (70) factor -> . INT_VALUE
+    (71) factor -> . BOOL_VALUE
+    (72) factor -> . STRING_VALUE
+    (73) factor -> . variable
+    (74) factor -> . OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (12) variable -> . ID variable1
+
+    FLOAT_VALUE     shift and go to state 81
+    INT_VALUE       shift and go to state 82
+    BOOL_VALUE      shift and go to state 83
+    STRING_VALUE    shift and go to state 84
+    OPEN_PARENTHESIS shift and go to state 71
+    ID              shift and go to state 70
+
+    exp                            shift and go to state 240
+    term                           shift and go to state 78
+    factor                         shift and go to state 79
+    function_call                  shift and go to state 80
+    variable                       shift and go to state 85
+
+state 208
 
     (59) exp1 -> PLUS np_add_operator . term np_exp exp1
     (63) term -> . factor np_term term1
@@ -3130,7 +3149,7 @@ state 207
     (72) factor -> . STRING_VALUE
     (73) factor -> . variable
     (74) factor -> . OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     (12) variable -> . ID variable1
 
     FLOAT_VALUE     shift and go to state 81
@@ -3140,12 +3159,12 @@ state 207
     OPEN_PARENTHESIS shift and go to state 71
     ID              shift and go to state 70
 
-    term                           shift and go to state 238
+    term                           shift and go to state 241
     factor                         shift and go to state 79
     function_call                  shift and go to state 80
     variable                       shift and go to state 85
 
-state 208
+state 209
 
     (60) exp1 -> MINUS np_add_operator . term np_exp exp1
     (63) term -> . factor np_term term1
@@ -3156,7 +3175,7 @@ state 208
     (72) factor -> . STRING_VALUE
     (73) factor -> . variable
     (74) factor -> . OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     (12) variable -> . ID variable1
 
     FLOAT_VALUE     shift and go to state 81
@@ -3166,12 +3185,12 @@ state 208
     OPEN_PARENTHESIS shift and go to state 71
     ID              shift and go to state 70
 
-    term                           shift and go to state 239
+    term                           shift and go to state 242
     factor                         shift and go to state 79
     function_call                  shift and go to state 80
     variable                       shift and go to state 85
 
-state 209
+state 210
 
     (64) term1 -> MULTIPLICATION np_add_operator . factor np_term term1
     (68) factor -> . function_call
@@ -3181,7 +3200,7 @@ state 209
     (72) factor -> . STRING_VALUE
     (73) factor -> . variable
     (74) factor -> . OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     (12) variable -> . ID variable1
 
     FLOAT_VALUE     shift and go to state 81
@@ -3191,11 +3210,11 @@ state 209
     OPEN_PARENTHESIS shift and go to state 71
     ID              shift and go to state 70
 
-    factor                         shift and go to state 240
+    factor                         shift and go to state 243
     function_call                  shift and go to state 80
     variable                       shift and go to state 85
 
-state 210
+state 211
 
     (65) term1 -> DIVISION np_add_operator . factor np_term term1
     (68) factor -> . function_call
@@ -3205,7 +3224,7 @@ state 210
     (72) factor -> . STRING_VALUE
     (73) factor -> . variable
     (74) factor -> . OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     (12) variable -> . ID variable1
 
     FLOAT_VALUE     shift and go to state 81
@@ -3215,17 +3234,17 @@ state 210
     OPEN_PARENTHESIS shift and go to state 71
     ID              shift and go to state 70
 
-    factor                         shift and go to state 241
+    factor                         shift and go to state 244
     function_call                  shift and go to state 80
     variable                       shift and go to state 85
 
-state 211
+state 212
 
-    (110) function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop . function_statement_loop function_return CLOSE_KEY
-    (113) function_statement_loop -> . statement_loop
-    (114) function_statement_loop -> . epsilon
+    (114) function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop . function_statement_loop function_return CLOSE_KEY
+    (117) function_statement_loop -> . statement_loop
+    (118) function_statement_loop -> . epsilon
     (6) statement_loop -> . statement statement_loop1
-    (115) epsilon -> .
+    (119) epsilon -> .
     (38) statement -> . assignment
     (39) statement -> . conditional
     (40) statement -> . cycle
@@ -3237,12 +3256,12 @@ state 211
     (93) cycle -> . FOR OPEN_PARENTHESIS ID IN ID CLOSE_PARENTHESIS cycle1
     (94) cycle -> . WHILE OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS cycle1
     (96) read -> . READ OPEN_PARENTHESIS variable_loop CLOSE_PARENTHESIS SEMICOLON
-    (100) write -> . WRITE OPEN_PARENTHESIS hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (100) write -> . WRITE OPEN_PARENTHESIS write_hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     (12) variable -> . ID variable1
 
-    RETURN          reduce using rule 115 (epsilon -> .)
-    CLOSE_KEY       reduce using rule 115 (epsilon -> .)
+    RETURN          reduce using rule 119 (epsilon -> .)
+    CLOSE_KEY       reduce using rule 119 (epsilon -> .)
     IF              shift and go to state 98
     FOR             shift and go to state 99
     WHILE           shift and go to state 100
@@ -3250,9 +3269,9 @@ state 211
     WRITE           shift and go to state 102
     ID              shift and go to state 70
 
-    function_statement_loop        shift and go to state 242
-    statement_loop                 shift and go to state 243
-    epsilon                        shift and go to state 244
+    function_statement_loop        shift and go to state 245
+    statement_loop                 shift and go to state 246
+    epsilon                        shift and go to state 247
     statement                      shift and go to state 90
     assignment                     shift and go to state 91
     conditional                    shift and go to state 92
@@ -3262,21 +3281,21 @@ state 211
     function_call                  shift and go to state 96
     variable                       shift and go to state 97
 
-state 212
+state 213
 
     (87) parameter1 -> COMMA atomic_var_type data_type . ID parameter1
 
-    ID              shift and go to state 245
-
-
-state 213
-
-    (88) parameter1 -> COMMA OBJ ID . ID parameter1
-
-    ID              shift and go to state 246
+    ID              shift and go to state 248
 
 
 state 214
+
+    (88) parameter1 -> COMMA OBJ ID . ID parameter1
+
+    ID              shift and go to state 249
+
+
+state 215
 
     (44) assignment -> variable ASSIGN hyper_exp SEMICOLON .
 
@@ -3290,67 +3309,67 @@ state 214
     RETURN          reduce using rule 44 (assignment -> variable ASSIGN hyper_exp SEMICOLON .)
 
 
-state 215
+state 216
 
     (90) conditional -> IF OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS . OPEN_KEY statement_loop CLOSE_KEY conditional1
 
-    OPEN_KEY        shift and go to state 247
-
-
-state 216
-
-    (93) cycle -> FOR OPEN_PARENTHESIS ID IN . ID CLOSE_PARENTHESIS cycle1
-
-    ID              shift and go to state 248
+    OPEN_KEY        shift and go to state 250
 
 
 state 217
 
-    (94) cycle -> WHILE OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS . cycle1
-    (95) cycle1 -> . OPEN_KEY statement_loop CLOSE_KEY
+    (93) cycle -> FOR OPEN_PARENTHESIS ID IN . ID CLOSE_PARENTHESIS cycle1
 
-    OPEN_KEY        shift and go to state 250
+    ID              shift and go to state 251
 
-    cycle1                         shift and go to state 249
 
 state 218
 
-    (96) read -> READ OPEN_PARENTHESIS variable_loop CLOSE_PARENTHESIS . SEMICOLON
+    (94) cycle -> WHILE OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS . cycle1
+    (95) cycle1 -> . OPEN_KEY statement_loop CLOSE_KEY
 
-    SEMICOLON       shift and go to state 251
+    OPEN_KEY        shift and go to state 253
 
+    cycle1                         shift and go to state 252
 
 state 219
+
+    (96) read -> READ OPEN_PARENTHESIS variable_loop CLOSE_PARENTHESIS . SEMICOLON
+
+    SEMICOLON       shift and go to state 254
+
+
+state 220
 
     (97) variable_loop -> variable variable_loop1 .
 
     CLOSE_PARENTHESIS reduce using rule 97 (variable_loop -> variable variable_loop1 .)
 
 
-state 220
+state 221
 
     (98) variable_loop1 -> COMMA . variable variable_loop1
     (12) variable -> . ID variable1
 
     ID              shift and go to state 186
 
-    variable                       shift and go to state 252
+    variable                       shift and go to state 255
 
-state 221
+state 222
 
     (99) variable_loop1 -> epsilon .
 
     CLOSE_PARENTHESIS reduce using rule 99 (variable_loop1 -> epsilon .)
 
 
-state 222
+state 223
 
     (14) variable1 -> DOT . ID
 
-    ID              shift and go to state 253
+    ID              shift and go to state 256
 
 
-state 223
+state 224
 
     (15) variable1 -> epsilon .
 
@@ -3358,14 +3377,35 @@ state 223
     CLOSE_PARENTHESIS reduce using rule 15 (variable1 -> epsilon .)
 
 
-state 224
-
-    (100) write -> WRITE OPEN_PARENTHESIS hyper_exp_loop CLOSE_PARENTHESIS . SEMICOLON
-
-    SEMICOLON       shift and go to state 254
-
-
 state 225
+
+    (100) write -> WRITE OPEN_PARENTHESIS write_hyper_exp_loop CLOSE_PARENTHESIS . SEMICOLON
+
+    SEMICOLON       shift and go to state 257
+
+
+state 226
+
+    (101) write_hyper_exp_loop -> hyper_exp np_add_write_quad . write_hyper_exp_loop1
+    (102) write_hyper_exp_loop1 -> . COMMA hyper_exp np_add_write_quad write_hyper_exp_loop1
+    (103) write_hyper_exp_loop1 -> . epsilon
+    (119) epsilon -> .
+
+    COMMA           shift and go to state 259
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+
+    write_hyper_exp_loop1          shift and go to state 258
+    epsilon                        shift and go to state 260
+
+state 227
+
+    (104) np_add_write_quad -> epsilon .
+
+    COMMA           reduce using rule 104 (np_add_write_quad -> epsilon .)
+    CLOSE_PARENTHESIS reduce using rule 104 (np_add_write_quad -> epsilon .)
+
+
+state 228
 
     (19) class_declaration2 -> class_function class_declaration2 .
 
@@ -3377,14 +3417,14 @@ state 225
     MAIN            reduce using rule 19 (class_declaration2 -> class_function class_declaration2 .)
 
 
-state 226
+state 229
 
-    (109) class_function -> AT_CLASS ID . FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+    (113) class_function -> AT_CLASS ID . FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
 
-    FUNCTION        shift and go to state 255
+    FUNCTION        shift and go to state 261
 
 
-state 227
+state 230
 
     (28) constructor -> CONSTRUCTOR ID OPEN_PARENTHESIS . parameter CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY
     (84) parameter -> . atomic_var_type data_type ID parameter1
@@ -3392,32 +3432,32 @@ state 227
     (86) parameter -> . epsilon
     (34) atomic_var_type -> . VAR
     (35) atomic_var_type -> . GROUP
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     OBJ             shift and go to state 46
     VAR             shift and go to state 48
     GROUP           shift and go to state 49
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
 
-    parameter                      shift and go to state 256
+    parameter                      shift and go to state 262
     atomic_var_type                shift and go to state 45
     epsilon                        shift and go to state 47
 
-state 228
+state 231
 
     (81) class_function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS . RETURNS return_arg SEMICOLON
 
-    RETURNS         shift and go to state 257
+    RETURNS         shift and go to state 263
 
 
-state 229
+state 232
 
-    (104) function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS . SEMICOLON
+    (108) function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS . SEMICOLON
 
-    SEMICOLON       shift and go to state 258
+    SEMICOLON       shift and go to state 264
 
 
-state 230
+state 233
 
     (74) factor -> OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis .
 
@@ -3437,7 +3477,7 @@ state 230
     SEMICOLON       reduce using rule 74 (factor -> OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis .)
 
 
-state 231
+state 234
 
     (76) np_remove_open_parenthesis -> epsilon .
 
@@ -3457,268 +3497,268 @@ state 231
     SEMICOLON       reduce using rule 76 (np_remove_open_parenthesis -> epsilon .)
 
 
-state 232
+state 235
 
     (47) hyper_exp1 -> AND np_add_operator super_exp . np_hyper_exp hyper_exp1
     (50) np_hyper_exp -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
-    AND             reduce using rule 115 (epsilon -> .)
-    OR              reduce using rule 115 (epsilon -> .)
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
+    AND             reduce using rule 119 (epsilon -> .)
+    OR              reduce using rule 119 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
-    np_hyper_exp                   shift and go to state 259
+    np_hyper_exp                   shift and go to state 265
     epsilon                        shift and go to state 123
-
-state 233
-
-    (48) hyper_exp1 -> OR np_add_operator super_exp . np_hyper_exp hyper_exp1
-    (50) np_hyper_exp -> . epsilon
-    (115) epsilon -> .
-
-    AND             reduce using rule 115 (epsilon -> .)
-    OR              reduce using rule 115 (epsilon -> .)
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
-
-    np_hyper_exp                   shift and go to state 260
-    epsilon                        shift and go to state 123
-
-state 234
-
-    (52) super_exp1 -> GREATER_THAN np_add_operator exp . np_super_exp super_exp1
-    (57) np_super_exp -> . epsilon
-    (115) epsilon -> .
-
-    GREATER_THAN    reduce using rule 115 (epsilon -> .)
-    LESS_THAN       reduce using rule 115 (epsilon -> .)
-    EQUAL_TO        reduce using rule 115 (epsilon -> .)
-    NOT_EQUAL_TO    reduce using rule 115 (epsilon -> .)
-    AND             reduce using rule 115 (epsilon -> .)
-    OR              reduce using rule 115 (epsilon -> .)
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
-
-    np_super_exp                   shift and go to state 261
-    epsilon                        shift and go to state 125
-
-state 235
-
-    (53) super_exp1 -> LESS_THAN np_add_operator exp . np_super_exp super_exp1
-    (57) np_super_exp -> . epsilon
-    (115) epsilon -> .
-
-    GREATER_THAN    reduce using rule 115 (epsilon -> .)
-    LESS_THAN       reduce using rule 115 (epsilon -> .)
-    EQUAL_TO        reduce using rule 115 (epsilon -> .)
-    NOT_EQUAL_TO    reduce using rule 115 (epsilon -> .)
-    AND             reduce using rule 115 (epsilon -> .)
-    OR              reduce using rule 115 (epsilon -> .)
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
-
-    np_super_exp                   shift and go to state 262
-    epsilon                        shift and go to state 125
 
 state 236
 
-    (54) super_exp1 -> EQUAL_TO np_add_operator exp . np_super_exp super_exp1
-    (57) np_super_exp -> . epsilon
-    (115) epsilon -> .
+    (48) hyper_exp1 -> OR np_add_operator super_exp . np_hyper_exp hyper_exp1
+    (50) np_hyper_exp -> . epsilon
+    (119) epsilon -> .
 
-    GREATER_THAN    reduce using rule 115 (epsilon -> .)
-    LESS_THAN       reduce using rule 115 (epsilon -> .)
-    EQUAL_TO        reduce using rule 115 (epsilon -> .)
-    NOT_EQUAL_TO    reduce using rule 115 (epsilon -> .)
-    AND             reduce using rule 115 (epsilon -> .)
-    OR              reduce using rule 115 (epsilon -> .)
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
+    AND             reduce using rule 119 (epsilon -> .)
+    OR              reduce using rule 119 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
-    np_super_exp                   shift and go to state 263
-    epsilon                        shift and go to state 125
+    np_hyper_exp                   shift and go to state 266
+    epsilon                        shift and go to state 123
 
 state 237
 
-    (55) super_exp1 -> NOT_EQUAL_TO np_add_operator exp . np_super_exp super_exp1
+    (52) super_exp1 -> GREATER_THAN np_add_operator exp . np_super_exp super_exp1
     (57) np_super_exp -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
-    GREATER_THAN    reduce using rule 115 (epsilon -> .)
-    LESS_THAN       reduce using rule 115 (epsilon -> .)
-    EQUAL_TO        reduce using rule 115 (epsilon -> .)
-    NOT_EQUAL_TO    reduce using rule 115 (epsilon -> .)
-    AND             reduce using rule 115 (epsilon -> .)
-    OR              reduce using rule 115 (epsilon -> .)
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
+    GREATER_THAN    reduce using rule 119 (epsilon -> .)
+    LESS_THAN       reduce using rule 119 (epsilon -> .)
+    EQUAL_TO        reduce using rule 119 (epsilon -> .)
+    NOT_EQUAL_TO    reduce using rule 119 (epsilon -> .)
+    AND             reduce using rule 119 (epsilon -> .)
+    OR              reduce using rule 119 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
-    np_super_exp                   shift and go to state 264
+    np_super_exp                   shift and go to state 267
     epsilon                        shift and go to state 125
 
 state 238
 
-    (59) exp1 -> PLUS np_add_operator term . np_exp exp1
-    (62) np_exp -> . epsilon
-    (115) epsilon -> .
+    (53) super_exp1 -> LESS_THAN np_add_operator exp . np_super_exp super_exp1
+    (57) np_super_exp -> . epsilon
+    (119) epsilon -> .
 
-    PLUS            reduce using rule 115 (epsilon -> .)
-    MINUS           reduce using rule 115 (epsilon -> .)
-    GREATER_THAN    reduce using rule 115 (epsilon -> .)
-    LESS_THAN       reduce using rule 115 (epsilon -> .)
-    EQUAL_TO        reduce using rule 115 (epsilon -> .)
-    NOT_EQUAL_TO    reduce using rule 115 (epsilon -> .)
-    AND             reduce using rule 115 (epsilon -> .)
-    OR              reduce using rule 115 (epsilon -> .)
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
+    GREATER_THAN    reduce using rule 119 (epsilon -> .)
+    LESS_THAN       reduce using rule 119 (epsilon -> .)
+    EQUAL_TO        reduce using rule 119 (epsilon -> .)
+    NOT_EQUAL_TO    reduce using rule 119 (epsilon -> .)
+    AND             reduce using rule 119 (epsilon -> .)
+    OR              reduce using rule 119 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
-    np_exp                         shift and go to state 265
-    epsilon                        shift and go to state 127
+    np_super_exp                   shift and go to state 268
+    epsilon                        shift and go to state 125
 
 state 239
 
-    (60) exp1 -> MINUS np_add_operator term . np_exp exp1
-    (62) np_exp -> . epsilon
-    (115) epsilon -> .
+    (54) super_exp1 -> EQUAL_TO np_add_operator exp . np_super_exp super_exp1
+    (57) np_super_exp -> . epsilon
+    (119) epsilon -> .
 
-    PLUS            reduce using rule 115 (epsilon -> .)
-    MINUS           reduce using rule 115 (epsilon -> .)
-    GREATER_THAN    reduce using rule 115 (epsilon -> .)
-    LESS_THAN       reduce using rule 115 (epsilon -> .)
-    EQUAL_TO        reduce using rule 115 (epsilon -> .)
-    NOT_EQUAL_TO    reduce using rule 115 (epsilon -> .)
-    AND             reduce using rule 115 (epsilon -> .)
-    OR              reduce using rule 115 (epsilon -> .)
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
+    GREATER_THAN    reduce using rule 119 (epsilon -> .)
+    LESS_THAN       reduce using rule 119 (epsilon -> .)
+    EQUAL_TO        reduce using rule 119 (epsilon -> .)
+    NOT_EQUAL_TO    reduce using rule 119 (epsilon -> .)
+    AND             reduce using rule 119 (epsilon -> .)
+    OR              reduce using rule 119 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
-    np_exp                         shift and go to state 266
-    epsilon                        shift and go to state 127
+    np_super_exp                   shift and go to state 269
+    epsilon                        shift and go to state 125
 
 state 240
 
-    (64) term1 -> MULTIPLICATION np_add_operator factor . np_term term1
-    (67) np_term -> . epsilon
-    (115) epsilon -> .
+    (55) super_exp1 -> NOT_EQUAL_TO np_add_operator exp . np_super_exp super_exp1
+    (57) np_super_exp -> . epsilon
+    (119) epsilon -> .
 
-    MULTIPLICATION  reduce using rule 115 (epsilon -> .)
-    DIVISION        reduce using rule 115 (epsilon -> .)
-    PLUS            reduce using rule 115 (epsilon -> .)
-    MINUS           reduce using rule 115 (epsilon -> .)
-    GREATER_THAN    reduce using rule 115 (epsilon -> .)
-    LESS_THAN       reduce using rule 115 (epsilon -> .)
-    EQUAL_TO        reduce using rule 115 (epsilon -> .)
-    NOT_EQUAL_TO    reduce using rule 115 (epsilon -> .)
-    AND             reduce using rule 115 (epsilon -> .)
-    OR              reduce using rule 115 (epsilon -> .)
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
+    GREATER_THAN    reduce using rule 119 (epsilon -> .)
+    LESS_THAN       reduce using rule 119 (epsilon -> .)
+    EQUAL_TO        reduce using rule 119 (epsilon -> .)
+    NOT_EQUAL_TO    reduce using rule 119 (epsilon -> .)
+    AND             reduce using rule 119 (epsilon -> .)
+    OR              reduce using rule 119 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
-    np_term                        shift and go to state 267
-    epsilon                        shift and go to state 129
+    np_super_exp                   shift and go to state 270
+    epsilon                        shift and go to state 125
 
 state 241
 
-    (65) term1 -> DIVISION np_add_operator factor . np_term term1
-    (67) np_term -> . epsilon
-    (115) epsilon -> .
+    (59) exp1 -> PLUS np_add_operator term . np_exp exp1
+    (62) np_exp -> . epsilon
+    (119) epsilon -> .
 
-    MULTIPLICATION  reduce using rule 115 (epsilon -> .)
-    DIVISION        reduce using rule 115 (epsilon -> .)
-    PLUS            reduce using rule 115 (epsilon -> .)
-    MINUS           reduce using rule 115 (epsilon -> .)
-    GREATER_THAN    reduce using rule 115 (epsilon -> .)
-    LESS_THAN       reduce using rule 115 (epsilon -> .)
-    EQUAL_TO        reduce using rule 115 (epsilon -> .)
-    NOT_EQUAL_TO    reduce using rule 115 (epsilon -> .)
-    AND             reduce using rule 115 (epsilon -> .)
-    OR              reduce using rule 115 (epsilon -> .)
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
+    PLUS            reduce using rule 119 (epsilon -> .)
+    MINUS           reduce using rule 119 (epsilon -> .)
+    GREATER_THAN    reduce using rule 119 (epsilon -> .)
+    LESS_THAN       reduce using rule 119 (epsilon -> .)
+    EQUAL_TO        reduce using rule 119 (epsilon -> .)
+    NOT_EQUAL_TO    reduce using rule 119 (epsilon -> .)
+    AND             reduce using rule 119 (epsilon -> .)
+    OR              reduce using rule 119 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
-    np_term                        shift and go to state 268
-    epsilon                        shift and go to state 129
+    np_exp                         shift and go to state 271
+    epsilon                        shift and go to state 127
 
 state 242
 
-    (110) function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop . function_return CLOSE_KEY
-    (111) function_return -> . RETURN hyper_exp SEMICOLON
-    (112) function_return -> . epsilon
-    (115) epsilon -> .
+    (60) exp1 -> MINUS np_add_operator term . np_exp exp1
+    (62) np_exp -> . epsilon
+    (119) epsilon -> .
 
-    RETURN          shift and go to state 270
-    CLOSE_KEY       reduce using rule 115 (epsilon -> .)
+    PLUS            reduce using rule 119 (epsilon -> .)
+    MINUS           reduce using rule 119 (epsilon -> .)
+    GREATER_THAN    reduce using rule 119 (epsilon -> .)
+    LESS_THAN       reduce using rule 119 (epsilon -> .)
+    EQUAL_TO        reduce using rule 119 (epsilon -> .)
+    NOT_EQUAL_TO    reduce using rule 119 (epsilon -> .)
+    AND             reduce using rule 119 (epsilon -> .)
+    OR              reduce using rule 119 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
-    function_return                shift and go to state 269
-    epsilon                        shift and go to state 271
+    np_exp                         shift and go to state 272
+    epsilon                        shift and go to state 127
 
 state 243
 
-    (113) function_statement_loop -> statement_loop .
+    (64) term1 -> MULTIPLICATION np_add_operator factor . np_term term1
+    (67) np_term -> . epsilon
+    (119) epsilon -> .
 
-    RETURN          reduce using rule 113 (function_statement_loop -> statement_loop .)
-    CLOSE_KEY       reduce using rule 113 (function_statement_loop -> statement_loop .)
+    MULTIPLICATION  reduce using rule 119 (epsilon -> .)
+    DIVISION        reduce using rule 119 (epsilon -> .)
+    PLUS            reduce using rule 119 (epsilon -> .)
+    MINUS           reduce using rule 119 (epsilon -> .)
+    GREATER_THAN    reduce using rule 119 (epsilon -> .)
+    LESS_THAN       reduce using rule 119 (epsilon -> .)
+    EQUAL_TO        reduce using rule 119 (epsilon -> .)
+    NOT_EQUAL_TO    reduce using rule 119 (epsilon -> .)
+    AND             reduce using rule 119 (epsilon -> .)
+    OR              reduce using rule 119 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
+    np_term                        shift and go to state 273
+    epsilon                        shift and go to state 129
 
 state 244
 
-    (114) function_statement_loop -> epsilon .
+    (65) term1 -> DIVISION np_add_operator factor . np_term term1
+    (67) np_term -> . epsilon
+    (119) epsilon -> .
 
-    RETURN          reduce using rule 114 (function_statement_loop -> epsilon .)
-    CLOSE_KEY       reduce using rule 114 (function_statement_loop -> epsilon .)
+    MULTIPLICATION  reduce using rule 119 (epsilon -> .)
+    DIVISION        reduce using rule 119 (epsilon -> .)
+    PLUS            reduce using rule 119 (epsilon -> .)
+    MINUS           reduce using rule 119 (epsilon -> .)
+    GREATER_THAN    reduce using rule 119 (epsilon -> .)
+    LESS_THAN       reduce using rule 119 (epsilon -> .)
+    EQUAL_TO        reduce using rule 119 (epsilon -> .)
+    NOT_EQUAL_TO    reduce using rule 119 (epsilon -> .)
+    AND             reduce using rule 119 (epsilon -> .)
+    OR              reduce using rule 119 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
+    np_term                        shift and go to state 274
+    epsilon                        shift and go to state 129
 
 state 245
+
+    (114) function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop . function_return CLOSE_KEY
+    (115) function_return -> . RETURN hyper_exp SEMICOLON
+    (116) function_return -> . epsilon
+    (119) epsilon -> .
+
+    RETURN          shift and go to state 276
+    CLOSE_KEY       reduce using rule 119 (epsilon -> .)
+
+    function_return                shift and go to state 275
+    epsilon                        shift and go to state 277
+
+state 246
+
+    (117) function_statement_loop -> statement_loop .
+
+    RETURN          reduce using rule 117 (function_statement_loop -> statement_loop .)
+    CLOSE_KEY       reduce using rule 117 (function_statement_loop -> statement_loop .)
+
+
+state 247
+
+    (118) function_statement_loop -> epsilon .
+
+    RETURN          reduce using rule 118 (function_statement_loop -> epsilon .)
+    CLOSE_KEY       reduce using rule 118 (function_statement_loop -> epsilon .)
+
+
+state 248
 
     (87) parameter1 -> COMMA atomic_var_type data_type ID . parameter1
     (87) parameter1 -> . COMMA atomic_var_type data_type ID parameter1
     (88) parameter1 -> . COMMA OBJ ID ID parameter1
     (89) parameter1 -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     COMMA           shift and go to state 134
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
 
-    parameter1                     shift and go to state 272
+    parameter1                     shift and go to state 278
     epsilon                        shift and go to state 135
 
-state 246
+state 249
 
     (88) parameter1 -> COMMA OBJ ID ID . parameter1
     (87) parameter1 -> . COMMA atomic_var_type data_type ID parameter1
     (88) parameter1 -> . COMMA OBJ ID ID parameter1
     (89) parameter1 -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     COMMA           shift and go to state 134
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
 
-    parameter1                     shift and go to state 273
+    parameter1                     shift and go to state 279
     epsilon                        shift and go to state 135
 
-state 247
+state 250
 
     (90) conditional -> IF OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS OPEN_KEY . statement_loop CLOSE_KEY conditional1
     (6) statement_loop -> . statement statement_loop1
@@ -3733,8 +3773,8 @@ state 247
     (93) cycle -> . FOR OPEN_PARENTHESIS ID IN ID CLOSE_PARENTHESIS cycle1
     (94) cycle -> . WHILE OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS cycle1
     (96) read -> . READ OPEN_PARENTHESIS variable_loop CLOSE_PARENTHESIS SEMICOLON
-    (100) write -> . WRITE OPEN_PARENTHESIS hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (100) write -> . WRITE OPEN_PARENTHESIS write_hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     (12) variable -> . ID variable1
 
     IF              shift and go to state 98
@@ -3744,7 +3784,7 @@ state 247
     WRITE           shift and go to state 102
     ID              shift and go to state 70
 
-    statement_loop                 shift and go to state 274
+    statement_loop                 shift and go to state 280
     statement                      shift and go to state 90
     assignment                     shift and go to state 91
     conditional                    shift and go to state 92
@@ -3754,14 +3794,14 @@ state 247
     function_call                  shift and go to state 96
     variable                       shift and go to state 97
 
-state 248
+state 251
 
     (93) cycle -> FOR OPEN_PARENTHESIS ID IN ID . CLOSE_PARENTHESIS cycle1
 
-    CLOSE_PARENTHESIS shift and go to state 275
+    CLOSE_PARENTHESIS shift and go to state 281
 
 
-state 249
+state 252
 
     (94) cycle -> WHILE OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS cycle1 .
 
@@ -3775,7 +3815,7 @@ state 249
     RETURN          reduce using rule 94 (cycle -> WHILE OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS cycle1 .)
 
 
-state 250
+state 253
 
     (95) cycle1 -> OPEN_KEY . statement_loop CLOSE_KEY
     (6) statement_loop -> . statement statement_loop1
@@ -3790,8 +3830,8 @@ state 250
     (93) cycle -> . FOR OPEN_PARENTHESIS ID IN ID CLOSE_PARENTHESIS cycle1
     (94) cycle -> . WHILE OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS cycle1
     (96) read -> . READ OPEN_PARENTHESIS variable_loop CLOSE_PARENTHESIS SEMICOLON
-    (100) write -> . WRITE OPEN_PARENTHESIS hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (100) write -> . WRITE OPEN_PARENTHESIS write_hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     (12) variable -> . ID variable1
 
     IF              shift and go to state 98
@@ -3801,7 +3841,7 @@ state 250
     WRITE           shift and go to state 102
     ID              shift and go to state 70
 
-    statement_loop                 shift and go to state 276
+    statement_loop                 shift and go to state 282
     statement                      shift and go to state 90
     assignment                     shift and go to state 91
     conditional                    shift and go to state 92
@@ -3811,7 +3851,7 @@ state 250
     function_call                  shift and go to state 96
     variable                       shift and go to state 97
 
-state 251
+state 254
 
     (96) read -> READ OPEN_PARENTHESIS variable_loop CLOSE_PARENTHESIS SEMICOLON .
 
@@ -3825,20 +3865,20 @@ state 251
     RETURN          reduce using rule 96 (read -> READ OPEN_PARENTHESIS variable_loop CLOSE_PARENTHESIS SEMICOLON .)
 
 
-state 252
+state 255
 
     (98) variable_loop1 -> COMMA variable . variable_loop1
     (98) variable_loop1 -> . COMMA variable variable_loop1
     (99) variable_loop1 -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
-    COMMA           shift and go to state 220
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
+    COMMA           shift and go to state 221
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
 
-    variable_loop1                 shift and go to state 277
-    epsilon                        shift and go to state 221
+    variable_loop1                 shift and go to state 283
+    epsilon                        shift and go to state 222
 
-state 253
+state 256
 
     (14) variable1 -> DOT ID .
 
@@ -3846,35 +3886,81 @@ state 253
     CLOSE_PARENTHESIS reduce using rule 14 (variable1 -> DOT ID .)
 
 
-state 254
+state 257
 
-    (100) write -> WRITE OPEN_PARENTHESIS hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON .
+    (100) write -> WRITE OPEN_PARENTHESIS write_hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON .
 
-    IF              reduce using rule 100 (write -> WRITE OPEN_PARENTHESIS hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON .)
-    FOR             reduce using rule 100 (write -> WRITE OPEN_PARENTHESIS hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON .)
-    WHILE           reduce using rule 100 (write -> WRITE OPEN_PARENTHESIS hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON .)
-    READ            reduce using rule 100 (write -> WRITE OPEN_PARENTHESIS hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON .)
-    WRITE           reduce using rule 100 (write -> WRITE OPEN_PARENTHESIS hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON .)
-    ID              reduce using rule 100 (write -> WRITE OPEN_PARENTHESIS hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON .)
-    CLOSE_KEY       reduce using rule 100 (write -> WRITE OPEN_PARENTHESIS hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON .)
-    RETURN          reduce using rule 100 (write -> WRITE OPEN_PARENTHESIS hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON .)
-
-
-state 255
-
-    (109) class_function -> AT_CLASS ID FUNCTION . ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
-
-    ID              shift and go to state 278
+    IF              reduce using rule 100 (write -> WRITE OPEN_PARENTHESIS write_hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON .)
+    FOR             reduce using rule 100 (write -> WRITE OPEN_PARENTHESIS write_hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON .)
+    WHILE           reduce using rule 100 (write -> WRITE OPEN_PARENTHESIS write_hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON .)
+    READ            reduce using rule 100 (write -> WRITE OPEN_PARENTHESIS write_hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON .)
+    WRITE           reduce using rule 100 (write -> WRITE OPEN_PARENTHESIS write_hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON .)
+    ID              reduce using rule 100 (write -> WRITE OPEN_PARENTHESIS write_hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON .)
+    CLOSE_KEY       reduce using rule 100 (write -> WRITE OPEN_PARENTHESIS write_hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON .)
+    RETURN          reduce using rule 100 (write -> WRITE OPEN_PARENTHESIS write_hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON .)
 
 
-state 256
+state 258
+
+    (101) write_hyper_exp_loop -> hyper_exp np_add_write_quad write_hyper_exp_loop1 .
+
+    CLOSE_PARENTHESIS reduce using rule 101 (write_hyper_exp_loop -> hyper_exp np_add_write_quad write_hyper_exp_loop1 .)
+
+
+state 259
+
+    (102) write_hyper_exp_loop1 -> COMMA . hyper_exp np_add_write_quad write_hyper_exp_loop1
+    (46) hyper_exp -> . super_exp np_hyper_exp hyper_exp1
+    (51) super_exp -> . exp np_super_exp super_exp1
+    (58) exp -> . term np_exp exp1
+    (63) term -> . factor np_term term1
+    (68) factor -> . function_call
+    (69) factor -> . FLOAT_VALUE
+    (70) factor -> . INT_VALUE
+    (71) factor -> . BOOL_VALUE
+    (72) factor -> . STRING_VALUE
+    (73) factor -> . variable
+    (74) factor -> . OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (12) variable -> . ID variable1
+
+    FLOAT_VALUE     shift and go to state 81
+    INT_VALUE       shift and go to state 82
+    BOOL_VALUE      shift and go to state 83
+    STRING_VALUE    shift and go to state 84
+    OPEN_PARENTHESIS shift and go to state 71
+    ID              shift and go to state 70
+
+    hyper_exp                      shift and go to state 284
+    super_exp                      shift and go to state 76
+    exp                            shift and go to state 77
+    term                           shift and go to state 78
+    factor                         shift and go to state 79
+    function_call                  shift and go to state 80
+    variable                       shift and go to state 85
+
+state 260
+
+    (103) write_hyper_exp_loop1 -> epsilon .
+
+    CLOSE_PARENTHESIS reduce using rule 103 (write_hyper_exp_loop1 -> epsilon .)
+
+
+state 261
+
+    (113) class_function -> AT_CLASS ID FUNCTION . ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+
+    ID              shift and go to state 285
+
+
+state 262
 
     (28) constructor -> CONSTRUCTOR ID OPEN_PARENTHESIS parameter . CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY
 
-    CLOSE_PARENTHESIS shift and go to state 279
+    CLOSE_PARENTHESIS shift and go to state 286
 
 
-state 257
+state 263
 
     (81) class_function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS . return_arg SEMICOLON
     (82) return_arg -> . data_type
@@ -3890,74 +3976,74 @@ state 257
     STRING          shift and go to state 25
     BOOL            shift and go to state 26
 
-    return_arg                     shift and go to state 280
+    return_arg                     shift and go to state 287
     data_type                      shift and go to state 131
 
-state 258
+state 264
 
-    (104) function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .
+    (108) function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .
 
-    MULTIPLICATION  reduce using rule 104 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
-    DIVISION        reduce using rule 104 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
-    PLUS            reduce using rule 104 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
-    MINUS           reduce using rule 104 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
-    GREATER_THAN    reduce using rule 104 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
-    LESS_THAN       reduce using rule 104 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
-    EQUAL_TO        reduce using rule 104 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
-    NOT_EQUAL_TO    reduce using rule 104 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
-    AND             reduce using rule 104 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
-    OR              reduce using rule 104 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
-    COMMA           reduce using rule 104 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
-    CLOSE_PARENTHESIS reduce using rule 104 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
-    IF              reduce using rule 104 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
-    FOR             reduce using rule 104 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
-    WHILE           reduce using rule 104 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
-    READ            reduce using rule 104 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
-    WRITE           reduce using rule 104 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
-    ID              reduce using rule 104 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
-    CLOSE_KEY       reduce using rule 104 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
-    RETURN          reduce using rule 104 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
-    CLOSE_BRACKET   reduce using rule 104 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
-    SEMICOLON       reduce using rule 104 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
+    MULTIPLICATION  reduce using rule 108 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
+    DIVISION        reduce using rule 108 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
+    PLUS            reduce using rule 108 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
+    MINUS           reduce using rule 108 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
+    GREATER_THAN    reduce using rule 108 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
+    LESS_THAN       reduce using rule 108 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
+    EQUAL_TO        reduce using rule 108 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
+    NOT_EQUAL_TO    reduce using rule 108 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
+    AND             reduce using rule 108 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
+    OR              reduce using rule 108 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
+    COMMA           reduce using rule 108 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
+    CLOSE_PARENTHESIS reduce using rule 108 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
+    IF              reduce using rule 108 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
+    FOR             reduce using rule 108 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
+    WHILE           reduce using rule 108 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
+    READ            reduce using rule 108 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
+    WRITE           reduce using rule 108 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
+    ID              reduce using rule 108 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
+    CLOSE_KEY       reduce using rule 108 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
+    RETURN          reduce using rule 108 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
+    CLOSE_BRACKET   reduce using rule 108 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
+    SEMICOLON       reduce using rule 108 (function_call -> ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON .)
 
 
-state 259
+state 265
 
     (47) hyper_exp1 -> AND np_add_operator super_exp np_hyper_exp . hyper_exp1
     (47) hyper_exp1 -> . AND np_add_operator super_exp np_hyper_exp hyper_exp1
     (48) hyper_exp1 -> . OR np_add_operator super_exp np_hyper_exp hyper_exp1
     (49) hyper_exp1 -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     AND             shift and go to state 159
     OR              shift and go to state 160
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
-    hyper_exp1                     shift and go to state 281
+    hyper_exp1                     shift and go to state 288
     epsilon                        shift and go to state 161
 
-state 260
+state 266
 
     (48) hyper_exp1 -> OR np_add_operator super_exp np_hyper_exp . hyper_exp1
     (47) hyper_exp1 -> . AND np_add_operator super_exp np_hyper_exp hyper_exp1
     (48) hyper_exp1 -> . OR np_add_operator super_exp np_hyper_exp hyper_exp1
     (49) hyper_exp1 -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     AND             shift and go to state 159
     OR              shift and go to state 160
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
-    hyper_exp1                     shift and go to state 282
+    hyper_exp1                     shift and go to state 289
     epsilon                        shift and go to state 161
 
-state 261
+state 267
 
     (52) super_exp1 -> GREATER_THAN np_add_operator exp np_super_exp . super_exp1
     (52) super_exp1 -> . GREATER_THAN np_add_operator exp np_super_exp super_exp1
@@ -3965,23 +4051,23 @@ state 261
     (54) super_exp1 -> . EQUAL_TO np_add_operator exp np_super_exp super_exp1
     (55) super_exp1 -> . NOT_EQUAL_TO np_add_operator exp np_super_exp super_exp1
     (56) super_exp1 -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     GREATER_THAN    shift and go to state 163
     LESS_THAN       shift and go to state 164
     EQUAL_TO        shift and go to state 165
     NOT_EQUAL_TO    shift and go to state 166
-    AND             reduce using rule 115 (epsilon -> .)
-    OR              reduce using rule 115 (epsilon -> .)
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
+    AND             reduce using rule 119 (epsilon -> .)
+    OR              reduce using rule 119 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
-    super_exp1                     shift and go to state 283
+    super_exp1                     shift and go to state 290
     epsilon                        shift and go to state 167
 
-state 262
+state 268
 
     (53) super_exp1 -> LESS_THAN np_add_operator exp np_super_exp . super_exp1
     (52) super_exp1 -> . GREATER_THAN np_add_operator exp np_super_exp super_exp1
@@ -3989,23 +4075,23 @@ state 262
     (54) super_exp1 -> . EQUAL_TO np_add_operator exp np_super_exp super_exp1
     (55) super_exp1 -> . NOT_EQUAL_TO np_add_operator exp np_super_exp super_exp1
     (56) super_exp1 -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     GREATER_THAN    shift and go to state 163
     LESS_THAN       shift and go to state 164
     EQUAL_TO        shift and go to state 165
     NOT_EQUAL_TO    shift and go to state 166
-    AND             reduce using rule 115 (epsilon -> .)
-    OR              reduce using rule 115 (epsilon -> .)
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
+    AND             reduce using rule 119 (epsilon -> .)
+    OR              reduce using rule 119 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
-    super_exp1                     shift and go to state 284
+    super_exp1                     shift and go to state 291
     epsilon                        shift and go to state 167
 
-state 263
+state 269
 
     (54) super_exp1 -> EQUAL_TO np_add_operator exp np_super_exp . super_exp1
     (52) super_exp1 -> . GREATER_THAN np_add_operator exp np_super_exp super_exp1
@@ -4013,23 +4099,23 @@ state 263
     (54) super_exp1 -> . EQUAL_TO np_add_operator exp np_super_exp super_exp1
     (55) super_exp1 -> . NOT_EQUAL_TO np_add_operator exp np_super_exp super_exp1
     (56) super_exp1 -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     GREATER_THAN    shift and go to state 163
     LESS_THAN       shift and go to state 164
     EQUAL_TO        shift and go to state 165
     NOT_EQUAL_TO    shift and go to state 166
-    AND             reduce using rule 115 (epsilon -> .)
-    OR              reduce using rule 115 (epsilon -> .)
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
+    AND             reduce using rule 119 (epsilon -> .)
+    OR              reduce using rule 119 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
-    super_exp1                     shift and go to state 285
+    super_exp1                     shift and go to state 292
     epsilon                        shift and go to state 167
 
-state 264
+state 270
 
     (55) super_exp1 -> NOT_EQUAL_TO np_add_operator exp np_super_exp . super_exp1
     (52) super_exp1 -> . GREATER_THAN np_add_operator exp np_super_exp super_exp1
@@ -4037,132 +4123,132 @@ state 264
     (54) super_exp1 -> . EQUAL_TO np_add_operator exp np_super_exp super_exp1
     (55) super_exp1 -> . NOT_EQUAL_TO np_add_operator exp np_super_exp super_exp1
     (56) super_exp1 -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     GREATER_THAN    shift and go to state 163
     LESS_THAN       shift and go to state 164
     EQUAL_TO        shift and go to state 165
     NOT_EQUAL_TO    shift and go to state 166
-    AND             reduce using rule 115 (epsilon -> .)
-    OR              reduce using rule 115 (epsilon -> .)
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
+    AND             reduce using rule 119 (epsilon -> .)
+    OR              reduce using rule 119 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
-    super_exp1                     shift and go to state 286
+    super_exp1                     shift and go to state 293
     epsilon                        shift and go to state 167
 
-state 265
+state 271
 
     (59) exp1 -> PLUS np_add_operator term np_exp . exp1
     (59) exp1 -> . PLUS np_add_operator term np_exp exp1
     (60) exp1 -> . MINUS np_add_operator term np_exp exp1
     (61) exp1 -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     PLUS            shift and go to state 169
     MINUS           shift and go to state 170
-    GREATER_THAN    reduce using rule 115 (epsilon -> .)
-    LESS_THAN       reduce using rule 115 (epsilon -> .)
-    EQUAL_TO        reduce using rule 115 (epsilon -> .)
-    NOT_EQUAL_TO    reduce using rule 115 (epsilon -> .)
-    AND             reduce using rule 115 (epsilon -> .)
-    OR              reduce using rule 115 (epsilon -> .)
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
+    GREATER_THAN    reduce using rule 119 (epsilon -> .)
+    LESS_THAN       reduce using rule 119 (epsilon -> .)
+    EQUAL_TO        reduce using rule 119 (epsilon -> .)
+    NOT_EQUAL_TO    reduce using rule 119 (epsilon -> .)
+    AND             reduce using rule 119 (epsilon -> .)
+    OR              reduce using rule 119 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
-    exp1                           shift and go to state 287
+    exp1                           shift and go to state 294
     epsilon                        shift and go to state 171
 
-state 266
+state 272
 
     (60) exp1 -> MINUS np_add_operator term np_exp . exp1
     (59) exp1 -> . PLUS np_add_operator term np_exp exp1
     (60) exp1 -> . MINUS np_add_operator term np_exp exp1
     (61) exp1 -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     PLUS            shift and go to state 169
     MINUS           shift and go to state 170
-    GREATER_THAN    reduce using rule 115 (epsilon -> .)
-    LESS_THAN       reduce using rule 115 (epsilon -> .)
-    EQUAL_TO        reduce using rule 115 (epsilon -> .)
-    NOT_EQUAL_TO    reduce using rule 115 (epsilon -> .)
-    AND             reduce using rule 115 (epsilon -> .)
-    OR              reduce using rule 115 (epsilon -> .)
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
+    GREATER_THAN    reduce using rule 119 (epsilon -> .)
+    LESS_THAN       reduce using rule 119 (epsilon -> .)
+    EQUAL_TO        reduce using rule 119 (epsilon -> .)
+    NOT_EQUAL_TO    reduce using rule 119 (epsilon -> .)
+    AND             reduce using rule 119 (epsilon -> .)
+    OR              reduce using rule 119 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
-    exp1                           shift and go to state 288
+    exp1                           shift and go to state 295
     epsilon                        shift and go to state 171
 
-state 267
+state 273
 
     (64) term1 -> MULTIPLICATION np_add_operator factor np_term . term1
     (64) term1 -> . MULTIPLICATION np_add_operator factor np_term term1
     (65) term1 -> . DIVISION np_add_operator factor np_term term1
     (66) term1 -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     MULTIPLICATION  shift and go to state 173
     DIVISION        shift and go to state 174
-    PLUS            reduce using rule 115 (epsilon -> .)
-    MINUS           reduce using rule 115 (epsilon -> .)
-    GREATER_THAN    reduce using rule 115 (epsilon -> .)
-    LESS_THAN       reduce using rule 115 (epsilon -> .)
-    EQUAL_TO        reduce using rule 115 (epsilon -> .)
-    NOT_EQUAL_TO    reduce using rule 115 (epsilon -> .)
-    AND             reduce using rule 115 (epsilon -> .)
-    OR              reduce using rule 115 (epsilon -> .)
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
+    PLUS            reduce using rule 119 (epsilon -> .)
+    MINUS           reduce using rule 119 (epsilon -> .)
+    GREATER_THAN    reduce using rule 119 (epsilon -> .)
+    LESS_THAN       reduce using rule 119 (epsilon -> .)
+    EQUAL_TO        reduce using rule 119 (epsilon -> .)
+    NOT_EQUAL_TO    reduce using rule 119 (epsilon -> .)
+    AND             reduce using rule 119 (epsilon -> .)
+    OR              reduce using rule 119 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
-    term1                          shift and go to state 289
+    term1                          shift and go to state 296
     epsilon                        shift and go to state 175
 
-state 268
+state 274
 
     (65) term1 -> DIVISION np_add_operator factor np_term . term1
     (64) term1 -> . MULTIPLICATION np_add_operator factor np_term term1
     (65) term1 -> . DIVISION np_add_operator factor np_term term1
     (66) term1 -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     MULTIPLICATION  shift and go to state 173
     DIVISION        shift and go to state 174
-    PLUS            reduce using rule 115 (epsilon -> .)
-    MINUS           reduce using rule 115 (epsilon -> .)
-    GREATER_THAN    reduce using rule 115 (epsilon -> .)
-    LESS_THAN       reduce using rule 115 (epsilon -> .)
-    EQUAL_TO        reduce using rule 115 (epsilon -> .)
-    NOT_EQUAL_TO    reduce using rule 115 (epsilon -> .)
-    AND             reduce using rule 115 (epsilon -> .)
-    OR              reduce using rule 115 (epsilon -> .)
-    COMMA           reduce using rule 115 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 115 (epsilon -> .)
-    SEMICOLON       reduce using rule 115 (epsilon -> .)
+    PLUS            reduce using rule 119 (epsilon -> .)
+    MINUS           reduce using rule 119 (epsilon -> .)
+    GREATER_THAN    reduce using rule 119 (epsilon -> .)
+    LESS_THAN       reduce using rule 119 (epsilon -> .)
+    EQUAL_TO        reduce using rule 119 (epsilon -> .)
+    NOT_EQUAL_TO    reduce using rule 119 (epsilon -> .)
+    AND             reduce using rule 119 (epsilon -> .)
+    OR              reduce using rule 119 (epsilon -> .)
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 119 (epsilon -> .)
+    SEMICOLON       reduce using rule 119 (epsilon -> .)
 
-    term1                          shift and go to state 290
+    term1                          shift and go to state 297
     epsilon                        shift and go to state 175
 
-state 269
+state 275
 
-    (110) function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return . CLOSE_KEY
+    (114) function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return . CLOSE_KEY
 
-    CLOSE_KEY       shift and go to state 291
+    CLOSE_KEY       shift and go to state 298
 
 
-state 270
+state 276
 
-    (111) function_return -> RETURN . hyper_exp SEMICOLON
+    (115) function_return -> RETURN . hyper_exp SEMICOLON
     (46) hyper_exp -> . super_exp np_hyper_exp hyper_exp1
     (51) super_exp -> . exp np_super_exp super_exp1
     (58) exp -> . term np_exp exp1
@@ -4174,7 +4260,7 @@ state 270
     (72) factor -> . STRING_VALUE
     (73) factor -> . variable
     (74) factor -> . OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     (12) variable -> . ID variable1
 
     FLOAT_VALUE     shift and go to state 81
@@ -4184,7 +4270,7 @@ state 270
     OPEN_PARENTHESIS shift and go to state 71
     ID              shift and go to state 70
 
-    hyper_exp                      shift and go to state 292
+    hyper_exp                      shift and go to state 299
     super_exp                      shift and go to state 76
     exp                            shift and go to state 77
     term                           shift and go to state 78
@@ -4192,79 +4278,91 @@ state 270
     function_call                  shift and go to state 80
     variable                       shift and go to state 85
 
-state 271
+state 277
 
-    (112) function_return -> epsilon .
+    (116) function_return -> epsilon .
 
-    CLOSE_KEY       reduce using rule 112 (function_return -> epsilon .)
+    CLOSE_KEY       reduce using rule 116 (function_return -> epsilon .)
 
 
-state 272
+state 278
 
     (87) parameter1 -> COMMA atomic_var_type data_type ID parameter1 .
 
     CLOSE_PARENTHESIS reduce using rule 87 (parameter1 -> COMMA atomic_var_type data_type ID parameter1 .)
 
 
-state 273
+state 279
 
     (88) parameter1 -> COMMA OBJ ID ID parameter1 .
 
     CLOSE_PARENTHESIS reduce using rule 88 (parameter1 -> COMMA OBJ ID ID parameter1 .)
 
 
-state 274
+state 280
 
     (90) conditional -> IF OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS OPEN_KEY statement_loop . CLOSE_KEY conditional1
 
-    CLOSE_KEY       shift and go to state 293
+    CLOSE_KEY       shift and go to state 300
 
 
-state 275
+state 281
 
     (93) cycle -> FOR OPEN_PARENTHESIS ID IN ID CLOSE_PARENTHESIS . cycle1
     (95) cycle1 -> . OPEN_KEY statement_loop CLOSE_KEY
 
-    OPEN_KEY        shift and go to state 250
+    OPEN_KEY        shift and go to state 253
 
-    cycle1                         shift and go to state 294
+    cycle1                         shift and go to state 301
 
-state 276
+state 282
 
     (95) cycle1 -> OPEN_KEY statement_loop . CLOSE_KEY
 
-    CLOSE_KEY       shift and go to state 295
+    CLOSE_KEY       shift and go to state 302
 
 
-state 277
+state 283
 
     (98) variable_loop1 -> COMMA variable variable_loop1 .
 
     CLOSE_PARENTHESIS reduce using rule 98 (variable_loop1 -> COMMA variable variable_loop1 .)
 
 
-state 278
+state 284
 
-    (109) class_function -> AT_CLASS ID FUNCTION ID . OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+    (102) write_hyper_exp_loop1 -> COMMA hyper_exp . np_add_write_quad write_hyper_exp_loop1
+    (104) np_add_write_quad -> . epsilon
+    (119) epsilon -> .
 
-    OPEN_PARENTHESIS shift and go to state 296
+    COMMA           reduce using rule 119 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+
+    np_add_write_quad              shift and go to state 303
+    epsilon                        shift and go to state 227
+
+state 285
+
+    (113) class_function -> AT_CLASS ID FUNCTION ID . OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+
+    OPEN_PARENTHESIS shift and go to state 304
 
 
-state 279
+state 286
 
     (28) constructor -> CONSTRUCTOR ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS . OPEN_KEY statement_loop CLOSE_KEY
 
-    OPEN_KEY        shift and go to state 297
+    OPEN_KEY        shift and go to state 305
 
 
-state 280
+state 287
 
     (81) class_function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg . SEMICOLON
 
-    SEMICOLON       shift and go to state 298
+    SEMICOLON       shift and go to state 306
 
 
-state 281
+state 288
 
     (47) hyper_exp1 -> AND np_add_operator super_exp np_hyper_exp hyper_exp1 .
 
@@ -4274,7 +4372,7 @@ state 281
     SEMICOLON       reduce using rule 47 (hyper_exp1 -> AND np_add_operator super_exp np_hyper_exp hyper_exp1 .)
 
 
-state 282
+state 289
 
     (48) hyper_exp1 -> OR np_add_operator super_exp np_hyper_exp hyper_exp1 .
 
@@ -4284,7 +4382,7 @@ state 282
     SEMICOLON       reduce using rule 48 (hyper_exp1 -> OR np_add_operator super_exp np_hyper_exp hyper_exp1 .)
 
 
-state 283
+state 290
 
     (52) super_exp1 -> GREATER_THAN np_add_operator exp np_super_exp super_exp1 .
 
@@ -4296,7 +4394,7 @@ state 283
     SEMICOLON       reduce using rule 52 (super_exp1 -> GREATER_THAN np_add_operator exp np_super_exp super_exp1 .)
 
 
-state 284
+state 291
 
     (53) super_exp1 -> LESS_THAN np_add_operator exp np_super_exp super_exp1 .
 
@@ -4308,7 +4406,7 @@ state 284
     SEMICOLON       reduce using rule 53 (super_exp1 -> LESS_THAN np_add_operator exp np_super_exp super_exp1 .)
 
 
-state 285
+state 292
 
     (54) super_exp1 -> EQUAL_TO np_add_operator exp np_super_exp super_exp1 .
 
@@ -4320,7 +4418,7 @@ state 285
     SEMICOLON       reduce using rule 54 (super_exp1 -> EQUAL_TO np_add_operator exp np_super_exp super_exp1 .)
 
 
-state 286
+state 293
 
     (55) super_exp1 -> NOT_EQUAL_TO np_add_operator exp np_super_exp super_exp1 .
 
@@ -4332,7 +4430,7 @@ state 286
     SEMICOLON       reduce using rule 55 (super_exp1 -> NOT_EQUAL_TO np_add_operator exp np_super_exp super_exp1 .)
 
 
-state 287
+state 294
 
     (59) exp1 -> PLUS np_add_operator term np_exp exp1 .
 
@@ -4348,7 +4446,7 @@ state 287
     SEMICOLON       reduce using rule 59 (exp1 -> PLUS np_add_operator term np_exp exp1 .)
 
 
-state 288
+state 295
 
     (60) exp1 -> MINUS np_add_operator term np_exp exp1 .
 
@@ -4364,7 +4462,7 @@ state 288
     SEMICOLON       reduce using rule 60 (exp1 -> MINUS np_add_operator term np_exp exp1 .)
 
 
-state 289
+state 296
 
     (64) term1 -> MULTIPLICATION np_add_operator factor np_term term1 .
 
@@ -4382,7 +4480,7 @@ state 289
     SEMICOLON       reduce using rule 64 (term1 -> MULTIPLICATION np_add_operator factor np_term term1 .)
 
 
-state 290
+state 297
 
     (65) term1 -> DIVISION np_add_operator factor np_term term1 .
 
@@ -4400,46 +4498,46 @@ state 290
     SEMICOLON       reduce using rule 65 (term1 -> DIVISION np_add_operator factor np_term term1 .)
 
 
-state 291
+state 298
 
-    (110) function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY .
+    (114) function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY .
 
-    CLASS           reduce using rule 110 (function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY .)
-    VAR             reduce using rule 110 (function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY .)
-    GROUP           reduce using rule 110 (function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY .)
-    OBJ             reduce using rule 110 (function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY .)
-    FUNCTION        reduce using rule 110 (function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY .)
-    MAIN            reduce using rule 110 (function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY .)
-
-
-state 292
-
-    (111) function_return -> RETURN hyper_exp . SEMICOLON
-
-    SEMICOLON       shift and go to state 299
+    CLASS           reduce using rule 114 (function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY .)
+    VAR             reduce using rule 114 (function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY .)
+    GROUP           reduce using rule 114 (function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY .)
+    OBJ             reduce using rule 114 (function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY .)
+    FUNCTION        reduce using rule 114 (function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY .)
+    MAIN            reduce using rule 114 (function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY .)
 
 
-state 293
+state 299
+
+    (115) function_return -> RETURN hyper_exp . SEMICOLON
+
+    SEMICOLON       shift and go to state 307
+
+
+state 300
 
     (90) conditional -> IF OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY . conditional1
     (91) conditional1 -> . ELSE OPEN_KEY statement_loop CLOSE_KEY
     (92) conditional1 -> . epsilon
-    (115) epsilon -> .
+    (119) epsilon -> .
 
-    ELSE            shift and go to state 301
-    IF              reduce using rule 115 (epsilon -> .)
-    FOR             reduce using rule 115 (epsilon -> .)
-    WHILE           reduce using rule 115 (epsilon -> .)
-    READ            reduce using rule 115 (epsilon -> .)
-    WRITE           reduce using rule 115 (epsilon -> .)
-    ID              reduce using rule 115 (epsilon -> .)
-    CLOSE_KEY       reduce using rule 115 (epsilon -> .)
-    RETURN          reduce using rule 115 (epsilon -> .)
+    ELSE            shift and go to state 309
+    IF              reduce using rule 119 (epsilon -> .)
+    FOR             reduce using rule 119 (epsilon -> .)
+    WHILE           reduce using rule 119 (epsilon -> .)
+    READ            reduce using rule 119 (epsilon -> .)
+    WRITE           reduce using rule 119 (epsilon -> .)
+    ID              reduce using rule 119 (epsilon -> .)
+    CLOSE_KEY       reduce using rule 119 (epsilon -> .)
+    RETURN          reduce using rule 119 (epsilon -> .)
 
-    conditional1                   shift and go to state 300
-    epsilon                        shift and go to state 302
+    conditional1                   shift and go to state 308
+    epsilon                        shift and go to state 310
 
-state 294
+state 301
 
     (93) cycle -> FOR OPEN_PARENTHESIS ID IN ID CLOSE_PARENTHESIS cycle1 .
 
@@ -4453,7 +4551,7 @@ state 294
     RETURN          reduce using rule 93 (cycle -> FOR OPEN_PARENTHESIS ID IN ID CLOSE_PARENTHESIS cycle1 .)
 
 
-state 295
+state 302
 
     (95) cycle1 -> OPEN_KEY statement_loop CLOSE_KEY .
 
@@ -4467,26 +4565,39 @@ state 295
     RETURN          reduce using rule 95 (cycle1 -> OPEN_KEY statement_loop CLOSE_KEY .)
 
 
-state 296
+state 303
 
-    (109) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS . parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+    (102) write_hyper_exp_loop1 -> COMMA hyper_exp np_add_write_quad . write_hyper_exp_loop1
+    (102) write_hyper_exp_loop1 -> . COMMA hyper_exp np_add_write_quad write_hyper_exp_loop1
+    (103) write_hyper_exp_loop1 -> . epsilon
+    (119) epsilon -> .
+
+    COMMA           shift and go to state 259
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
+
+    write_hyper_exp_loop1          shift and go to state 311
+    epsilon                        shift and go to state 260
+
+state 304
+
+    (113) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS . parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
     (84) parameter -> . atomic_var_type data_type ID parameter1
     (85) parameter -> . OBJ ID ID parameter1
     (86) parameter -> . epsilon
     (34) atomic_var_type -> . VAR
     (35) atomic_var_type -> . GROUP
-    (115) epsilon -> .
+    (119) epsilon -> .
 
     OBJ             shift and go to state 46
     VAR             shift and go to state 48
     GROUP           shift and go to state 49
-    CLOSE_PARENTHESIS reduce using rule 115 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 119 (epsilon -> .)
 
-    parameter                      shift and go to state 303
+    parameter                      shift and go to state 312
     atomic_var_type                shift and go to state 45
     epsilon                        shift and go to state 47
 
-state 297
+state 305
 
     (28) constructor -> CONSTRUCTOR ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS OPEN_KEY . statement_loop CLOSE_KEY
     (6) statement_loop -> . statement statement_loop1
@@ -4501,8 +4612,8 @@ state 297
     (93) cycle -> . FOR OPEN_PARENTHESIS ID IN ID CLOSE_PARENTHESIS cycle1
     (94) cycle -> . WHILE OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS cycle1
     (96) read -> . READ OPEN_PARENTHESIS variable_loop CLOSE_PARENTHESIS SEMICOLON
-    (100) write -> . WRITE OPEN_PARENTHESIS hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (100) write -> . WRITE OPEN_PARENTHESIS write_hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     (12) variable -> . ID variable1
 
     IF              shift and go to state 98
@@ -4512,7 +4623,7 @@ state 297
     WRITE           shift and go to state 102
     ID              shift and go to state 70
 
-    statement_loop                 shift and go to state 304
+    statement_loop                 shift and go to state 313
     statement                      shift and go to state 90
     assignment                     shift and go to state 91
     conditional                    shift and go to state 92
@@ -4522,7 +4633,7 @@ state 297
     function_call                  shift and go to state 96
     variable                       shift and go to state 97
 
-state 298
+state 306
 
     (81) class_function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg SEMICOLON .
 
@@ -4530,14 +4641,14 @@ state 298
     CLOSE_KEY       reduce using rule 81 (class_function_declaration -> FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg SEMICOLON .)
 
 
-state 299
+state 307
 
-    (111) function_return -> RETURN hyper_exp SEMICOLON .
+    (115) function_return -> RETURN hyper_exp SEMICOLON .
 
-    CLOSE_KEY       reduce using rule 111 (function_return -> RETURN hyper_exp SEMICOLON .)
+    CLOSE_KEY       reduce using rule 115 (function_return -> RETURN hyper_exp SEMICOLON .)
 
 
-state 300
+state 308
 
     (90) conditional -> IF OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY conditional1 .
 
@@ -4551,14 +4662,14 @@ state 300
     RETURN          reduce using rule 90 (conditional -> IF OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY conditional1 .)
 
 
-state 301
+state 309
 
     (91) conditional1 -> ELSE . OPEN_KEY statement_loop CLOSE_KEY
 
-    OPEN_KEY        shift and go to state 305
+    OPEN_KEY        shift and go to state 314
 
 
-state 302
+state 310
 
     (92) conditional1 -> epsilon .
 
@@ -4572,21 +4683,28 @@ state 302
     RETURN          reduce using rule 92 (conditional1 -> epsilon .)
 
 
-state 303
+state 311
 
-    (109) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter . CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+    (102) write_hyper_exp_loop1 -> COMMA hyper_exp np_add_write_quad write_hyper_exp_loop1 .
 
-    CLOSE_PARENTHESIS shift and go to state 306
+    CLOSE_PARENTHESIS reduce using rule 102 (write_hyper_exp_loop1 -> COMMA hyper_exp np_add_write_quad write_hyper_exp_loop1 .)
 
 
-state 304
+state 312
+
+    (113) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter . CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+
+    CLOSE_PARENTHESIS shift and go to state 315
+
+
+state 313
 
     (28) constructor -> CONSTRUCTOR ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS OPEN_KEY statement_loop . CLOSE_KEY
 
-    CLOSE_KEY       shift and go to state 307
+    CLOSE_KEY       shift and go to state 316
 
 
-state 305
+state 314
 
     (91) conditional1 -> ELSE OPEN_KEY . statement_loop CLOSE_KEY
     (6) statement_loop -> . statement statement_loop1
@@ -4601,8 +4719,8 @@ state 305
     (93) cycle -> . FOR OPEN_PARENTHESIS ID IN ID CLOSE_PARENTHESIS cycle1
     (94) cycle -> . WHILE OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS cycle1
     (96) read -> . READ OPEN_PARENTHESIS variable_loop CLOSE_PARENTHESIS SEMICOLON
-    (100) write -> . WRITE OPEN_PARENTHESIS hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (100) write -> . WRITE OPEN_PARENTHESIS write_hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     (12) variable -> . ID variable1
 
     IF              shift and go to state 98
@@ -4612,7 +4730,7 @@ state 305
     WRITE           shift and go to state 102
     ID              shift and go to state 70
 
-    statement_loop                 shift and go to state 308
+    statement_loop                 shift and go to state 317
     statement                      shift and go to state 90
     assignment                     shift and go to state 91
     conditional                    shift and go to state 92
@@ -4622,14 +4740,14 @@ state 305
     function_call                  shift and go to state 96
     variable                       shift and go to state 97
 
-state 306
+state 315
 
-    (109) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS . RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+    (113) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS . RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
 
-    RETURNS         shift and go to state 309
+    RETURNS         shift and go to state 318
 
 
-state 307
+state 316
 
     (28) constructor -> CONSTRUCTOR ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY .
 
@@ -4642,16 +4760,16 @@ state 307
     MAIN            reduce using rule 28 (constructor -> CONSTRUCTOR ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY .)
 
 
-state 308
+state 317
 
     (91) conditional1 -> ELSE OPEN_KEY statement_loop . CLOSE_KEY
 
-    CLOSE_KEY       shift and go to state 310
+    CLOSE_KEY       shift and go to state 319
 
 
-state 309
+state 318
 
-    (109) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS . return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+    (113) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS . return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
     (82) return_arg -> . data_type
     (83) return_arg -> . VOID
     (77) data_type -> . INT
@@ -4665,10 +4783,10 @@ state 309
     STRING          shift and go to state 25
     BOOL            shift and go to state 26
 
-    return_arg                     shift and go to state 311
+    return_arg                     shift and go to state 320
     data_type                      shift and go to state 131
 
-state 310
+state 319
 
     (91) conditional1 -> ELSE OPEN_KEY statement_loop CLOSE_KEY .
 
@@ -4682,20 +4800,20 @@ state 310
     RETURN          reduce using rule 91 (conditional1 -> ELSE OPEN_KEY statement_loop CLOSE_KEY .)
 
 
-state 311
+state 320
 
-    (109) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg . OPEN_KEY function_statement_loop function_return CLOSE_KEY
+    (113) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg . OPEN_KEY function_statement_loop function_return CLOSE_KEY
 
-    OPEN_KEY        shift and go to state 312
+    OPEN_KEY        shift and go to state 321
 
 
-state 312
+state 321
 
-    (109) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY . function_statement_loop function_return CLOSE_KEY
-    (113) function_statement_loop -> . statement_loop
-    (114) function_statement_loop -> . epsilon
+    (113) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY . function_statement_loop function_return CLOSE_KEY
+    (117) function_statement_loop -> . statement_loop
+    (118) function_statement_loop -> . epsilon
     (6) statement_loop -> . statement statement_loop1
-    (115) epsilon -> .
+    (119) epsilon -> .
     (38) statement -> . assignment
     (39) statement -> . conditional
     (40) statement -> . cycle
@@ -4707,12 +4825,12 @@ state 312
     (93) cycle -> . FOR OPEN_PARENTHESIS ID IN ID CLOSE_PARENTHESIS cycle1
     (94) cycle -> . WHILE OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS cycle1
     (96) read -> . READ OPEN_PARENTHESIS variable_loop CLOSE_PARENTHESIS SEMICOLON
-    (100) write -> . WRITE OPEN_PARENTHESIS hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
-    (104) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    (100) write -> . WRITE OPEN_PARENTHESIS write_hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
+    (108) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     (12) variable -> . ID variable1
 
-    RETURN          reduce using rule 115 (epsilon -> .)
-    CLOSE_KEY       reduce using rule 115 (epsilon -> .)
+    RETURN          reduce using rule 119 (epsilon -> .)
+    CLOSE_KEY       reduce using rule 119 (epsilon -> .)
     IF              shift and go to state 98
     FOR             shift and go to state 99
     WHILE           shift and go to state 100
@@ -4720,9 +4838,9 @@ state 312
     WRITE           shift and go to state 102
     ID              shift and go to state 70
 
-    function_statement_loop        shift and go to state 313
-    statement_loop                 shift and go to state 243
-    epsilon                        shift and go to state 244
+    function_statement_loop        shift and go to state 322
+    statement_loop                 shift and go to state 246
+    epsilon                        shift and go to state 247
     statement                      shift and go to state 90
     assignment                     shift and go to state 91
     conditional                    shift and go to state 92
@@ -4732,35 +4850,35 @@ state 312
     function_call                  shift and go to state 96
     variable                       shift and go to state 97
 
-state 313
+state 322
 
-    (109) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop . function_return CLOSE_KEY
-    (111) function_return -> . RETURN hyper_exp SEMICOLON
-    (112) function_return -> . epsilon
-    (115) epsilon -> .
+    (113) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop . function_return CLOSE_KEY
+    (115) function_return -> . RETURN hyper_exp SEMICOLON
+    (116) function_return -> . epsilon
+    (119) epsilon -> .
 
-    RETURN          shift and go to state 270
-    CLOSE_KEY       reduce using rule 115 (epsilon -> .)
+    RETURN          shift and go to state 276
+    CLOSE_KEY       reduce using rule 119 (epsilon -> .)
 
-    function_return                shift and go to state 314
-    epsilon                        shift and go to state 271
+    function_return                shift and go to state 323
+    epsilon                        shift and go to state 277
 
-state 314
+state 323
 
-    (109) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return . CLOSE_KEY
+    (113) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return . CLOSE_KEY
 
-    CLOSE_KEY       shift and go to state 315
+    CLOSE_KEY       shift and go to state 324
 
 
-state 315
+state 324
 
-    (109) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .
+    (113) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .
 
-    AT_CLASS        reduce using rule 109 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
-    CLASS           reduce using rule 109 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
-    VAR             reduce using rule 109 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
-    GROUP           reduce using rule 109 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
-    OBJ             reduce using rule 109 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
-    FUNCTION        reduce using rule 109 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
-    MAIN            reduce using rule 109 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
+    AT_CLASS        reduce using rule 113 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
+    CLASS           reduce using rule 113 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
+    VAR             reduce using rule 113 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
+    GROUP           reduce using rule 113 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
+    OBJ             reduce using rule 113 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
+    FUNCTION        reduce using rule 113 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
+    MAIN            reduce using rule 113 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
 

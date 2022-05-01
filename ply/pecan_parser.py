@@ -97,7 +97,7 @@ def p_variable(p):
     '''
     variable    : ID variable1
     '''
-    p[0] = ("Variable " + p[1], 'string')
+    p[0] = ("Variable " + p[1], 'bool')
 
 
 def p_variable1(p):
@@ -237,8 +237,13 @@ def p_assignment(p):
     '''
     assignment  : variable ASSIGN hyper_exp SEMICOLON
     '''
-    pass
-
+    var_value, var_type = p[1]
+    exp_value, exp_type = operand_stack.pop()
+    result_type = semantic_cube.is_type_match(var_type, exp_type, '=')
+    if result_type:
+        quads.generate_quad('=', exp_value, None, var_value)
+    else:
+        raise TypeMismatchError()
 
 def p_np_add_operator(p):
     '''
@@ -352,8 +357,7 @@ def add_exp_quad(operator_list):
             quads.generate_quad(operator, lo_value, ro_value, new_temp)
             operand_stack.append(new_temp)
         else:
-            raise Exception("Error: Type mismatch")
-
+            raise TypeMismatchError()
 
 def p_factor(p):
     '''
@@ -467,30 +471,53 @@ def p_read(p):
     '''
     read    : READ OPEN_PARENTHESIS variable_loop CLOSE_PARENTHESIS SEMICOLON
     '''
-    pass
+    for variable in p[3]:
+        quads.generate_quad('READ', None, None, variable)
 
 
 def p_variable_loop(p):
     '''
     variable_loop   : variable variable_loop1
     '''
-    pass
-
+    p[0] = [p[1]] + p[2]
 
 def p_variable_loop1(p):
     '''
     variable_loop1  : COMMA variable variable_loop1
                     | epsilon
     '''
-    pass
-
+    if len(p) == 4:
+        p[0] = [p[2]] + p[3]
+    else:
+        p[0] = []
 
 def p_write(p):
     '''
-    write   : WRITE OPEN_PARENTHESIS hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
+    write   : WRITE OPEN_PARENTHESIS write_hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
     '''
     pass
 
+def p_write_hyper_exp_loop(p):
+    '''
+    write_hyper_exp_loop  : hyper_exp np_add_write_quad write_hyper_exp_loop1
+    '''
+    pass
+
+
+def p_write_hyper_exp_loop1(p):
+    '''
+    write_hyper_exp_loop1 : COMMA hyper_exp np_add_write_quad write_hyper_exp_loop1
+                    | epsilon
+
+    '''
+    pass
+
+def p_np_add_write_quad(p):
+    '''
+    np_add_write_quad : epsilon
+    '''
+    operand_tuple = operand_stack.pop() # TODO: Check further what to do with the type
+    quads.generate_quad('WRITE', None, None, operand_tuple)
 
 def p_hyper_exp_loop(p):
     '''
@@ -571,6 +598,8 @@ def p_epsilon(p):
 class SyntaxError(Exception):
     pass
 
+class TypeMismatchError(Exception):
+    pass
 
 def p_error(p):
     print('syntax error', p)
