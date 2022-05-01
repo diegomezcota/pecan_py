@@ -33,7 +33,7 @@ constructor Student(var string matricula) {
     write("Me saque muy mala calificacion de:", calificacion);
 }
 
-function create() returns string {
+function create(obj Figura rectangulo) returns string {
     return "creado";
 }
 
