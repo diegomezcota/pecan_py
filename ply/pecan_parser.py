@@ -240,6 +240,13 @@ def p_assignment(p):
     pass
 
 
+def p_np_add_operator(p):
+    '''
+    np_add_operator : epsilon
+    '''
+    operator_stack.append(p[-1])
+
+
 def p_hyper_exp(p):
     '''
     hyper_exp   : super_exp hyper_exp1
@@ -249,8 +256,8 @@ def p_hyper_exp(p):
 
 def p_hyper_exp1(p):
     '''
-    hyper_exp1  : AND super_exp hyper_exp1
-                | OR super_exp hyper_exp1
+    hyper_exp1  : AND np_add_operator super_exp hyper_exp1
+                | OR np_add_operator super_exp hyper_exp1
                 | epsilon
     '''
     pass
@@ -265,10 +272,10 @@ def p_super_exp(p):
 
 def p_super_exp1(p):
     '''
-    super_exp1  : GREATER_THAN exp super_exp1
-                | LESS_THAN exp super_exp1
-                | EQUAL_TO exp super_exp1
-                | NOT_EQUAL_TO exp super_exp1
+    super_exp1  : GREATER_THAN np_add_operator exp super_exp1
+                | LESS_THAN np_add_operator exp super_exp1
+                | EQUAL_TO np_add_operator exp super_exp1
+                | NOT_EQUAL_TO np_add_operator exp super_exp1
                 | epsilon
     '''
     pass
@@ -283,8 +290,8 @@ def p_exp(p):
 
 def p_exp1(p):
     '''
-    exp1    : PLUS term exp1
-            | MINUS term exp1
+    exp1    : PLUS np_add_operator term exp1
+            | MINUS np_add_operator term exp1
             | epsilon
     '''
     pass
@@ -292,18 +299,25 @@ def p_exp1(p):
 
 def p_term(p):
     '''
-    term    : factor term1
+    term    : factor np_term term1
     '''
     pass
 
 
 def p_term1(p):
     '''
-    term1   : MULTIPLICATION factor term1
-            | DIVISION factor term1
+    term1   : MULTIPLICATION np_add_operator factor term1
+            | DIVISION np_add_operator factor term1
             | epsilon
     '''
     pass
+
+
+def p_np_term(p):
+    if operator_stack[-1] in ['*', '/']:
+        ro_value, ro_tyoe = operand_stack.pop()
+        lo_value, lo_type = operand_stack.pop()
+        operator
 
 
 def p_factor(p):
@@ -314,13 +328,18 @@ def p_factor(p):
             | BOOL_VALUE
             | STRING_VALUE
             | variable
-            | OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS
+            | OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS
     '''
     if len(p) == 2:
         temp_tuple = p[1]
         operand_stack.append(temp_tuple)
-    else:
-        print('aucsilio')
+
+
+def p_np_add_open_parenthesis(p):
+    '''
+    np_add_open_parenthesis : epsilon
+    '''
+    operator_stack.append('(')
 
 
 def p_data_type(p):
