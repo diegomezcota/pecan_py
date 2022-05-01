@@ -1,11 +1,18 @@
-from ast import Pass
+from function_directory import FunctionDirectory
+from avail import Avail
+from quadruples import Quadruples
+from semantic_cube import SemanticCube
 import ply.yacc as yacc
 from lexer import tokens
 
 import json
 
-from function_directory import FunctionDirectory
 function_directory = FunctionDirectory()
+avail = Avail()
+quads = Quadruples()
+semantic_cube = SemanticCube()
+operand_stack = []
+operator_stack = []
 
 # TODO: main scope and their variables, meternos al los statements
 # ideas: main function part be their own function to add to the function directory in an easier way
@@ -25,7 +32,8 @@ def p_program(p):
     '''
     program : PROGRAM np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
-    #print(json.dumps(function_directory.table, indent=2))
+    # print(json.dumps(function_directory.table, indent=2)
+    print(quads.list)
     pass
 
 
@@ -89,7 +97,7 @@ def p_variable(p):
     '''
     variable    : ID variable1
     '''
-    pass
+    p[0] = ("Variable " + p[1], 'string')
 
 
 def p_variable1(p):
@@ -196,12 +204,14 @@ def p_variable_declaration(p):
     else:
         p[0] = ('variable_declaration', p[1], p[4], p[2])
 
+
 def p_atomic_var_type(p):
     '''
     atomic_var_type    : VAR
                 | GROUP
     '''
     p[0] = p[1]
+
 
 def p_variable_declaration1(p):
     '''
@@ -230,70 +240,119 @@ def p_assignment(p):
     pass
 
 
+def p_np_add_operator(p):
+    '''
+    np_add_operator : epsilon
+    '''
+    operator_stack.append(p[-1])
+
+
 def p_hyper_exp(p):
     '''
-    hyper_exp   : super_exp hyper_exp1
+    hyper_exp   : super_exp np_hyper_exp hyper_exp1
     '''
     pass
 
 
 def p_hyper_exp1(p):
     '''
-    hyper_exp1  : AND super_exp hyper_exp1
-                | OR super_exp hyper_exp1
+    hyper_exp1  : AND np_add_operator super_exp np_hyper_exp hyper_exp1
+                | OR np_add_operator super_exp np_hyper_exp hyper_exp1
                 | epsilon
     '''
     pass
 
 
+def p_np_hyper_exp(p):
+    '''
+    np_hyper_exp : epsilon
+    '''
+    add_exp_quad(['&&', '||'])
+
+
 def p_super_exp(p):
     '''
-    super_exp   : exp super_exp1
+    super_exp   : exp np_super_exp super_exp1
     '''
     pass
 
 
 def p_super_exp1(p):
     '''
-    super_exp1  : GREATER_THAN exp super_exp1
-                | LESS_THAN exp super_exp1
-                | EQUAL_TO exp super_exp1
-                | NOT_EQUAL_TO exp super_exp1
+    super_exp1  : GREATER_THAN np_add_operator exp np_super_exp super_exp1
+                | LESS_THAN np_add_operator exp np_super_exp super_exp1
+                | EQUAL_TO np_add_operator exp np_super_exp super_exp1
+                | NOT_EQUAL_TO np_add_operator exp np_super_exp super_exp1
                 | epsilon
     '''
     pass
 
 
+def p_np_super_exp(p):
+    '''
+    np_super_exp : epsilon
+    '''
+    add_exp_quad(['>', '<', '==', '!='])
+
+
 def p_exp(p):
     '''
-    exp : term exp1
+    exp : term np_exp exp1
     '''
     pass
 
 
 def p_exp1(p):
     '''
-    exp1    : PLUS term exp1
-            | MINUS term exp1
+    exp1    : PLUS np_add_operator term np_exp exp1
+            | MINUS np_add_operator term np_exp exp1
             | epsilon
     '''
     pass
 
 
+def p_np_exp(p):
+    '''
+    np_exp : epsilon
+    '''
+    add_exp_quad(['+', '-'])
+
+
 def p_term(p):
     '''
-    term    : factor term1
+    term    : factor np_term term1
     '''
     pass
 
 
 def p_term1(p):
     '''
-    term1   : MULTIPLICATION factor term1
-            | DIVISION factor term1
+    term1   : MULTIPLICATION np_add_operator factor np_term term1
+            | DIVISION np_add_operator factor np_term term1
             | epsilon
     '''
     pass
+
+
+def p_np_term(p):
+    '''
+    np_term : epsilon
+    '''
+    add_exp_quad(['*', '/'])
+
+
+def add_exp_quad(operator_list):
+    if operator_stack and operator_stack[-1] in operator_list:
+        ro_value, ro_type = operand_stack.pop()
+        lo_value, lo_type = operand_stack.pop()
+        operator = operator_stack.pop()
+        result_type = semantic_cube.is_type_match(lo_type, ro_type, operator)
+        if result_type:
+            new_temp = avail.get_new_temp(result_type)
+            quads.generate_quad(operator, lo_value, ro_value, new_temp)
+            operand_stack.append(new_temp)
+        else:
+            raise Exception("Error: Type mismatch")
 
 
 def p_factor(p):
@@ -304,9 +363,25 @@ def p_factor(p):
             | BOOL_VALUE
             | STRING_VALUE
             | variable
-            | OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS
+            | OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
     '''
-    pass
+    if len(p) == 2:
+        temp_tuple = p[1]
+        operand_stack.append(temp_tuple)
+
+
+def p_np_add_open_parenthesis(p):
+    '''
+    np_add_open_parenthesis : epsilon
+    '''
+    operator_stack.append('(')
+
+
+def p_np_remove_open_parenthesis(p):
+    '''
+    np_remove_open_parenthesis : epsilon
+    '''
+    operator_stack.pop()
 
 
 def p_data_type(p):
@@ -437,7 +512,7 @@ def p_function_call(p):
     '''
     function_call   : ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     '''
-    pass
+    p[0] = ("Function call " + p[1], 'string')
 
 
 def p_function_call1(p):
