@@ -1,7 +1,7 @@
 from function_directory import FunctionDirectory
 from avail import Avail
 from quadruples import Quadruples
-from ast import Pass
+from semantic_cube import SemanticCube
 import ply.yacc as yacc
 from lexer import tokens
 
@@ -10,6 +10,7 @@ import json
 function_directory = FunctionDirectory()
 avail = Avail()
 quads = Quadruples()
+semantic_cube = SemanticCube()
 operand_stack = []
 operator_stack = []
 
@@ -314,10 +315,19 @@ def p_term1(p):
 
 
 def p_np_term(p):
-    if operator_stack[-1] in ['*', '/']:
+    '''
+    np_term : epsilon
+    '''
+    if operator_stack and operator_stack[-1] in ['*', '/']:
         ro_value, ro_tyoe = operand_stack.pop()
         lo_value, lo_type = operand_stack.pop()
-        operator
+        operator = operand_stack.pop()
+        result_type = semantic_cube.is_type_match(lo_type, ro_tyoe, operator)
+        if result_type:
+            new_temp = avail.get_new_temp(result_type)
+            quads.generate_quad(operator, lo_value, ro_value, new_temp)
+        else:
+            raise Exception("Error: Type mismatch")
 
 
 def p_factor(p):

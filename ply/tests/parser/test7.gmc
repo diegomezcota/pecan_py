@@ -1,0 +1,6 @@
+// test7: Tests Temporales
+program test;
+main() {
+    a = 3.154 / 4;
+    b = b * 3;
+}
