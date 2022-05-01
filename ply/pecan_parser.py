@@ -10,6 +10,8 @@ import json
 function_directory = FunctionDirectory()
 avail = Avail()
 quads = Quadruples()
+operand_stack = []
+operator_stack = []
 
 # TODO: main scope and their variables, meternos al los statements
 # ideas: main function part be their own function to add to the function directory in an easier way
@@ -29,7 +31,9 @@ def p_program(p):
     '''
     program : PROGRAM np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
-    print(json.dumps(function_directory.table, indent=2))
+    #print(json.dumps(function_directory.table, indent=2))
+    print(operator_stack)
+    print(operand_stack)
     pass
 
 
@@ -93,7 +97,7 @@ def p_variable(p):
     '''
     variable    : ID variable1
     '''
-    pass
+    p[0] = ("Variable " + p[1], 'string')
 
 
 def p_variable1(p):
@@ -313,7 +317,11 @@ def p_factor(p):
             | variable
             | OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS
     '''
-    pass
+    if len(p) == 2:
+        temp_tuple = p[1]
+        operand_stack.append(temp_tuple)
+    else:
+        print('aucsilio')
 
 
 def p_data_type(p):
@@ -442,7 +450,7 @@ def p_function_call(p):
     '''
     function_call   : ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     '''
-    pass
+    p[0] = ("Function call " + p[1], 'string')
 
 
 def p_function_call1(p):

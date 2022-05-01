@@ -37,92 +37,104 @@ tokens = [
 ]
 
 # Regular expression rules for simple tokens
-t_SEMICOLON         = r';'
-t_OPEN_PARENTHESIS  = r'\('
+t_SEMICOLON = r';'
+t_OPEN_PARENTHESIS = r'\('
 t_CLOSE_PARENTHESIS = r'\)'
-t_OPEN_KEY          = r'{'
-t_CLOSE_KEY         = r'}'
-t_COMMA             = r','
-t_ASSIGN            = r'='
-t_OPEN_BRACKET      = r'\['
-t_CLOSE_BRACKET     = r'\]'
-t_AND               = r'&&'
-t_OR                = r'\|\|'
-t_PLUS              = r'\+'
-t_MINUS             = r'-'
-t_MULTIPLICATION    = r'\*'
-t_DIVISION          = r'/'
-t_GREATER_THAN      = r'>'
-t_LESS_THAN         = r'<'
-t_EQUAL_TO          = r'=='
-t_NOT_EQUAL_TO      = r'!='
-t_DOT               = r'\.'
-t_AT_CLASS          = r'@class'
+t_OPEN_KEY = r'{'
+t_CLOSE_KEY = r'}'
+t_COMMA = r','
+t_ASSIGN = r'='
+t_OPEN_BRACKET = r'\['
+t_CLOSE_BRACKET = r'\]'
+t_AND = r'&&'
+t_OR = r'\|\|'
+t_PLUS = r'\+'
+t_MINUS = r'-'
+t_MULTIPLICATION = r'\*'
+t_DIVISION = r'/'
+t_GREATER_THAN = r'>'
+t_LESS_THAN = r'<'
+t_EQUAL_TO = r'=='
+t_NOT_EQUAL_TO = r'!='
+t_DOT = r'\.'
+t_AT_CLASS = r'@class'
 
 # Reserved words
 reserved = {
-    'program' : 'PROGRAM',
-    'main' : 'MAIN',
-    'class' : 'CLASS',
-    'is' : 'IS',
-    'constructor' : 'CONSTRUCTOR',
-    'var' : 'VAR',
-    'group' : 'GROUP',
-    'int' : 'INT',
-    'float' : 'FLOAT',
-    'string' : 'STRING',
-    'bool' : 'BOOL',
-    'function' : 'FUNCTION',
-    'returns' : 'RETURNS',
-    'void' : 'VOID',
-    'if' : 'IF',
-    'else' : 'ELSE',
-    'read' : 'READ',
-    'write' : 'WRITE',
-    'for' : 'FOR',
-    'in' : 'IN',
-    'while' : 'WHILE',
-    'return' : 'RETURN',
-    'obj' : 'OBJ'
+    'program': 'PROGRAM',
+    'main': 'MAIN',
+    'class': 'CLASS',
+    'is': 'IS',
+    'constructor': 'CONSTRUCTOR',
+    'var': 'VAR',
+    'group': 'GROUP',
+    'int': 'INT',
+    'float': 'FLOAT',
+    'string': 'STRING',
+    'bool': 'BOOL',
+    'function': 'FUNCTION',
+    'returns': 'RETURNS',
+    'void': 'VOID',
+    'if': 'IF',
+    'else': 'ELSE',
+    'read': 'READ',
+    'write': 'WRITE',
+    'for': 'FOR',
+    'in': 'IN',
+    'while': 'WHILE',
+    'return': 'RETURN',
+    'obj': 'OBJ'
 }
 
 tokens += list(reserved.values())
 
 # A string containing ignored characters (spaces and tabs)
-t_ignore  = ' \t\n'
+t_ignore = ' \t\n'
 t_ignore_COMMENT = r'//.*'
 
 # ID check for reserved words
+
+
 def t_BOOL_VALUE(t):
     r'true|false'
     t.type = reserved.get(t.value, 'BOOL_VALUE')
+    t.value = (t.value, 'bool')
     return t
-    
+
 
 def t_ID(t):
     r'[a-zA-Z_][a-zA-Z_0-9]*'
-    t.type = reserved.get(t.value,'ID')    # Check for reserved words
+    t.type = reserved.get(t.value, 'ID')    # Check for reserved words
     return t
+
 
 def t_FLOAT_VALUE(t):
     r'[0-9]+\.[0-9]+'
     t.type = reserved.get(t.value, 'FLOAT_VALUE')
+    t.value = (t.value, 'float')
     return t
+
 
 def t_INT_VALUE(t):
     r'[0-9]+'
     t.type = reserved.get(t.value, 'INT_VALUE')
+    t.value = (t.value, 'int')
     return t
+
 
 def t_STRING_VALUE(t):
     r'".*"'
     t.type = reserved.get(t.value, 'STRING_VALUE')
+    t.value = (t.value, 'string')
     return t
 
 # Error handling rule
+
+
 def t_error(t):
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)
-    
+
+
 # Build the lexer
 lexer = lex.lex()
