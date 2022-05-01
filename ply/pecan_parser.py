@@ -205,11 +205,10 @@ def p_variable_declaration(p):
         p[0] = ('variable_declaration', p[1], p[4], p[2])
 
 
-def p_var_type(p):
+def p_atomic_var_type(p):
     '''
-    var_type    : VAR
+    atomic_var_type    : VAR
                 | GROUP
-                | OBJ
     '''
     p[0] = p[1]
 
@@ -351,22 +350,24 @@ def p_return_arg(p):
 
 def p_parameter(p):
     '''
-    parameter   : var_type data_type ID parameter1
+    parameter   : atomic_var_type data_type ID parameter1
+                | OBJ ID ID parameter1
                 | epsilon
     '''
     if len(p) == 5:
-        p[0] = [(p[1], p[2])] + p[3]
+        p[0] = [(p[1], p[2], p[3])] + p[4]
     else:
         p[0] = []
 
 
 def p_parameter1(p):
     '''
-    parameter1  : COMMA var_type data_type ID parameter1
+    parameter1  : COMMA atomic_var_type data_type ID parameter1
+                | COMMA OBJ ID ID parameter1
                 | epsilon
     '''
     if len(p) == 6:
-        p[0] = [(p[2], p[3])] + p[4]
+        p[0] = [(p[2], p[3], p[4])] + p[5]
     else:
         p[0] = []
 
@@ -482,7 +483,7 @@ def p_function_declaration(p):
     function_declaration    : FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
     '''
     function_directory.add_function_with_variables(
-        function_variables=p[9], function_name=p[2], function_type=p[7])
+        function_parameters=p[4], function_variables=p[9], function_name=p[2], function_type=p[7])
 
 
 def p_function_return(p):
