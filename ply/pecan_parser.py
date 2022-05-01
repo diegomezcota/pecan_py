@@ -25,7 +25,7 @@ def p_program(p):
     '''
     program : PROGRAM np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
-    print(json.dumps(function_directory.table, indent=2))
+    #print(json.dumps(function_directory.table, indent=2))
     pass
 
 
@@ -196,11 +196,10 @@ def p_variable_declaration(p):
     else:
         p[0] = ('variable_declaration', p[1], p[4], p[2])
 
-def p_var_type(p):
+def p_atomic_var_type(p):
     '''
-    var_type    : VAR
+    atomic_var_type    : VAR
                 | GROUP
-                | OBJ
     '''
     p[0] = p[1]
 
@@ -337,7 +336,8 @@ def p_return_arg(p):
 
 def p_parameter(p):
     '''
-    parameter   : var_type data_type ID parameter1
+    parameter   : atomic_var_type data_type ID parameter1
+                | OBJ ID ID parameter1
                 | epsilon
     '''
     if len(p) == 5:
@@ -348,7 +348,8 @@ def p_parameter(p):
 
 def p_parameter1(p):
     '''
-    parameter1  : COMMA var_type data_type ID parameter1
+    parameter1  : COMMA atomic_var_type data_type ID parameter1
+                | COMMA OBJ ID ID parameter1
                 | epsilon
     '''
     if len(p) == 6:
