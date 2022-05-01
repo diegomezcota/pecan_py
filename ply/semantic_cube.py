@@ -55,3 +55,8 @@ class SemanticCube:
             ('bool', 'bool', '&&'): 'bool',
             ('bool', 'bool', '||'): 'bool',
         }
+
+    def is_type_match(self, lo_type, ro_type, operator):
+        if (lo_type, ro_type, operator) in self.table:
+            return self.table[(lo_type, ro_type, operator)]
+        return None
