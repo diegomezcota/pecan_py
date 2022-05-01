@@ -54,6 +54,11 @@ class SemanticCube:
             ('bool', 'bool', '!='): 'bool',
             ('bool', 'bool', '&&'): 'bool',
             ('bool', 'bool', '||'): 'bool',
+            ('int', 'int', '='): 'int',
+            ('float', 'int', '=') : 'float',
+            ('float', 'float', '=') : 'float',
+            ('string', 'string', '=') : 'string',
+            ('bool', 'bool', '=') : 'bool'
         }
 
     def is_type_match(self, lo_type, ro_type, operator):
