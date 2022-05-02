@@ -1,6 +1,7 @@
 // test7: Tests Temporales
 program test;
 main() {
+    var int a;
     write(true || (12 > 13));
     write(4 * 3 / 2 + 3 * 5);
     write(1 * 3);
