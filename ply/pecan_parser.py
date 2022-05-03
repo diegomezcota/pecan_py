@@ -488,16 +488,46 @@ def p_np_if_3(p):
 def p_cycle(p):
     '''
     cycle   : FOR OPEN_PARENTHESIS ID IN ID CLOSE_PARENTHESIS cycle1
-            | WHILE OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS cycle1
+            | WHILE np_while_1 OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS np_while_2 cycle1
     '''
     pass
 
 
 def p_cycle1(p):
     '''
-    cycle1  : OPEN_KEY statement_loop CLOSE_KEY
+    cycle1  : OPEN_KEY statement_loop CLOSE_KEY np_while_3
     '''
+    # TODO: Averiguar que hacer con el for por lo pronto truena
     pass
+
+
+def p_np_while_1(p):
+    '''
+    np_while_1 : epsilon
+    '''
+    jump_stack.append(quads.counter)
+
+
+def p_np_while_2(p):
+    '''
+    np_while_2 : epsilon
+    '''
+    res_address, res_type = operand_stack.pop()
+    if res_type != 'bool':
+        raise TypeMismatchError()
+    else:
+        quads.generate_quad('GOTOF', res_address, None, None)
+        jump_stack.append(quads.counter - 1)
+
+
+def p_np_while_3(p):
+    '''
+    np_while_3 : epsilon
+    '''
+    go_to_false_quad_id = jump_stack.pop()
+    quad_id_to_return_to = jump_stack.pop()
+    quads.generate_quad('GOTO', None, None, quad_id_to_return_to)
+    quads.fill_quad(go_to_false_quad_id, 3, quads.counter)
 
 
 def p_read(p):

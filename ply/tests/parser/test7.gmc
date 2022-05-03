@@ -1,21 +1,12 @@
 // test7: Tests Temporales
 program test;
 main() {
-   // if (7 == 8) {
-   //     write("tru");
-   // }
 
-   // if (6 > 5) {
-   //     write("tru 2");
-   // } else {
-   //     write("else");
-   // }
-
-   if (true) {
-       if (false) {
-           write("ping");
-       }
-   }
-
-   write("holi");
+    while (5 > 4) {
+        if (false) {
+            write("aucsilie");
+        }
+        write("sos");
+    }
+    write("bringui bringui");
 }
