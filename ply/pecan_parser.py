@@ -13,6 +13,7 @@ quads = Quadruples()
 semantic_cube = SemanticCube()
 operand_stack = []
 operator_stack = []
+jump_stack = []
 
 # TODO: main scope and their variables, meternos al los statements
 # ideas: main function part be their own function to add to the function directory in an easier way
@@ -245,6 +246,7 @@ def p_assignment(p):
     else:
         raise TypeMismatchError()
 
+
 def p_np_add_operator(p):
     '''
     np_add_operator : epsilon
@@ -359,6 +361,7 @@ def add_exp_quad(operator_list):
         else:
             raise TypeMismatchError()
 
+
 def p_factor(p):
     '''
     factor  : function_call
@@ -439,17 +442,47 @@ def p_parameter1(p):
 
 def p_conditional(p):
     '''
-    conditional : IF OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY conditional1
+    conditional : IF OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS np_if_1 OPEN_KEY statement_loop CLOSE_KEY conditional1
     '''
     pass
 
 
 def p_conditional1(p):
     '''
-    conditional1    : ELSE OPEN_KEY statement_loop CLOSE_KEY
-                    | epsilon
+    conditional1    : ELSE np_if_3 OPEN_KEY statement_loop CLOSE_KEY np_if_2
+                    | np_if_2
     '''
     pass
+
+
+def p_np_if_1(p):
+    '''
+    np_if_1 : epsilon
+    '''
+    res_address, res_type = operand_stack.pop()
+    if res_type != 'bool':
+        raise TypeMismatchError()
+    else:
+        quads.generate_quad('GOTOF', res_address, None, None)
+        jump_stack.append(quads.counter - 1)
+
+
+def p_np_if_2(p):
+    '''
+    np_if_2 : epsilon
+    '''
+    end_if = jump_stack.pop()
+    quads.fill_quad(end_if, 3, quads.counter)
+
+
+def p_np_if_3(p):
+    '''
+    np_if_3 : epsilon
+    '''
+    quads.generate_quad('GOTO', None, None, None)
+    go_to_false_quad_id = jump_stack.pop()
+    jump_stack.append(quads.counter - 1)
+    quads.fill_quad(go_to_false_quad_id, 3, quads.counter)
 
 
 def p_cycle(p):
@@ -481,6 +514,7 @@ def p_variable_loop(p):
     '''
     p[0] = [p[1]] + p[2]
 
+
 def p_variable_loop1(p):
     '''
     variable_loop1  : COMMA variable variable_loop1
@@ -491,11 +525,13 @@ def p_variable_loop1(p):
     else:
         p[0] = []
 
+
 def p_write(p):
     '''
     write   : WRITE OPEN_PARENTHESIS write_hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
     '''
     pass
+
 
 def p_write_hyper_exp_loop(p):
     '''
@@ -512,12 +548,14 @@ def p_write_hyper_exp_loop1(p):
     '''
     pass
 
+
 def p_np_add_write_quad(p):
     '''
     np_add_write_quad : epsilon
     '''
-    operand_tuple = operand_stack.pop() # TODO: Check further what to do with the type
+    operand_tuple = operand_stack.pop()  # TODO: Check further what to do with the type
     quads.generate_quad('WRITE', None, None, operand_tuple)
+
 
 def p_hyper_exp_loop(p):
     '''
@@ -598,8 +636,10 @@ def p_epsilon(p):
 class SyntaxError(Exception):
     pass
 
+
 class TypeMismatchError(Exception):
     pass
+
 
 def p_error(p):
     print('syntax error', p)

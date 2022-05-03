@@ -1,8 +1,21 @@
 // test7: Tests Temporales
 program test;
 main() {
-    write(true || (12 > 13));
-    write(4 * 3 / 2 + 3 * 5);
-    write(1 * 3);
-    read(a, b, marianis);
+   // if (7 == 8) {
+   //     write("tru");
+   // }
+
+   // if (6 > 5) {
+   //     write("tru 2");
+   // } else {
+   //     write("else");
+   // }
+
+   if (true) {
+       if (false) {
+           write("ping");
+       }
+   }
+
+   write("holi");
 }
