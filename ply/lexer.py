@@ -83,7 +83,8 @@ reserved = {
     'in': 'IN',
     'while': 'WHILE',
     'return': 'RETURN',
-    'obj': 'OBJ'
+    'obj': 'OBJ',
+    'do': 'DO'
 }
 
 tokens += list(reserved.values())

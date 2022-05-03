@@ -489,6 +489,7 @@ def p_cycle(p):
     '''
     cycle   : FOR OPEN_PARENTHESIS ID IN ID CLOSE_PARENTHESIS cycle1
             | WHILE np_while_1 OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS np_while_2 cycle1
+            | DO np_do_while_1 OPEN_KEY statement_loop CLOSE_KEY WHILE OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS np_do_while_2 SEMICOLON
     '''
     pass
 
@@ -530,9 +531,28 @@ def p_np_while_3(p):
     quads.fill_quad(go_to_false_quad_id, 3, quads.counter)
 
 
+def p_np_do_while_1(p):
+    '''
+    np_do_while_1 : epsilon
+    '''
+    jump_stack.append(quads.counter)
+
+
+def p_np_do_while_2(p):
+    '''
+    np_do_while_2 : epsilon
+    '''
+    quad_id_to_return_to = jump_stack.pop()
+    res_address, res_type = operand_stack.pop()
+    if res_type != 'bool':
+        raise TypeMismatchError()
+    else:
+        quads.generate_quad('GOTOT', res_address, None, quad_id_to_return_to)
+
+
 def p_read(p):
     '''
-    read    : READ OPEN_PARENTHESIS variable_loop CLOSE_PARENTHESIS SEMICOLON
+    read : READ OPEN_PARENTHESIS variable_loop CLOSE_PARENTHESIS SEMICOLON
     '''
     for variable in p[3]:
         quads.generate_quad('READ', None, None, variable)
@@ -540,14 +560,14 @@ def p_read(p):
 
 def p_variable_loop(p):
     '''
-    variable_loop   : variable variable_loop1
+    variable_loop : variable variable_loop1
     '''
     p[0] = [p[1]] + p[2]
 
 
 def p_variable_loop1(p):
     '''
-    variable_loop1  : COMMA variable variable_loop1
+    variable_loop1 : COMMA variable variable_loop1
                     | epsilon
     '''
     if len(p) == 4:
@@ -558,14 +578,14 @@ def p_variable_loop1(p):
 
 def p_write(p):
     '''
-    write   : WRITE OPEN_PARENTHESIS write_hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
+    write : WRITE OPEN_PARENTHESIS write_hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
     '''
     pass
 
 
 def p_write_hyper_exp_loop(p):
     '''
-    write_hyper_exp_loop  : hyper_exp np_add_write_quad write_hyper_exp_loop1
+    write_hyper_exp_loop : hyper_exp np_add_write_quad write_hyper_exp_loop1
     '''
     pass
 
@@ -589,7 +609,7 @@ def p_np_add_write_quad(p):
 
 def p_hyper_exp_loop(p):
     '''
-    hyper_exp_loop  : hyper_exp hyper_exp_loop1
+    hyper_exp_loop : hyper_exp hyper_exp_loop1
     '''
     pass
 
@@ -605,14 +625,14 @@ def p_hyper_exp_loop1(p):
 
 def p_function_call(p):
     '''
-    function_call   : ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    function_call : ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     '''
     p[0] = ("Function call " + p[1], 'string')
 
 
 def p_function_call1(p):
     '''
-    function_call1  : DOT ID
+    function_call1 : DOT ID
                     | epsilon
     '''
     pass
@@ -620,7 +640,7 @@ def p_function_call1(p):
 
 def p_function_call2(p):
     '''
-    function_call2  : hyper_exp_loop
+    function_call2 : hyper_exp_loop
                     | epsilon
     '''
     pass
@@ -628,7 +648,7 @@ def p_function_call2(p):
 
 def p_class_function(p):
     '''
-    class_function  : AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+    class_function : AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
 
     '''
     pass
@@ -636,7 +656,7 @@ def p_class_function(p):
 
 def p_function_declaration(p):
     '''
-    function_declaration    : FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
+    function_declaration : FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
     '''
     function_directory.add_function_with_variables(
         function_parameters=p[4], function_variables=p[9], function_name=p[2], function_type=p[7])
@@ -652,14 +672,14 @@ def p_function_return(p):
 
 def p_function_statement_loop(p):
     '''
-    function_statement_loop  : statement_loop
+    function_statement_loop : statement_loop
                     | epsilon
     '''
     p[0] = p[1]
 
 
 def p_epsilon(p):
-    '''epsilon :'''
+    '''epsilon : '''
     p[0] = 'epsilon'
 
 

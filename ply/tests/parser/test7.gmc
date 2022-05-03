@@ -2,11 +2,7 @@
 program test;
 main() {
 
-    while (5 > 4) {
-        if (false) {
-            write("aucsilie");
-        }
-        write("sos");
-    }
-    write("bringui bringui");
+    do {
+        write("hola tripsi");
+    } while (shiri);
 }
