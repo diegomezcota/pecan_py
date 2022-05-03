@@ -7,15 +7,15 @@ from lexer import tokens
 
 import json
 
-function_directory = FunctionDirectory()
-avail = Avail()
-quads = Quadruples()
-semantic_cube = SemanticCube()
-operand_stack = []
-operator_stack = []
+# TODO: Reiniciar todo, refactor dirFunc, checar duplicado de variables y que existan, agregar memoria virtual
+function_directory = None
+avail = None
+quads = None
+semantic_cube = None
+operand_stack = None
+operator_stack = None
 
 # TODO: main scope and their variables, meternos al los statements
-# ideas: main function part be their own function to add to the function directory in an easier way
 # class scope:
 #   class_scopes: {function_name -> function_type, vars_table}
 # scopes
@@ -30,12 +30,10 @@ operator_stack = []
 
 def p_program(p):
     '''
-    program : PROGRAM np_start_func_dir ID SEMICOLON declaration_loop main_function
+    program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
-    # print(json.dumps(function_directory.table, indent=2)
-    print(quads.list)
+    #print(quads.list)
     pass
-
 
 def p_main_function(p):
     '''
@@ -44,6 +42,17 @@ def p_main_function(p):
     function_directory.add_function_with_variables(
         function_variables=p[5], function_name=p[1], function_type='void')
 
+def p_np_start_state(p):
+    '''
+    np_start_state : epsilon
+    '''
+    global function_directory, avail, quads, semantic_cube, operand_stack, operator_stack
+    function_directory = FunctionDirectory()
+    avail = Avail()
+    quads = Quadruples()
+    semantic_cube = SemanticCube()
+    operand_stack = []
+    operator_stack = []
 
 def p_np_start_func_dir(p):
     '''
