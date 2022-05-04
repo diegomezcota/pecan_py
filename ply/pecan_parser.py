@@ -14,8 +14,16 @@ quads = None
 semantic_cube = None
 operand_stack = None
 operator_stack = None
+jump_stack = None
+
+current_general_scope = None
+current_internal_scope = None
+current_var_name = None
+current_var_type = None
+current_var_data_type = None
 
 # TODO: main scope and their variables, meternos al los statements
+# TODO: Arreglar return de funciones
 # class scope:
 #   class_scopes: {function_name -> function_type, vars_table}
 # scopes
@@ -32,46 +40,60 @@ def p_program(p):
     '''
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
+    print(json.dumps(function_directory.table, indent=2))
     #print(quads.list)
     pass
 
 def p_main_function(p):
     '''
-    main_function : MAIN OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_KEY variable_declaration_loop statement_loop CLOSE_KEY
+    main_function : MAIN np_add_main_internal_scope OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_KEY variable_declaration_loop statement_loop CLOSE_KEY
     '''
-    function_directory.add_function_with_variables(
-        function_variables=p[5], function_name=p[1], function_type='void')
+
+def p_np_add_main_internal_scope(p):
+    '''
+    np_add_main_internal_scope : epsilon
+    '''
+    global function_directory, current_internal_scope
+    current_internal_scope = 'main'
+    function_directory.add_internal_scope(current_general_scope, current_internal_scope)
+    function_directory.set_function_type(current_general_scope, current_internal_scope, 'void')
 
 def p_np_start_state(p):
     '''
     np_start_state : epsilon
     '''
-    global function_directory, avail, quads, semantic_cube, operand_stack, operator_stack
+    global function_directory, avail, quads, semantic_cube, operand_stack, operator_stack, jump_stack
+    global current_general_scope, current_internal_scope, current_var_name, current_var_type, current_var_data_type
     function_directory = FunctionDirectory()
     avail = Avail()
     quads = Quadruples()
     semantic_cube = SemanticCube()
     operand_stack = []
     operator_stack = []
-
+    jump_stack = []
+    current_general_scope = None
+    current_internal_scope = None
+    current_var_name = None
+    current_var_type = None
+    current_var_data_type = None
+    
 def p_np_start_func_dir(p):
     '''
     np_start_func_dir : epsilon
     '''
-    global function_directory
-    function_directory.init_global_scope()
-
+    global function_directory, current_general_scope, current_internal_scope
+    current_general_scope = '#global'
+    current_internal_scope = '#global'
+    function_directory.add_general_scope(current_general_scope)
+    function_directory.add_internal_scope(current_general_scope, current_internal_scope)
+    function_directory.set_function_type(current_general_scope, current_internal_scope, 'void')
 
 def p_declaration_loop(p):
     '''
     declaration_loop : declaration declaration_loop
                      | epsilon
     '''
-    # Up to this point, we know we are in global scope
-    if len(p) == 3:
-        # If the declaration is a variable one
-        if p[1] and p[1][0] == 'variable_declaration':
-            function_directory.add_global_variable(declaration=p[1])
+    pass
 
 
 def p_statement_loop(p):
@@ -192,27 +214,38 @@ def p_variable_declaration_loop(p):
     variable_declaration_loop : variable_declaration variable_declaration_loop
                                 | epsilon
     '''
-    if len(p) == 3:
-        p[0] = [p[1]] + p[2]
-    else:
-        p[0] = []
+    pass
 
 
 def p_variable_declaration(p):
     '''
-    variable_declaration    : VAR data_type ID SEMICOLON
-                            | GROUP ID ASSIGN data_type OPEN_BRACKET INT_VALUE CLOSE_BRACKET SEMICOLON
-                            | OBJ ID ASSIGN ID OPEN_PARENTHESIS variable_declaration1 CLOSE_PARENTHESIS SEMICOLON
+    variable_declaration    : VAR np_set_current_var_type data_type np_set_current_var_data_type ID np_set_current_var_name SEMICOLON np_add_variable
+                            | GROUP np_set_current_var_type ID np_set_current_var_name ASSIGN data_type np_set_current_var_data_type OPEN_BRACKET INT_VALUE CLOSE_BRACKET SEMICOLON np_add_variable
+                            | OBJ np_set_current_var_type ID np_set_current_var_name ASSIGN ID OPEN_PARENTHESIS variable_declaration1 CLOSE_PARENTHESIS SEMICOLON np_add_variable
 
     '''
-    # Return info related to each variable type (var_type, data_type, ID)
-    if p[1] == 'var':
-        p[0] = ('variable_declaration', p[1], p[2], p[3])
-    elif p[1] == 'group':
-        p[0] = ('variable_declaration', p[1], p[4], p[2])
-    else:
-        p[0] = ('variable_declaration', p[1], p[4], p[2])
+    pass
 
+def  p_np_set_current_var_type(p):
+    '''
+    np_set_current_var_type : epsilon
+    '''   
+    global current_var_type
+    current_var_type = p[-1]
+
+def p_np_set_current_var_data_type(p):
+    '''
+    np_set_current_var_data_type : epsilon
+    '''
+    global current_var_data_type
+    current_var_data_type = p[-1]
+
+def p_np_set_current_var_name(p):
+    '''
+    np_set_current_var_name : epsilon
+    '''
+    global current_var_name
+    current_var_name = p[-1]
 
 def p_atomic_var_type(p):
     '''
@@ -220,6 +253,12 @@ def p_atomic_var_type(p):
                 | GROUP
     '''
     p[0] = p[1]
+    
+def p_np_add_variable(p):
+    '''
+    np_add_variable : epsilon
+    '''
+    function_directory.add_variable(current_general_scope, current_internal_scope, current_var_name, current_var_type, current_var_data_type)
 
 
 def p_variable_declaration1(p):
@@ -253,6 +292,7 @@ def p_assignment(p):
         quads.generate_quad('=', exp_value, None, var_value)
     else:
         raise TypeMismatchError()
+
 
 def p_np_add_operator(p):
     '''
@@ -368,6 +408,7 @@ def add_exp_quad(operator_list):
         else:
             raise TypeMismatchError()
 
+
 def p_factor(p):
     '''
     factor  : function_call
@@ -448,37 +489,117 @@ def p_parameter1(p):
 
 def p_conditional(p):
     '''
-    conditional : IF OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY conditional1
+    conditional : IF OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS np_if_1 OPEN_KEY statement_loop CLOSE_KEY conditional1
     '''
     pass
 
 
 def p_conditional1(p):
     '''
-    conditional1    : ELSE OPEN_KEY statement_loop CLOSE_KEY
-                    | epsilon
+    conditional1    : ELSE np_if_3 OPEN_KEY statement_loop CLOSE_KEY np_if_2
+                    | np_if_2
     '''
     pass
+
+
+def p_np_if_1(p):
+    '''
+    np_if_1 : epsilon
+    '''
+    res_address, res_type = operand_stack.pop()
+    if res_type != 'bool':
+        raise TypeMismatchError()
+    else:
+        quads.generate_quad('GOTOF', res_address, None, None)
+        jump_stack.append(quads.counter - 1)
+
+
+def p_np_if_2(p):
+    '''
+    np_if_2 : epsilon
+    '''
+    end_if = jump_stack.pop()
+    quads.fill_quad(end_if, 3, quads.counter)
+
+
+def p_np_if_3(p):
+    '''
+    np_if_3 : epsilon
+    '''
+    quads.generate_quad('GOTO', None, None, None)
+    go_to_false_quad_id = jump_stack.pop()
+    jump_stack.append(quads.counter - 1)
+    quads.fill_quad(go_to_false_quad_id, 3, quads.counter)
 
 
 def p_cycle(p):
     '''
     cycle   : FOR OPEN_PARENTHESIS ID IN ID CLOSE_PARENTHESIS cycle1
-            | WHILE OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS cycle1
+            | WHILE np_while_1 OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS np_while_2 cycle1
+            | DO np_do_while_1 OPEN_KEY statement_loop CLOSE_KEY WHILE OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS np_do_while_2 SEMICOLON
     '''
     pass
 
 
 def p_cycle1(p):
     '''
-    cycle1  : OPEN_KEY statement_loop CLOSE_KEY
+    cycle1  : OPEN_KEY statement_loop CLOSE_KEY np_while_3
     '''
+    # TODO: Averiguar que hacer con el for por lo pronto truena
     pass
+
+
+def p_np_while_1(p):
+    '''
+    np_while_1 : epsilon
+    '''
+    jump_stack.append(quads.counter)
+
+
+def p_np_while_2(p):
+    '''
+    np_while_2 : epsilon
+    '''
+    res_address, res_type = operand_stack.pop()
+    if res_type != 'bool':
+        raise TypeMismatchError()
+    else:
+        quads.generate_quad('GOTOF', res_address, None, None)
+        jump_stack.append(quads.counter - 1)
+
+
+def p_np_while_3(p):
+    '''
+    np_while_3 : epsilon
+    '''
+    go_to_false_quad_id = jump_stack.pop()
+    quad_id_to_return_to = jump_stack.pop()
+    quads.generate_quad('GOTO', None, None, quad_id_to_return_to)
+    quads.fill_quad(go_to_false_quad_id, 3, quads.counter)
+
+
+def p_np_do_while_1(p):
+    '''
+    np_do_while_1 : epsilon
+    '''
+    jump_stack.append(quads.counter)
+
+
+def p_np_do_while_2(p):
+    '''
+    np_do_while_2 : epsilon
+    '''
+    quad_id_to_return_to = jump_stack.pop()
+    res_address, res_type = operand_stack.pop()
+    if res_type != 'bool':
+        raise TypeMismatchError()
+    else:
+        quads.generate_quad('GOTOT', res_address, None, quad_id_to_return_to)
 
 
 def p_read(p):
     '''
-    read    : READ OPEN_PARENTHESIS variable_loop CLOSE_PARENTHESIS SEMICOLON
+    read : READ OPEN_PARENTHESIS variable_loop CLOSE_PARENTHESIS SEMICOLON
     '''
     for variable in p[3]:
         quads.generate_quad('READ', None, None, variable)
@@ -486,13 +607,14 @@ def p_read(p):
 
 def p_variable_loop(p):
     '''
-    variable_loop   : variable variable_loop1
+    variable_loop : variable variable_loop1
     '''
     p[0] = [p[1]] + p[2]
 
+
 def p_variable_loop1(p):
     '''
-    variable_loop1  : COMMA variable variable_loop1
+    variable_loop1 : COMMA variable variable_loop1
                     | epsilon
     '''
     if len(p) == 4:
@@ -500,15 +622,17 @@ def p_variable_loop1(p):
     else:
         p[0] = []
 
+
 def p_write(p):
     '''
-    write   : WRITE OPEN_PARENTHESIS write_hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
+    write : WRITE OPEN_PARENTHESIS write_hyper_exp_loop CLOSE_PARENTHESIS SEMICOLON
     '''
     pass
 
+
 def p_write_hyper_exp_loop(p):
     '''
-    write_hyper_exp_loop  : hyper_exp np_add_write_quad write_hyper_exp_loop1
+    write_hyper_exp_loop : hyper_exp np_add_write_quad write_hyper_exp_loop1
     '''
     pass
 
@@ -521,16 +645,18 @@ def p_write_hyper_exp_loop1(p):
     '''
     pass
 
+
 def p_np_add_write_quad(p):
     '''
     np_add_write_quad : epsilon
     '''
-    operand_tuple = operand_stack.pop() # TODO: Check further what to do with the type
+    operand_tuple = operand_stack.pop()  # TODO: Check further what to do with the type
     quads.generate_quad('WRITE', None, None, operand_tuple)
+
 
 def p_hyper_exp_loop(p):
     '''
-    hyper_exp_loop  : hyper_exp hyper_exp_loop1
+    hyper_exp_loop : hyper_exp hyper_exp_loop1
     '''
     pass
 
@@ -546,14 +672,14 @@ def p_hyper_exp_loop1(p):
 
 def p_function_call(p):
     '''
-    function_call   : ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    function_call : ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     '''
     p[0] = ("Function call " + p[1], 'string')
 
 
 def p_function_call1(p):
     '''
-    function_call1  : DOT ID
+    function_call1 : DOT ID
                     | epsilon
     '''
     pass
@@ -561,7 +687,7 @@ def p_function_call1(p):
 
 def p_function_call2(p):
     '''
-    function_call2  : hyper_exp_loop
+    function_call2 : hyper_exp_loop
                     | epsilon
     '''
     pass
@@ -569,7 +695,7 @@ def p_function_call2(p):
 
 def p_class_function(p):
     '''
-    class_function  : AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+    class_function : AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
 
     '''
     pass
@@ -577,11 +703,24 @@ def p_class_function(p):
 
 def p_function_declaration(p):
     '''
-    function_declaration    : FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
+    function_declaration : FUNCTION ID np_add_function_internal_scope OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg np_set_function_return_type OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY    
     '''
-    function_directory.add_function_with_variables(
-        function_parameters=p[4], function_variables=p[9], function_name=p[2], function_type=p[7])
+    global current_internal_scope
+    current_internal_scope = '#global'
 
+def p_np_add_function_internal_scope(p):
+    '''
+    np_add_function_internal_scope : epsilon
+    '''
+    global current_internal_scope
+    current_internal_scope = p[-1]
+    function_directory.add_internal_scope(current_general_scope, current_internal_scope)
+    
+def p_np_set_function_return_type(p):
+    '''
+    np_set_function_return_type : epsilon
+    '''
+    function_directory.set_function_type(current_general_scope, current_internal_scope, p[-1])
 
 def p_function_return(p):
     '''
@@ -593,22 +732,24 @@ def p_function_return(p):
 
 def p_function_statement_loop(p):
     '''
-    function_statement_loop  : statement_loop
+    function_statement_loop : statement_loop
                     | epsilon
     '''
     p[0] = p[1]
 
 
 def p_epsilon(p):
-    '''epsilon :'''
+    '''epsilon : '''
     p[0] = 'epsilon'
 
 
 class SyntaxError(Exception):
     pass
 
+
 class TypeMismatchError(Exception):
     pass
+
 
 def p_error(p):
     print('syntax error', p)

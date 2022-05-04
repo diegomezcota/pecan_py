@@ -33,3 +33,17 @@ Se trabajó en la estructura e implementación del directorio de funciones así 
 
 ### semantic_cube.py
 Se trabajó en el diseño e implementación del cubo semántico.
+
+## Avance 3: Semántica, Generación de Código de Expresiones y Estatutos Lineales
+
+### pecan_parser.py
+Generación de cuádruplos para expresiones y estatutos lineales. Manejamos la lógica de type matching, administración de temporales, las filas de operandos y operadores.
+
+### semantic_cube.py
+Agregamos el type matching para estatutos de asignación.
+
+### avail.py
+Diseño e implementación de la estructura Avail (temporales).
+
+### quadruples.py
+Diseño e implementación de estructura y creación de cuádruplos.
