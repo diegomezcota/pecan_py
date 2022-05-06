@@ -7,16 +7,23 @@ from lexer import tokens
 
 import json
 
-function_directory = FunctionDirectory()
-avail = Avail()
-quads = Quadruples()
-semantic_cube = SemanticCube()
-operand_stack = []
-operator_stack = []
-jump_stack = []
+# TODO: Reiniciar todo, refactor dirFunc, checar duplicado de variables y que existan, agregar memoria virtual
+function_directory = None
+avail = None
+quads = None
+semantic_cube = None
+operand_stack = None
+operator_stack = None
+jump_stack = None
+
+current_general_scope = None
+current_internal_scope = None
+current_var_name = None
+current_var_type = None
+current_var_data_type = None
 
 # TODO: main scope and their variables, meternos al los statements
-# ideas: main function part be their own function to add to the function directory in an easier way
+# TODO: Arreglar return de funciones
 # class scope:
 #   class_scopes: {function_name -> function_type, vars_table}
 # scopes
@@ -31,39 +38,62 @@ jump_stack = []
 
 def p_program(p):
     '''
-    program : PROGRAM np_start_func_dir ID SEMICOLON declaration_loop main_function
+    program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
-    # print(json.dumps(function_directory.table, indent=2)
-    print(quads.list)
+    print(json.dumps(function_directory.table, indent=2))
+    #print(quads.list)
     pass
-
 
 def p_main_function(p):
     '''
-    main_function : MAIN OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_KEY variable_declaration_loop statement_loop CLOSE_KEY
+    main_function : MAIN np_add_main_internal_scope OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_KEY variable_declaration_loop statement_loop CLOSE_KEY
     '''
-    function_directory.add_function_with_variables(
-        function_variables=p[5], function_name=p[1], function_type='void')
 
+def p_np_add_main_internal_scope(p):
+    '''
+    np_add_main_internal_scope : epsilon
+    '''
+    global function_directory, current_internal_scope
+    current_internal_scope = 'main'
+    function_directory.add_internal_scope(current_general_scope, current_internal_scope)
+    function_directory.set_function_type(current_general_scope, current_internal_scope, 'void')
 
+def p_np_start_state(p):
+    '''
+    np_start_state : epsilon
+    '''
+    global function_directory, avail, quads, semantic_cube, operand_stack, operator_stack, jump_stack
+    global current_general_scope, current_internal_scope, current_var_name, current_var_type, current_var_data_type
+    function_directory = FunctionDirectory()
+    avail = Avail()
+    quads = Quadruples()
+    semantic_cube = SemanticCube()
+    operand_stack = []
+    operator_stack = []
+    jump_stack = []
+    current_general_scope = None
+    current_internal_scope = None
+    current_var_name = None
+    current_var_type = None
+    current_var_data_type = None
+    
 def p_np_start_func_dir(p):
     '''
     np_start_func_dir : epsilon
     '''
-    global function_directory
-    function_directory.init_global_scope()
-
+    global function_directory, current_general_scope, current_internal_scope
+    current_general_scope = '#global'
+    current_internal_scope = '#global'
+    function_directory.add_general_scope(current_general_scope)
+    function_directory.add_internal_scope(current_general_scope, current_internal_scope)
+    function_directory.set_function_type(current_general_scope, current_internal_scope, 'void')
 
 def p_declaration_loop(p):
     '''
     declaration_loop : declaration declaration_loop
                      | epsilon
     '''
-    # Up to this point, we know we are in global scope
-    if len(p) == 3:
-        # If the declaration is a variable one
-        if p[1] and p[1][0] == 'variable_declaration':
-            function_directory.add_global_variable(declaration=p[1])
+    pass
 
 
 def p_statement_loop(p):
@@ -184,27 +214,38 @@ def p_variable_declaration_loop(p):
     variable_declaration_loop : variable_declaration variable_declaration_loop
                                 | epsilon
     '''
-    if len(p) == 3:
-        p[0] = [p[1]] + p[2]
-    else:
-        p[0] = []
+    pass
 
 
 def p_variable_declaration(p):
     '''
-    variable_declaration    : VAR data_type ID SEMICOLON
-                            | GROUP ID ASSIGN data_type OPEN_BRACKET INT_VALUE CLOSE_BRACKET SEMICOLON
-                            | OBJ ID ASSIGN ID OPEN_PARENTHESIS variable_declaration1 CLOSE_PARENTHESIS SEMICOLON
+    variable_declaration    : VAR np_set_current_var_type data_type np_set_current_var_data_type ID np_set_current_var_name SEMICOLON np_add_variable
+                            | GROUP np_set_current_var_type ID np_set_current_var_name ASSIGN data_type np_set_current_var_data_type OPEN_BRACKET INT_VALUE CLOSE_BRACKET SEMICOLON np_add_variable
+                            | OBJ np_set_current_var_type ID np_set_current_var_name ASSIGN ID OPEN_PARENTHESIS variable_declaration1 CLOSE_PARENTHESIS SEMICOLON np_add_variable
 
     '''
-    # Return info related to each variable type (var_type, data_type, ID)
-    if p[1] == 'var':
-        p[0] = ('variable_declaration', p[1], p[2], p[3])
-    elif p[1] == 'group':
-        p[0] = ('variable_declaration', p[1], p[4], p[2])
-    else:
-        p[0] = ('variable_declaration', p[1], p[4], p[2])
+    pass
 
+def  p_np_set_current_var_type(p):
+    '''
+    np_set_current_var_type : epsilon
+    '''   
+    global current_var_type
+    current_var_type = p[-1]
+
+def p_np_set_current_var_data_type(p):
+    '''
+    np_set_current_var_data_type : epsilon
+    '''
+    global current_var_data_type
+    current_var_data_type = p[-1]
+
+def p_np_set_current_var_name(p):
+    '''
+    np_set_current_var_name : epsilon
+    '''
+    global current_var_name
+    current_var_name = p[-1]
 
 def p_atomic_var_type(p):
     '''
@@ -212,6 +253,12 @@ def p_atomic_var_type(p):
                 | GROUP
     '''
     p[0] = p[1]
+    
+def p_np_add_variable(p):
+    '''
+    np_add_variable : epsilon
+    '''
+    function_directory.add_variable(current_general_scope, current_internal_scope, current_var_name, current_var_type, current_var_data_type)
 
 
 def p_variable_declaration1(p):
@@ -656,11 +703,24 @@ def p_class_function(p):
 
 def p_function_declaration(p):
     '''
-    function_declaration : FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
+    function_declaration : FUNCTION ID np_add_function_internal_scope OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg np_set_function_return_type OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY    
     '''
-    function_directory.add_function_with_variables(
-        function_parameters=p[4], function_variables=p[9], function_name=p[2], function_type=p[7])
+    global current_internal_scope
+    current_internal_scope = '#global'
 
+def p_np_add_function_internal_scope(p):
+    '''
+    np_add_function_internal_scope : epsilon
+    '''
+    global current_internal_scope
+    current_internal_scope = p[-1]
+    function_directory.add_internal_scope(current_general_scope, current_internal_scope)
+    
+def p_np_set_function_return_type(p):
+    '''
+    np_set_function_return_type : epsilon
+    '''
+    function_directory.set_function_type(current_general_scope, current_internal_scope, p[-1])
 
 def p_function_return(p):
     '''

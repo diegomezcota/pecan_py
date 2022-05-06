@@ -1,7 +1,14 @@
 // test7: Tests Temporales
 program test;
-main() {
 
+var int a;
+
+function tripsi() returns float {
+    var int a;
+}
+
+main() {
+    var int a;
     do {
         write("hola tripsi");
     } while (shiri);
