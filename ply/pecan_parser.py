@@ -8,6 +8,7 @@ from lexer import tokens
 import json
 
 # TODO: Reiniciar todo, refactor dirFunc, checar duplicado de variables y que existan, agregar memoria virtual
+# TODO: Resolver discrepancia entre que los cuadruplos que usen variables temporales, a veces usamos tupla y en otras veces no
 function_directory = None
 avail = None
 quads = None
@@ -15,6 +16,7 @@ semantic_cube = None
 operand_stack = None
 operator_stack = None
 jump_stack = None
+control_variable_stack = None
 
 current_general_scope = None
 current_internal_scope = None
@@ -40,14 +42,16 @@ def p_program(p):
     '''
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
-    print(json.dumps(function_directory.table, indent=2))
-    #print(quads.list)
+    #print(json.dumps(function_directory.table, indent=2))
+    print(quads.list)
     pass
+
 
 def p_main_function(p):
     '''
     main_function : MAIN np_add_main_internal_scope OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_KEY variable_declaration_loop statement_loop CLOSE_KEY
     '''
+
 
 def p_np_add_main_internal_scope(p):
     '''
@@ -55,14 +59,17 @@ def p_np_add_main_internal_scope(p):
     '''
     global function_directory, current_internal_scope
     current_internal_scope = 'main'
-    function_directory.add_internal_scope(current_general_scope, current_internal_scope)
-    function_directory.set_function_type(current_general_scope, current_internal_scope, 'void')
+    function_directory.add_internal_scope(
+        current_general_scope, current_internal_scope)
+    function_directory.set_function_type(
+        current_general_scope, current_internal_scope, 'void')
+
 
 def p_np_start_state(p):
     '''
     np_start_state : epsilon
     '''
-    global function_directory, avail, quads, semantic_cube, operand_stack, operator_stack, jump_stack
+    global function_directory, avail, quads, semantic_cube, operand_stack, operator_stack, jump_stack, control_variable_stack
     global current_general_scope, current_internal_scope, current_var_name, current_var_type, current_var_data_type
     function_directory = FunctionDirectory()
     avail = Avail()
@@ -71,12 +78,14 @@ def p_np_start_state(p):
     operand_stack = []
     operator_stack = []
     jump_stack = []
+    control_variable_stack = []
     current_general_scope = None
     current_internal_scope = None
     current_var_name = None
     current_var_type = None
     current_var_data_type = None
-    
+
+
 def p_np_start_func_dir(p):
     '''
     np_start_func_dir : epsilon
@@ -85,8 +94,11 @@ def p_np_start_func_dir(p):
     current_general_scope = '#global'
     current_internal_scope = '#global'
     function_directory.add_general_scope(current_general_scope)
-    function_directory.add_internal_scope(current_general_scope, current_internal_scope)
-    function_directory.set_function_type(current_general_scope, current_internal_scope, 'void')
+    function_directory.add_internal_scope(
+        current_general_scope, current_internal_scope)
+    function_directory.set_function_type(
+        current_general_scope, current_internal_scope, 'void')
+
 
 def p_declaration_loop(p):
     '''
@@ -226,12 +238,14 @@ def p_variable_declaration(p):
     '''
     pass
 
-def  p_np_set_current_var_type(p):
+
+def p_np_set_current_var_type(p):
     '''
     np_set_current_var_type : epsilon
-    '''   
+    '''
     global current_var_type
     current_var_type = p[-1]
+
 
 def p_np_set_current_var_data_type(p):
     '''
@@ -240,6 +254,7 @@ def p_np_set_current_var_data_type(p):
     global current_var_data_type
     current_var_data_type = p[-1]
 
+
 def p_np_set_current_var_name(p):
     '''
     np_set_current_var_name : epsilon
@@ -247,18 +262,21 @@ def p_np_set_current_var_name(p):
     global current_var_name
     current_var_name = p[-1]
 
+
 def p_atomic_var_type(p):
     '''
     atomic_var_type    : VAR
                 | GROUP
     '''
     p[0] = p[1]
-    
+
+
 def p_np_add_variable(p):
     '''
     np_add_variable : epsilon
     '''
-    function_directory.add_variable(current_general_scope, current_internal_scope, current_var_name, current_var_type, current_var_data_type)
+    function_directory.add_variable(current_general_scope, current_internal_scope,
+                                    current_var_name, current_var_type, current_var_data_type)
 
 
 def p_variable_declaration1(p):
@@ -534,18 +552,87 @@ def p_np_if_3(p):
 
 def p_cycle(p):
     '''
-    cycle   : FOR OPEN_PARENTHESIS ID IN ID CLOSE_PARENTHESIS cycle1
-            | WHILE np_while_1 OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS np_while_2 cycle1
+    cycle   : FOR ID np_for_1 ASSIGN hyper_exp np_for_2 TO hyper_exp np_for_3 cycle_for
+            | WHILE np_while_1 OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS np_while_2 cycle_while
             | DO np_do_while_1 OPEN_KEY statement_loop CLOSE_KEY WHILE OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS np_do_while_2 SEMICOLON
     '''
     pass
 
 
-def p_cycle1(p):
+def p_cycle_for(p):
     '''
-    cycle1  : OPEN_KEY statement_loop CLOSE_KEY np_while_3
+    cycle_for  : OPEN_KEY statement_loop CLOSE_KEY np_for_4
     '''
-    # TODO: Averiguar que hacer con el for por lo pronto truena
+    pass
+
+
+def p_np_for_1(p):
+    '''
+    np_for_1 : epsilon
+    '''
+    var_address = p[-1]
+    # TODD: Checar que el var_type de p[-1] sea int
+    operand_stack.append((var_address, 'int'))
+
+
+def p_np_for_2(p):
+    '''
+    np_for_2 : epsilon
+    '''
+    exp_address, exp_type = operand_stack.pop()
+    if exp_type != 'int':
+        raise TypeMismatchError()
+    else:
+        control_var_address, control_var_type = operand_stack[-1]
+        control_variable_stack.append((control_var_address, control_var_type))
+        result_type = semantic_cube.is_type_match(
+            control_var_type, exp_type, '=')
+        if result_type:
+            quads.generate_quad('=', exp_address, None, control_var_address)
+        else:
+            raise TypeMismatchError()
+
+
+def p_np_for_3(p):
+    '''
+    np_for_3 : epsilon
+    '''
+    exp_address, exp_type = operand_stack.pop()
+    if exp_type != 'int':
+        raise TypeMismatchError()
+    else:
+        variable_final_address, _ = avail.get_new_temp('int')
+        quads.generate_quad('=', exp_address, None, variable_final_address)
+        new_temp_address, new_temp_type = avail.get_new_temp('bool')
+        control_variable_address, _ = control_variable_stack[-1]
+        quads.generate_quad('<', control_variable_address,
+                            variable_final_address, (new_temp_address, new_temp_type))
+        jump_stack.append(quads.counter - 1)
+        quads.generate_quad('GOTOF', new_temp_address, None, None)
+        jump_stack.append(quads.counter - 1)
+
+
+def p_np_for_4(p):
+    '''
+    np_for_4 : epsilon
+    '''
+    control_variable_address, _ = control_variable_stack.pop()
+    new_temp = avail.get_new_temp('int')
+    # TODO: Pedir temporal de constante 1
+    quads.generate_quad('+', control_variable_address, 1, new_temp)
+    quads.generate_quad('=', new_temp[0], None, control_variable_address)
+    id_original_address, _ = operand_stack.pop()
+    quads.generate_quad('=', new_temp[0], None, id_original_address)
+    end_for = jump_stack.pop()
+    return_for = jump_stack.pop()
+    quads.generate_quad('GOTO', None, None, return_for)
+    quads.fill_quad(end_for, 3, quads.counter)
+
+
+def p_cycle_while(p):
+    '''
+    cycle_while  : OPEN_KEY statement_loop CLOSE_KEY np_while_3
+    '''
     pass
 
 
@@ -708,19 +795,24 @@ def p_function_declaration(p):
     global current_internal_scope
     current_internal_scope = '#global'
 
+
 def p_np_add_function_internal_scope(p):
     '''
     np_add_function_internal_scope : epsilon
     '''
     global current_internal_scope
     current_internal_scope = p[-1]
-    function_directory.add_internal_scope(current_general_scope, current_internal_scope)
-    
+    function_directory.add_internal_scope(
+        current_general_scope, current_internal_scope)
+
+
 def p_np_set_function_return_type(p):
     '''
     np_set_function_return_type : epsilon
     '''
-    function_directory.set_function_type(current_general_scope, current_internal_scope, p[-1])
+    function_directory.set_function_type(
+        current_general_scope, current_internal_scope, p[-1])
+
 
 def p_function_return(p):
     '''
