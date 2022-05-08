@@ -80,11 +80,11 @@ reserved = {
     'read': 'READ',
     'write': 'WRITE',
     'for': 'FOR',
-    'in': 'IN',
     'while': 'WHILE',
     'return': 'RETURN',
     'obj': 'OBJ',
-    'do': 'DO'
+    'do': 'DO',
+    'to': 'TO'
 }
 
 tokens += list(reserved.values())
