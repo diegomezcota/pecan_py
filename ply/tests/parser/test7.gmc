@@ -7,7 +7,7 @@ var float diegomis;
 function pelos(var string text) returns void {
     var int ping;
     var int times;
-    write(text);
+    //write(text);
 }
 
 function pelones(var string shiri) returns void {
@@ -16,13 +16,14 @@ function pelones(var string shiri) returns void {
     var float noris;
     var float oryx;
     var bool cosi;
-    write(shiri);
+    //write(shiri);
 }
 
 main() {
     var bool aucsilio;
-    if (a < b) {
-        a = 3 * 4.15 + 88;
-        write("tripsi");
+    var float a;
+    var float b;
+    if (true) {
+        write(a, b);
     }
 }

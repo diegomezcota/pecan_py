@@ -42,8 +42,8 @@ def p_program(p):
     '''
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
-    print(json.dumps(function_directory.table, indent=2))
-    # print(quads.list)
+    #print(json.dumps(function_directory.table, indent=2))
+    print(quads.list)
     pass
 
 
@@ -140,7 +140,10 @@ def p_variable(p):
     '''
     variable    : ID variable1
     '''
-    p[0] = ("Variable " + p[1], 'float')
+    variable_map = function_directory.table[current_general_scope][current_internal_scope]['vars_table'][p[1]]
+    variable_address, variable_data_type = variable_map[
+        'var_virtual_address'], variable_map['var_data_type']
+    p[0] = (variable_address, variable_data_type)
 
 
 def p_variable1(p):
@@ -799,7 +802,7 @@ def p_class_function(p):
 
 def p_function_declaration(p):
     '''
-    function_declaration : FUNCTION ID np_add_function_internal_scope OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg np_set_function_return_type OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY    
+    function_declaration : FUNCTION ID np_add_function_internal_scope OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg np_set_function_return_type OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
     '''
     global current_internal_scope
     current_internal_scope = '#global'
