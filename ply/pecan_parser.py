@@ -42,8 +42,8 @@ def p_program(p):
     '''
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
-    #print(json.dumps(function_directory.table, indent=2))
-    print(quads.list)
+    print(json.dumps(function_directory.table, indent=2))
+    # print(quads.list)
     pass
 
 
@@ -275,8 +275,17 @@ def p_np_add_variable(p):
     '''
     np_add_variable : epsilon
     '''
+    new_variable_address = None
+    if (current_general_scope == '#global'):
+        if (current_internal_scope == '#global'):
+            new_variable_address = avail.get_new_address(
+                current_var_data_type, 'globals')
+        else:
+            new_variable_address = avail.get_new_address(
+                current_var_data_type, 'locals')
+
     function_directory.add_variable(current_general_scope, current_internal_scope,
-                                    current_var_name, current_var_type, current_var_data_type)
+                                    current_var_name, current_var_type, current_var_data_type, new_variable_address)
 
 
 def p_variable_declaration1(p):
@@ -794,6 +803,7 @@ def p_function_declaration(p):
     '''
     global current_internal_scope
     current_internal_scope = '#global'
+    avail.reset_local_counters()
 
 
 def p_np_add_function_internal_scope(p):

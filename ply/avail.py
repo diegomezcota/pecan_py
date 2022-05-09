@@ -25,3 +25,9 @@ class Avail:
             temp_tuple = (self.table['temps'][type][0], type)
             self.table['temps'][type][0] += 1
             return temp_tuple
+
+    def reset_local_counters(self):
+        self.table['locals']['int'][0] = self.table['locals']['int'][1]
+        self.table['locals']['float'][0] = self.table['locals']['float'][1]
+        self.table['locals']['bool'][0] = self.table['locals']['bool'][1]
+        self.table['locals']['string'][0] = self.table['locals']['string'][1]
