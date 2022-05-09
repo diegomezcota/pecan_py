@@ -140,7 +140,10 @@ def p_variable(p):
     '''
     variable    : ID variable1
     '''
-    p[0] = ("Variable " + p[1], 'bool')
+    variable_map = function_directory.table[current_general_scope][current_internal_scope]['vars_table'][p[1]]
+    variable_address, variable_data_type = variable_map[
+        'var_virtual_address'], variable_map['var_data_type']
+    p[0] = (variable_address, variable_data_type)
 
 
 def p_variable1(p):
@@ -275,8 +278,17 @@ def p_np_add_variable(p):
     '''
     np_add_variable : epsilon
     '''
+    new_variable_address = None
+    if (current_general_scope == '#global'):
+        if (current_internal_scope == '#global'):
+            new_variable_address = avail.get_new_address(
+                current_var_data_type, 'globals')
+        else:
+            new_variable_address = avail.get_new_address(
+                current_var_data_type, 'locals')
+
     function_directory.add_variable(current_general_scope, current_internal_scope,
-                                    current_var_name, current_var_type, current_var_data_type)
+                                    current_var_name, current_var_type, current_var_data_type, new_variable_address)
 
 
 def p_variable_declaration1(p):
@@ -790,10 +802,11 @@ def p_class_function(p):
 
 def p_function_declaration(p):
     '''
-    function_declaration : FUNCTION ID np_add_function_internal_scope OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg np_set_function_return_type OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY    
+    function_declaration : FUNCTION ID np_add_function_internal_scope OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg np_set_function_return_type OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
     '''
     global current_internal_scope
     current_internal_scope = '#global'
+    avail.reset_local_counters()
 
 
 def p_np_add_function_internal_scope(p):
