@@ -7,8 +7,9 @@ from lexer import tokens
 
 import json
 
-# TODO: checar existencia de funciomes
+# TODO: checar existencia de funciones
 # TODO: Resolver discrepancia entre que los cuadruplos que usen variables temporales, a veces usamos tupla y en otras veces no
+# TODO: Arreglar return de funciones
 function_directory = None
 avail = None
 quads = None
@@ -23,19 +24,6 @@ current_internal_scope = None
 current_var_name = None
 current_var_type = None
 current_var_data_type = None
-
-# TODO: main scope and their variables, meternos al los statements
-# TODO: Arreglar return de funciones
-# class scope:
-#   class_scopes: {function_name -> function_type, vars_table}
-# scopes
-#   global
-#   functions
-#   main
-#   class
-#       name -> function
-# to fix? no permitir que una funcion se llame "global", o guardarla como 0_global o algo así que sea imposible llamarse
-# TODO: Check how are the function parameters handled
 
 
 def p_program(p):
@@ -151,7 +139,7 @@ def p_variable(p):
             'var_virtual_address'], variable_map['var_data_type']
         p[0] = (variable_address, variable_data_type)
     else:
-        print('error: no existe variable')
+        raise VariableNotDefined()
 
 
 def p_variable1(p):
@@ -592,7 +580,7 @@ def p_np_check_existance_for_var(p):
     '''
     if not (function_directory.has_variable(current_general_scope, current_internal_scope, p[-1])):
         if not (function_directory.has_variable(current_general_scope, '#global', p[-1])):
-            print('error: variable no definida')
+            raise VariableNotDefined()
 
 
 def p_np_for_1(p):
@@ -870,6 +858,10 @@ class SyntaxError(Exception):
 
 
 class TypeMismatchError(Exception):
+    pass
+
+
+class VariableNotDefined(Exception):
     pass
 
 
