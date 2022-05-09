@@ -140,7 +140,7 @@ def p_variable(p):
     '''
     variable    : ID variable1
     '''
-    p[0] = ("Variable " + p[1], 'bool')
+    p[0] = ("Variable " + p[1], 'float')
 
 
 def p_variable1(p):
