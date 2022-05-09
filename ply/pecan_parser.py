@@ -7,7 +7,7 @@ from lexer import tokens
 
 import json
 
-# TODO: Reiniciar todo, refactor dirFunc, checar duplicado de variables y que existan, agregar memoria virtual
+# TODO: checar existencia de funciomes
 # TODO: Resolver discrepancia entre que los cuadruplos que usen variables temporales, a veces usamos tupla y en otras veces no
 function_directory = None
 avail = None
@@ -140,10 +140,18 @@ def p_variable(p):
     '''
     variable    : ID variable1
     '''
-    variable_map = function_directory.table[current_general_scope][current_internal_scope]['vars_table'][p[1]]
-    variable_address, variable_data_type = variable_map[
-        'var_virtual_address'], variable_map['var_data_type']
-    p[0] = (variable_address, variable_data_type)
+    if (function_directory.has_variable(current_general_scope, current_internal_scope, p[1])):
+        variable_map = function_directory.table[current_general_scope][current_internal_scope]['vars_table'][p[1]]
+        variable_address, variable_data_type = variable_map[
+            'var_virtual_address'], variable_map['var_data_type']
+        p[0] = (variable_address, variable_data_type)
+    elif (function_directory.has_variable(current_general_scope, '#global', p[1])):
+        variable_map = function_directory.table[current_general_scope]['#global']['vars_table'][p[1]]
+        variable_address, variable_data_type = variable_map[
+            'var_virtual_address'], variable_map['var_data_type']
+        p[0] = (variable_address, variable_data_type)
+    else:
+        print('error: no existe variable')
 
 
 def p_variable1(p):
@@ -564,7 +572,7 @@ def p_np_if_3(p):
 
 def p_cycle(p):
     '''
-    cycle   : FOR ID np_for_1 ASSIGN hyper_exp np_for_2 TO hyper_exp np_for_3 cycle_for
+    cycle   : FOR ID np_check_existance_for_var np_for_1 ASSIGN hyper_exp np_for_2 TO hyper_exp np_for_3 cycle_for
             | WHILE np_while_1 OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS np_while_2 cycle_while
             | DO np_do_while_1 OPEN_KEY statement_loop CLOSE_KEY WHILE OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS np_do_while_2 SEMICOLON
     '''
@@ -576,6 +584,15 @@ def p_cycle_for(p):
     cycle_for  : OPEN_KEY statement_loop CLOSE_KEY np_for_4
     '''
     pass
+
+
+def p_np_check_existance_for_var(p):
+    '''
+    np_check_existance_for_var : epsilon
+    '''
+    if not (function_directory.has_variable(current_general_scope, current_internal_scope, p[-1])):
+        if not (function_directory.has_variable(current_general_scope, '#global', p[-1])):
+            print('error: variable no definida')
 
 
 def p_np_for_1(p):
