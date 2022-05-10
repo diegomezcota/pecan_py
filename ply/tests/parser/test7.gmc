@@ -1,28 +1,14 @@
 // test7: Tests Temporales
 program test;
 
-var int marianis;
-var float diegomis;
+var int b;
 
-function pelos(var string text) returns void {
-    var int ping;
-    var int times;
-    //write(text);
-}
-
-function pelones(var string shiri) returns void {
-    var int shu;
-    var int tripsis;
-    var float noris;
-    var float oryx;
-    var bool cosi;
-    //write(shiri);
+function pelos() returns void{
+    write(b);
 }
 
 main() {
-    var bool aucsilio;
-    var float a;
-    var float b;
+    var int a;
     if (true) {
         write(a, b);
     }
