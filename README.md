@@ -57,8 +57,9 @@ Agregamos implementación de direcciones de memoria virtuales para constantes y 
 Agregamos chequeos de existencia de scopes y variables.
 
 ### lexer.py
-Modificación de palabras reservadas para soporar el ciclo for en nuestra gramática.
+Modificación de palabras reservadas para soportar el ciclo for en nuestra gramática.
 
 ### pecan_parser.py
-Generación de cuádruplos para ciclos while, do while y for y administración de memoria virtual para variables y constantes.
+Generación de cuádruplos para condicionales if e if else y ciclos while, do while y for.
+Administración de memoria virtual para variables y constantes.
 
