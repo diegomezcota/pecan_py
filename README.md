@@ -47,3 +47,19 @@ Diseño e implementación de la estructura Avail (temporales).
 
 ### quadruples.py
 Diseño e implementación de estructura y creación de cuádruplos.
+
+## Avance 4: Generación de Código de Estatutos Condicionales y Cíclicos
+
+### avail.py
+Agregamos implementación de direcciones de memoria virtuales para constantes y variables globales, locales y temporales.
+
+### function_directory.py
+Agregamos chequeos de existencia de scopes y variables.
+
+### lexer.py
+Modificación de palabras reservadas para soportar el ciclo for en nuestra gramática.
+
+### pecan_parser.py
+Generación de cuádruplos para condicionales if e if else y ciclos while, do while y for.
+Administración de memoria virtual para variables y constantes.
+
