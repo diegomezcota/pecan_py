@@ -10,6 +10,7 @@ import json
 # TODO: checar existencia de funciones
 # TODO: Resolver discrepancia entre que los cuadruplos que usen variables temporales, a veces usamos tupla y en otras veces no
 # TODO: Arreglar return de funciones
+# TODO: Resettear variables temporales por scope (funciones y main)
 function_directory = None
 avail = None
 quads = None
