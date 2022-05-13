@@ -23,6 +23,14 @@ class Avail:
             temp_tuple = (self.table['temps'][type][0], type)
             self.table['temps'][type][0] += 1
             return temp_tuple
+        
+    def get_new_global(self, type):
+        if self.table['globals'][type][0] == self.table['globals'][type][2]:
+            raise TooManyVariables()
+        else:
+            global_address = self.table['globals'][type][0]
+            self.table['globals'][type][0] += 1
+            return global_address
 
     def reset_local_counters(self):
         # Reset local counters
