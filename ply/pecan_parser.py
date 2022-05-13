@@ -15,6 +15,7 @@ import json
 # TODO: Resolver discrepancia entre que los cuadruplos que usen variables temporales, a veces usamos tupla y en otras veces no
 # TODO: Arreglar return de funciones (podemos usar current scopes para saber el tipo de la función y checar el match)
 # TODO: Hacer tabla de constantes y asignar memoria
+# TODO: Agregar puntos neuralgicos de funcion al main (los correspondientes)
 
 function_directory = None
 avail = None
@@ -36,8 +37,8 @@ def p_program(p):
     '''
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
-    #print(json.dumps(function_directory.table, indent=2))
-    print(quads.list)
+    print(json.dumps(function_directory.table, indent=2))
+    #print(quads.list)
     pass
 
 
@@ -815,7 +816,7 @@ def p_class_function(p):
 
 def p_function_declaration(p):
     '''
-    function_declaration : FUNCTION ID np_add_function_internal_scope OPEN_PARENTHESIS parameter np_add_parameters_to_var_table CLOSE_PARENTHESIS RETURNS return_arg np_set_function_return_type OPEN_KEY variable_declaration_loop np_generate_variable_workspace np_add_function_start_quad function_statement_loop function_return CLOSE_KEY
+    function_declaration : FUNCTION ID np_add_function_internal_scope OPEN_PARENTHESIS parameter np_add_parameters_to_var_table CLOSE_PARENTHESIS RETURNS return_arg np_set_function_return_type OPEN_KEY variable_declaration_loop np_generate_variable_workspace np_add_function_start_quad function_statement_loop function_return CLOSE_KEY np_end_function
     '''
     global current_internal_scope
     current_internal_scope = '#global'
@@ -832,6 +833,16 @@ def p_np_add_function_start_quad(p):
     np_add_function_start_quad : epsilon
     '''
     function_directory.set_start_quad(current_general_scope, current_internal_scope, quads.counter)
+    
+def p_np_end_function(p):
+    '''
+    np_end_function : epsilon
+    '''
+    function_directory.delete_vars_table(current_general_scope, current_internal_scope)
+    quads.generate_quad('ENDFUNC', None, None, None)
+    temps_workspace = avail.get_counter_summary('temps')
+    function_directory.set_temps_workspace(current_general_scope, current_internal_scope, temps_workspace)
+    
 
 def p_np_add_function_internal_scope(p):
     '''

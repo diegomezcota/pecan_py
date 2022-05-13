@@ -8,12 +8,6 @@ function a(int a) returns float {
     return 3.14;
 }
 
-function pelos(int a, int b, float c, string brussels) returns int {
-    var bool i;
-    var bool j;
-    var bool tenerBrussels; 
-}
-
 main() {
     var int i;
     for i = 10 to 15 {
