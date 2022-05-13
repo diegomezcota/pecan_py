@@ -7,10 +7,14 @@ from lexer import tokens
 
 import json
 
+# TODO: Hacer cuadruplos de las funciones 
+# TODO: Agregar variable global con el nombre de la funcion
+# TODO: Agregar parametros a la vars table de cada funcion
 # TODO: checar existencia de funciones
+# TODO: Usar direcciones para todo
 # TODO: Resolver discrepancia entre que los cuadruplos que usen variables temporales, a veces usamos tupla y en otras veces no
-# TODO: Arreglar return de funciones
-# TODO: Resettear variables temporales por scope (funciones y main)
+# TODO: Arreglar return de funciones (podemos usar current scopes para saber el tipo de la función y checar el match)
+
 function_directory = None
 avail = None
 quads = None
@@ -31,8 +35,8 @@ def p_program(p):
     '''
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
-    #print(json.dumps(function_directory.table, indent=2))
-    print(quads.list)
+    print(json.dumps(function_directory.table, indent=2))
+    #print(quads.list)
     pass
 
 

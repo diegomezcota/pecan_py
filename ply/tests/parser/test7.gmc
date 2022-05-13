@@ -3,6 +3,10 @@ program test;
 
 var int i;
 
+function pelos() returns int {
+    return;
+}
+
 main() {
     var int i;
     for i = 10 to 15 {
