@@ -28,6 +28,9 @@ class FunctionDirectory:
                 "workspace" : {}
             }
 
+    def set_temps_workspace(self, general_name, internal_name, temps_workspace):
+        self.table[general_name][internal_name]['workspace']['temps_workspace'] = temps_workspace
+
     def set_function_type(self, general_name, internal_name, type):
         self.table[general_name][internal_name]['function_type'] = type
         
@@ -63,6 +66,9 @@ class FunctionDirectory:
         for _, var_dict in vars_table.items():
             variable_workspace[var_dict['var_data_type']] += 1
         self.table[general_name][internal_name]['workspace']['variables_workspace'] = variable_workspace
+        
+    def delete_vars_table(self, general_name, internal_name):
+        self.table[general_name][internal_name]['vars_table'] = {}
         
 
 class GeneralScopeAlreadyDeclared(Exception):
