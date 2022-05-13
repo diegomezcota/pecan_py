@@ -36,6 +36,10 @@ class Avail:
         self.table['temps']['bool'][0] = self.table['temps']['bool'][1]
         self.table['temps']['string'][0] = self.table['temps']['string'][1]
 
+    def get_counter_summary(self, block):
+        type_counters = self.table[block]
+        counter_summary = { data_type : dt_array[0] - dt_array[1] for data_type, dt_array in type_counters.items() }
+        return counter_summary
 
 class TooManyVariables(Exception):
     pass
