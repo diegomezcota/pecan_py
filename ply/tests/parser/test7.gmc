@@ -3,8 +3,10 @@ program test;
 
 var int i;
 
-function pelos() returns int {
-    return;
+function pelos(int a, int b, float c, string brussels) returns int {
+    var bool i;
+    var bool j;
+    var bool tenerBrussels; 
 }
 
 main() {

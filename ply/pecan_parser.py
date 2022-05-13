@@ -267,14 +267,6 @@ def p_np_set_current_var_name(p):
     current_var_name = p[-1]
 
 
-def p_atomic_var_type(p):
-    '''
-    atomic_var_type    : VAR
-                | GROUP
-    '''
-    p[0] = p[1]
-
-
 def p_np_add_variable(p):
     '''
     np_add_variable : epsilon
@@ -496,27 +488,42 @@ def p_return_arg(p):
 
 def p_parameter(p):
     '''
-    parameter   : atomic_var_type data_type ID parameter1
-                | OBJ ID ID parameter1
+    parameter   : data_type ID parameter1
                 | epsilon
     '''
-    if len(p) == 5:
-        p[0] = [(p[1], p[2], p[3])] + p[4]
+    if len(p) == 4:
+        p[0] = [(p[1], p[2])] + p[3]
     else:
         p[0] = []
 
 
 def p_parameter1(p):
     '''
-    parameter1  : COMMA atomic_var_type data_type ID parameter1
-                | COMMA OBJ ID ID parameter1
+    parameter1  : COMMA data_type ID parameter1
                 | epsilon
     '''
-    if len(p) == 6:
-        p[0] = [(p[2], p[3], p[4])] + p[5]
+    if len(p) == 5:
+        p[0] = [(p[2], p[3])] + p[4]
     else:
         p[0] = []
 
+def p_np_add_parameters_to_var_table(p):
+    '''
+    np_add_parameters_to_var_table : epsilon
+    '''
+    parameters = p[-1]
+    for parameter in parameters:
+        parameter_dt, parameter_name = parameter
+        # Checar si el parametro ya existe
+        if function_directory.has_variable(current_general_scope, current_internal_scope, parameter_name):
+            print('Parametro doblemente declarado')
+            # TODO: Raise error
+        else:
+            # pedimos memoria local
+            param_address = avail.get_new_address(parameter_dt, 'locals')
+            # Agregar variable a var table y agregar la firma de parametros
+            function_directory.add_variable(current_general_scope, current_internal_scope, parameter_name, 'var', parameter_dt, param_address)
+            function_directory.add_to_param_signature(current_general_scope, current_internal_scope, parameter_dt)
 
 def p_conditional(p):
     '''
@@ -807,12 +814,17 @@ def p_class_function(p):
 
 def p_function_declaration(p):
     '''
-    function_declaration : FUNCTION ID np_add_function_internal_scope OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg np_set_function_return_type OPEN_KEY variable_declaration_loop function_statement_loop function_return CLOSE_KEY
+    function_declaration : FUNCTION ID np_add_function_internal_scope OPEN_PARENTHESIS parameter np_add_parameters_to_var_table CLOSE_PARENTHESIS RETURNS return_arg np_set_function_return_type OPEN_KEY variable_declaration_loop np_generate_variable_workspace function_statement_loop function_return CLOSE_KEY
     '''
     global current_internal_scope
     current_internal_scope = '#global'
     avail.reset_local_counters()
 
+def p_np_generate_variable_workspace(p):
+    '''
+    np_generate_variable_workspace : epsilon
+    '''
+    function_directory.generate_variable_workspace(current_general_scope, current_internal_scope)
 
 def p_np_add_function_internal_scope(p):
     '''
