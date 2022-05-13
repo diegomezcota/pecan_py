@@ -3,6 +3,11 @@ program test;
 
 var int i;
 
+function a(int a) returns float {
+    a = a + 3;
+    return 3.14;
+}
+
 function pelos(int a, int b, float c, string brussels) returns int {
     var bool i;
     var bool j;
