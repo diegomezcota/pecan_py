@@ -592,12 +592,10 @@ def p_np_for_2(p):
     '''
     np_for_2 : epsilon
     '''
-    #print(operand_stack[-1])
     exp_address, exp_type = operand_stack.pop()
     if exp_type != 'int':
         raise TypeMismatchError()
     else:
-        #print(operand_stack[-1])
         control_var_address, control_var_type = operand_stack[-1]
         control_variable_stack.append((control_var_address, control_var_type))
         result_type = semantic_cube.is_type_match(
