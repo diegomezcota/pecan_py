@@ -25,10 +25,16 @@ class Avail:
             return temp_tuple
 
     def reset_local_counters(self):
+        # Reset local counters
         self.table['locals']['int'][0] = self.table['locals']['int'][1]
         self.table['locals']['float'][0] = self.table['locals']['float'][1]
         self.table['locals']['bool'][0] = self.table['locals']['bool'][1]
         self.table['locals']['string'][0] = self.table['locals']['string'][1]
+        # Reset temporal local counters
+        self.table['temps']['int'][0] = self.table['temps']['int'][1]
+        self.table['temps']['float'][0] = self.table['temps']['float'][1]
+        self.table['temps']['bool'][0] = self.table['temps']['bool'][1]
+        self.table['temps']['string'][0] = self.table['temps']['string'][1]
 
 
 class TooManyVariables(Exception):
