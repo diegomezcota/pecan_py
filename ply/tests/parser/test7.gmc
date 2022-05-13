@@ -1,15 +1,11 @@
 // test7: Tests Temporales
 program test;
 
-var int b;
-
-function pelos() returns void{
-    write(b);
-}
+var int i;
 
 main() {
-    var int a;
-    if (true) {
-        write(a, b);
+    var int i;
+    for i = 10 to 15 {
+        write("hola mundo");
     }
 }

@@ -561,7 +561,7 @@ def p_np_if_3(p):
 
 def p_cycle(p):
     '''
-    cycle   : FOR ID np_check_existance_for_var np_for_1 ASSIGN hyper_exp np_for_2 TO hyper_exp np_for_3 cycle_for
+    cycle   : FOR ID np_for_1 ASSIGN hyper_exp np_for_2 TO hyper_exp np_for_3 cycle_for
             | WHILE np_while_1 OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS np_while_2 cycle_while
             | DO np_do_while_1 OPEN_KEY statement_loop CLOSE_KEY WHILE OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS np_do_while_2 SEMICOLON
     '''
@@ -574,20 +574,15 @@ def p_cycle_for(p):
     '''
     pass
 
-
-def p_np_check_existance_for_var(p):
-    '''
-    np_check_existance_for_var : epsilon
-    '''
-    if not (function_directory.has_variable(current_general_scope, current_internal_scope, p[-1])):
-        if not (function_directory.has_variable(current_general_scope, '#global', p[-1])):
-            raise VariableNotDefined()
-
-
 def p_np_for_1(p):
     '''
     np_for_1 : epsilon
     '''
+    # Check existence for variable
+    if not (function_directory.has_variable(current_general_scope, current_internal_scope, p[-1])):
+        if not (function_directory.has_variable(current_general_scope, '#global', p[-1])):
+            raise VariableNotDefined()
+        # else get variable address
     var_address = p[-1]
     # TODD: Checar que el var_type de p[-1] sea int
     operand_stack.append((var_address, 'int'))
