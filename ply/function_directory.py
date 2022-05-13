@@ -30,6 +30,9 @@ class FunctionDirectory:
 
     def set_function_type(self, general_name, internal_name, type):
         self.table[general_name][internal_name]['function_type'] = type
+        
+    def set_start_quad(self, general_name, internal_name, quad_id):
+        self.table[general_name][internal_name]['start_quad'] = quad_id
 
     def add_variable(self, general_name, internal_name, var_name, var_type, var_data_type, var_virtual_address):
         if var_name in self.table[general_name][internal_name]['vars_table'].keys():
@@ -60,6 +63,7 @@ class FunctionDirectory:
         for _, var_dict in vars_table.items():
             variable_workspace[var_dict['var_data_type']] += 1
         self.table[general_name][internal_name]['workspace']['variables_workspace'] = variable_workspace
+        
 
 class GeneralScopeAlreadyDeclared(Exception):
     pass
