@@ -37,8 +37,8 @@ def p_program(p):
     '''
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
-    print(json.dumps(function_directory.table, indent=2))
-    #print(quads.list)
+    #print(json.dumps(function_directory.table, indent=2))
+    print(quads.list)
     pass
 
 
@@ -865,9 +865,20 @@ def p_np_set_function_return_type(p):
 def p_function_return(p):
     '''
     function_return : RETURN hyper_exp SEMICOLON
-                    | epsilon
+                    | RETURN SEMICOLON
     '''
-    pass
+    function_return_type = function_directory.table[current_general_scope][current_internal_scope]['function_type']
+    if len(p) == 4:
+        return_exp_address, return_exp_type = operand_stack.pop()
+        if return_exp_type != function_return_type:
+            raise FunctionReturnError()
+        else:
+            function_address = avail.get_new_global(function_return_type)
+            function_directory.add_variable('#global', '#global', current_internal_scope, 'var', function_return_type, function_address)
+            quads.generate_quad('=', return_exp_address, None, function_address)
+    else:
+        if function_return_type != 'void':
+            raise FunctionReturnError()
 
 
 def p_function_statement_loop(p):
@@ -890,6 +901,8 @@ class SyntaxError(Exception):
 class TypeMismatchError(Exception):
     pass
 
+class FunctionReturnError(Exception):
+    ...
 
 class VariableNotDefined(Exception):
     pass

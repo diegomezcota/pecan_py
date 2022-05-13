@@ -140,7 +140,7 @@ Rule 134   np_end_function -> epsilon
 Rule 135   np_add_function_internal_scope -> epsilon
 Rule 136   np_set_function_return_type -> epsilon
 Rule 137   function_return -> RETURN hyper_exp SEMICOLON
-Rule 138   function_return -> epsilon
+Rule 138   function_return -> RETURN SEMICOLON
 Rule 139   function_statement_loop -> statement_loop
 Rule 140   function_statement_loop -> epsilon
 Rule 141   epsilon -> <empty>
@@ -187,9 +187,9 @@ OR                   : 52
 PLUS                 : 63
 PROGRAM              : 1
 READ                 : 113
-RETURN               : 137
+RETURN               : 137 138
 RETURNS              : 85 130 131
-SEMICOLON            : 1 18 33 34 35 48 85 101 113 117 125 137
+SEMICOLON            : 1 18 33 34 35 48 85 101 113 117 125 137 138
 STRING               : 83
 STRING_VALUE         : 76
 TO                   : 99
@@ -221,7 +221,7 @@ cycle_while          : 100
 data_type            : 33 34 86 88 90
 declaration          : 6
 declaration_loop     : 1 6
-epsilon              : 3 4 5 7 10 17 20 22 26 29 32 36 37 38 39 41 49 53 54 60 61 65 66 70 71 79 80 89 91 92 96 97 98 103 104 105 106 108 109 110 111 112 116 120 121 124 127 129 132 133 134 135 136 138 140
+epsilon              : 3 4 5 7 10 17 20 22 26 29 32 36 37 38 39 41 49 53 54 60 61 65 66 70 71 79 80 89 91 92 96 97 98 103 104 105 106 108 109 110 111 112 116 120 121 124 127 129 132 133 134 135 136 140
 exp                  : 55 56 57 58 59
 exp1                 : 62 63 64
 factor               : 67 68 69
@@ -1126,7 +1126,6 @@ state 77
     WRITE           reduce using rule 141 (epsilon -> .)
     ID              reduce using rule 141 (epsilon -> .)
     RETURN          reduce using rule 141 (epsilon -> .)
-    CLOSE_KEY       reduce using rule 141 (epsilon -> .)
 
     variable_declaration           shift and go to state 77
     variable_declaration_loop      shift and go to state 108
@@ -1144,7 +1143,6 @@ state 78
     WRITE           reduce using rule 32 (variable_declaration_loop -> epsilon .)
     ID              reduce using rule 32 (variable_declaration_loop -> epsilon .)
     RETURN          reduce using rule 32 (variable_declaration_loop -> epsilon .)
-    CLOSE_KEY       reduce using rule 32 (variable_declaration_loop -> epsilon .)
 
 
 state 79
@@ -1219,7 +1217,6 @@ state 85
     WRITE           reduce using rule 141 (epsilon -> .)
     ID              reduce using rule 141 (epsilon -> .)
     RETURN          reduce using rule 141 (epsilon -> .)
-    CLOSE_KEY       reduce using rule 141 (epsilon -> .)
 
     np_add_variable                shift and go to state 113
     epsilon                        shift and go to state 114
@@ -1552,7 +1549,6 @@ state 108
     WRITE           reduce using rule 31 (variable_declaration_loop -> variable_declaration variable_declaration_loop .)
     ID              reduce using rule 31 (variable_declaration_loop -> variable_declaration variable_declaration_loop .)
     RETURN          reduce using rule 31 (variable_declaration_loop -> variable_declaration variable_declaration_loop .)
-    CLOSE_KEY       reduce using rule 31 (variable_declaration_loop -> variable_declaration variable_declaration_loop .)
 
 
 state 109
@@ -1628,7 +1624,6 @@ state 113
     WRITE           reduce using rule 33 (variable_declaration -> VAR np_set_current_var_type data_type np_set_current_var_data_type ID np_set_current_var_name SEMICOLON np_add_variable .)
     ID              reduce using rule 33 (variable_declaration -> VAR np_set_current_var_type data_type np_set_current_var_data_type ID np_set_current_var_name SEMICOLON np_add_variable .)
     RETURN          reduce using rule 33 (variable_declaration -> VAR np_set_current_var_type data_type np_set_current_var_data_type ID np_set_current_var_name SEMICOLON np_add_variable .)
-    CLOSE_KEY       reduce using rule 33 (variable_declaration -> VAR np_set_current_var_type data_type np_set_current_var_data_type ID np_set_current_var_name SEMICOLON np_add_variable .)
 
 
 state 114
@@ -1649,7 +1644,6 @@ state 114
     WRITE           reduce using rule 39 (np_add_variable -> epsilon .)
     ID              reduce using rule 39 (np_add_variable -> epsilon .)
     RETURN          reduce using rule 39 (np_add_variable -> epsilon .)
-    CLOSE_KEY       reduce using rule 39 (np_add_variable -> epsilon .)
 
 
 state 115
@@ -2963,7 +2957,6 @@ state 197
     WRITE           reduce using rule 141 (epsilon -> .)
     ID              reduce using rule 141 (epsilon -> .)
     RETURN          reduce using rule 141 (epsilon -> .)
-    CLOSE_KEY       reduce using rule 141 (epsilon -> .)
 
     np_add_variable                shift and go to state 243
     epsilon                        shift and go to state 114
@@ -3532,7 +3525,6 @@ state 241
     WRITE           reduce using rule 141 (epsilon -> .)
     ID              reduce using rule 141 (epsilon -> .)
     RETURN          reduce using rule 141 (epsilon -> .)
-    CLOSE_KEY       reduce using rule 141 (epsilon -> .)
 
     np_add_variable                shift and go to state 273
     epsilon                        shift and go to state 114
@@ -3581,7 +3573,6 @@ state 243
     WRITE           reduce using rule 35 (variable_declaration -> OBJ np_set_current_var_type ID np_set_current_var_name ASSIGN ID OPEN_PARENTHESIS variable_declaration1 CLOSE_PARENTHESIS SEMICOLON np_add_variable .)
     ID              reduce using rule 35 (variable_declaration -> OBJ np_set_current_var_type ID np_set_current_var_name ASSIGN ID OPEN_PARENTHESIS variable_declaration1 CLOSE_PARENTHESIS SEMICOLON np_add_variable .)
     RETURN          reduce using rule 35 (variable_declaration -> OBJ np_set_current_var_type ID np_set_current_var_name ASSIGN ID OPEN_PARENTHESIS variable_declaration1 CLOSE_PARENTHESIS SEMICOLON np_add_variable .)
-    CLOSE_KEY       reduce using rule 35 (variable_declaration -> OBJ np_set_current_var_type ID np_set_current_var_name ASSIGN ID OPEN_PARENTHESIS variable_declaration1 CLOSE_PARENTHESIS SEMICOLON np_add_variable .)
 
 
 state 244
@@ -3896,7 +3887,6 @@ state 256
     WRITE           reduce using rule 141 (epsilon -> .)
     ID              reduce using rule 141 (epsilon -> .)
     RETURN          reduce using rule 141 (epsilon -> .)
-    CLOSE_KEY       reduce using rule 141 (epsilon -> .)
 
     variable_declaration_loop      shift and go to state 286
     variable_declaration           shift and go to state 77
@@ -4088,7 +4078,6 @@ state 273
     WRITE           reduce using rule 34 (variable_declaration -> GROUP np_set_current_var_type ID np_set_current_var_name ASSIGN data_type np_set_current_var_data_type OPEN_BRACKET INT_VALUE CLOSE_BRACKET SEMICOLON np_add_variable .)
     ID              reduce using rule 34 (variable_declaration -> GROUP np_set_current_var_type ID np_set_current_var_name ASSIGN data_type np_set_current_var_data_type OPEN_BRACKET INT_VALUE CLOSE_BRACKET SEMICOLON np_add_variable .)
     RETURN          reduce using rule 34 (variable_declaration -> GROUP np_set_current_var_type ID np_set_current_var_name ASSIGN data_type np_set_current_var_data_type OPEN_BRACKET INT_VALUE CLOSE_BRACKET SEMICOLON np_add_variable .)
-    CLOSE_KEY       reduce using rule 34 (variable_declaration -> GROUP np_set_current_var_type ID np_set_current_var_name ASSIGN data_type np_set_current_var_data_type OPEN_BRACKET INT_VALUE CLOSE_BRACKET SEMICOLON np_add_variable .)
 
 
 state 274
@@ -4373,7 +4362,6 @@ state 286
     WRITE           reduce using rule 141 (epsilon -> .)
     ID              reduce using rule 141 (epsilon -> .)
     RETURN          reduce using rule 141 (epsilon -> .)
-    CLOSE_KEY       reduce using rule 141 (epsilon -> .)
 
     np_generate_variable_workspace shift and go to state 309
     epsilon                        shift and go to state 310
@@ -4836,7 +4824,6 @@ state 309
     WRITE           reduce using rule 141 (epsilon -> .)
     ID              reduce using rule 141 (epsilon -> .)
     RETURN          reduce using rule 141 (epsilon -> .)
-    CLOSE_KEY       reduce using rule 141 (epsilon -> .)
 
     np_add_function_start_quad     shift and go to state 329
     epsilon                        shift and go to state 330
@@ -4853,7 +4840,6 @@ state 310
     WRITE           reduce using rule 132 (np_generate_variable_workspace -> epsilon .)
     ID              reduce using rule 132 (np_generate_variable_workspace -> epsilon .)
     RETURN          reduce using rule 132 (np_generate_variable_workspace -> epsilon .)
-    CLOSE_KEY       reduce using rule 132 (np_generate_variable_workspace -> epsilon .)
 
 
 state 311
@@ -5187,7 +5173,6 @@ state 329
     (14) variable -> . ID variable1
 
     RETURN          reduce using rule 141 (epsilon -> .)
-    CLOSE_KEY       reduce using rule 141 (epsilon -> .)
     IF              shift and go to state 101
     FOR             shift and go to state 102
     WHILE           shift and go to state 104
@@ -5220,7 +5205,6 @@ state 330
     WRITE           reduce using rule 133 (np_add_function_start_quad -> epsilon .)
     ID              reduce using rule 133 (np_add_function_start_quad -> epsilon .)
     RETURN          reduce using rule 133 (np_add_function_start_quad -> epsilon .)
-    CLOSE_KEY       reduce using rule 133 (np_add_function_start_quad -> epsilon .)
 
 
 state 331
@@ -5302,21 +5286,17 @@ state 338
 
     (131) function_declaration -> FUNCTION ID np_add_function_internal_scope OPEN_PARENTHESIS parameter np_add_parameters_to_var_table CLOSE_PARENTHESIS RETURNS return_arg np_set_function_return_type OPEN_KEY variable_declaration_loop np_generate_variable_workspace np_add_function_start_quad function_statement_loop . function_return CLOSE_KEY np_end_function
     (137) function_return -> . RETURN hyper_exp SEMICOLON
-    (138) function_return -> . epsilon
-    (141) epsilon -> .
+    (138) function_return -> . RETURN SEMICOLON
 
     RETURN          shift and go to state 351
-    CLOSE_KEY       reduce using rule 141 (epsilon -> .)
 
     function_return                shift and go to state 350
-    epsilon                        shift and go to state 352
 
 state 339
 
     (139) function_statement_loop -> statement_loop .
 
     RETURN          reduce using rule 139 (function_statement_loop -> statement_loop .)
-    CLOSE_KEY       reduce using rule 139 (function_statement_loop -> statement_loop .)
 
 
 state 340
@@ -5324,7 +5304,6 @@ state 340
     (140) function_statement_loop -> epsilon .
 
     RETURN          reduce using rule 140 (function_statement_loop -> epsilon .)
-    CLOSE_KEY       reduce using rule 140 (function_statement_loop -> epsilon .)
 
 
 state 341
@@ -5350,8 +5329,8 @@ state 342
 
     OPEN_KEY        reduce using rule 141 (epsilon -> .)
 
-    np_if_3                        shift and go to state 353
-    epsilon                        shift and go to state 354
+    np_if_3                        shift and go to state 352
+    epsilon                        shift and go to state 353
 
 state 343
 
@@ -5388,9 +5367,9 @@ state 345
     (99) cycle -> FOR ID np_for_1 ASSIGN hyper_exp np_for_2 TO hyper_exp np_for_3 . cycle_for
     (102) cycle_for -> . OPEN_KEY statement_loop CLOSE_KEY np_for_4
 
-    OPEN_KEY        shift and go to state 356
+    OPEN_KEY        shift and go to state 355
 
-    cycle_for                      shift and go to state 355
+    cycle_for                      shift and go to state 354
 
 state 346
 
@@ -5415,8 +5394,8 @@ state 347
     CLOSE_KEY       reduce using rule 141 (epsilon -> .)
     RETURN          reduce using rule 141 (epsilon -> .)
 
-    np_while_3                     shift and go to state 357
-    epsilon                        shift and go to state 358
+    np_while_3                     shift and go to state 356
+    epsilon                        shift and go to state 357
 
 state 348
 
@@ -5426,8 +5405,8 @@ state 348
 
     SEMICOLON       reduce using rule 141 (epsilon -> .)
 
-    np_do_while_2                  shift and go to state 359
-    epsilon                        shift and go to state 360
+    np_do_while_2                  shift and go to state 358
+    epsilon                        shift and go to state 359
 
 state 349
 
@@ -5445,19 +5424,20 @@ state 349
     STRING          shift and go to state 37
     BOOL            shift and go to state 38
 
-    return_arg                     shift and go to state 361
+    return_arg                     shift and go to state 360
     data_type                      shift and go to state 173
 
 state 350
 
     (131) function_declaration -> FUNCTION ID np_add_function_internal_scope OPEN_PARENTHESIS parameter np_add_parameters_to_var_table CLOSE_PARENTHESIS RETURNS return_arg np_set_function_return_type OPEN_KEY variable_declaration_loop np_generate_variable_workspace np_add_function_start_quad function_statement_loop function_return . CLOSE_KEY np_end_function
 
-    CLOSE_KEY       shift and go to state 362
+    CLOSE_KEY       shift and go to state 361
 
 
 state 351
 
     (137) function_return -> RETURN . hyper_exp SEMICOLON
+    (138) function_return -> RETURN . SEMICOLON
     (50) hyper_exp -> . super_exp np_hyper_exp hyper_exp1
     (55) super_exp -> . exp np_super_exp super_exp1
     (62) exp -> . term np_exp exp1
@@ -5472,6 +5452,7 @@ state 351
     (125) function_call -> . ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
     (14) variable -> . ID variable1
 
+    SEMICOLON       shift and go to state 363
     FLOAT_VALUE     shift and go to state 126
     INT_VALUE       shift and go to state 127
     BOOL_VALUE      shift and go to state 128
@@ -5479,7 +5460,7 @@ state 351
     OPEN_PARENTHESIS shift and go to state 116
     ID              shift and go to state 103
 
-    hyper_exp                      shift and go to state 363
+    hyper_exp                      shift and go to state 362
     super_exp                      shift and go to state 121
     exp                            shift and go to state 122
     term                           shift and go to state 123
@@ -5489,26 +5470,19 @@ state 351
 
 state 352
 
-    (138) function_return -> epsilon .
-
-    CLOSE_KEY       reduce using rule 138 (function_return -> epsilon .)
-
-
-state 353
-
     (94) conditional1 -> ELSE np_if_3 . OPEN_KEY statement_loop CLOSE_KEY np_if_2
 
     OPEN_KEY        shift and go to state 364
 
 
-state 354
+state 353
 
     (98) np_if_3 -> epsilon .
 
     OPEN_KEY        reduce using rule 98 (np_if_3 -> epsilon .)
 
 
-state 355
+state 354
 
     (99) cycle -> FOR ID np_for_1 ASSIGN hyper_exp np_for_2 TO hyper_exp np_for_3 cycle_for .
 
@@ -5523,7 +5497,7 @@ state 355
     RETURN          reduce using rule 99 (cycle -> FOR ID np_for_1 ASSIGN hyper_exp np_for_2 TO hyper_exp np_for_3 cycle_for .)
 
 
-state 356
+state 355
 
     (102) cycle_for -> OPEN_KEY . statement_loop CLOSE_KEY np_for_4
     (8) statement_loop -> . statement statement_loop1
@@ -5561,7 +5535,7 @@ state 356
     function_call                  shift and go to state 99
     variable                       shift and go to state 100
 
-state 357
+state 356
 
     (107) cycle_while -> OPEN_KEY statement_loop CLOSE_KEY np_while_3 .
 
@@ -5576,7 +5550,7 @@ state 357
     RETURN          reduce using rule 107 (cycle_while -> OPEN_KEY statement_loop CLOSE_KEY np_while_3 .)
 
 
-state 358
+state 357
 
     (110) np_while_3 -> epsilon .
 
@@ -5591,28 +5565,28 @@ state 358
     RETURN          reduce using rule 110 (np_while_3 -> epsilon .)
 
 
-state 359
+state 358
 
     (101) cycle -> DO np_do_while_1 OPEN_KEY statement_loop CLOSE_KEY WHILE OPEN_PARENTHESIS hyper_exp CLOSE_PARENTHESIS np_do_while_2 . SEMICOLON
 
     SEMICOLON       shift and go to state 366
 
 
-state 360
+state 359
 
     (112) np_do_while_2 -> epsilon .
 
     SEMICOLON       reduce using rule 112 (np_do_while_2 -> epsilon .)
 
 
-state 361
+state 360
 
     (130) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg . OPEN_KEY function_statement_loop function_return CLOSE_KEY
 
     OPEN_KEY        shift and go to state 367
 
 
-state 362
+state 361
 
     (131) function_declaration -> FUNCTION ID np_add_function_internal_scope OPEN_PARENTHESIS parameter np_add_parameters_to_var_table CLOSE_PARENTHESIS RETURNS return_arg np_set_function_return_type OPEN_KEY variable_declaration_loop np_generate_variable_workspace np_add_function_start_quad function_statement_loop function_return CLOSE_KEY . np_end_function
     (134) np_end_function -> . epsilon
@@ -5628,11 +5602,18 @@ state 362
     np_end_function                shift and go to state 368
     epsilon                        shift and go to state 369
 
-state 363
+state 362
 
     (137) function_return -> RETURN hyper_exp . SEMICOLON
 
     SEMICOLON       shift and go to state 370
+
+
+state 363
+
+    (138) function_return -> RETURN SEMICOLON .
+
+    CLOSE_KEY       reduce using rule 138 (function_return -> RETURN SEMICOLON .)
 
 
 state 364
@@ -5719,7 +5700,6 @@ state 367
     (14) variable -> . ID variable1
 
     RETURN          reduce using rule 141 (epsilon -> .)
-    CLOSE_KEY       reduce using rule 141 (epsilon -> .)
     IF              shift and go to state 101
     FOR             shift and go to state 102
     WHILE           shift and go to state 104
@@ -5801,14 +5781,11 @@ state 373
 
     (130) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop . function_return CLOSE_KEY
     (137) function_return -> . RETURN hyper_exp SEMICOLON
-    (138) function_return -> . epsilon
-    (141) epsilon -> .
+    (138) function_return -> . RETURN SEMICOLON
 
     RETURN          shift and go to state 351
-    CLOSE_KEY       reduce using rule 141 (epsilon -> .)
 
     function_return                shift and go to state 377
-    epsilon                        shift and go to state 352
 
 state 374
 
