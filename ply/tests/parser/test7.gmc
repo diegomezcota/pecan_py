@@ -9,5 +9,9 @@ function a(int a) returns float {
 }
 
 main() {
+    var int a;
+    var float b;
+    var bool isNalis;
+    a = 10 + 14;
     write("hello world");
 }

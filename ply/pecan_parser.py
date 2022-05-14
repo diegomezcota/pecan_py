@@ -7,15 +7,11 @@ from lexer import tokens
 
 import json
 
-# TODO: Hacer cuadruplos de las funciones 
-# TODO: Agregar variable global con el nombre de la funcion
-# TODO: Agregar parametros a la vars table de cada funcion
+# TODO: Hacer cuadruplos de las llamadas funciones 
 # TODO: checar existencia de funciones
 # TODO: Usar direcciones para todo
 # TODO: Resolver discrepancia entre que los cuadruplos que usen variables temporales, a veces usamos tupla y en otras veces no
-# TODO: Arreglar return de funciones (podemos usar current scopes para saber el tipo de la función y checar el match)
 # TODO: Hacer tabla de constantes y asignar memoria
-# TODO: Agregar puntos neuralgicos de funcion al main (los correspondientes)
 
 function_directory = None
 avail = None
@@ -37,15 +33,18 @@ def p_program(p):
     '''
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
-    #print(json.dumps(function_directory.table, indent=2))
-    print(quads.list)
+    print(json.dumps(function_directory.table, indent=2))
+    #print(quads.list)
     pass
 
 
 def p_main_function(p):
     '''
-    main_function : MAIN np_add_main_internal_scope OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_KEY variable_declaration_loop statement_loop CLOSE_KEY
+    main_function : MAIN np_add_main_internal_scope OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_KEY variable_declaration_loop np_generate_variable_workspace np_add_function_start_quad statement_loop CLOSE_KEY np_end_function
     '''
+    global current_internal_scope
+    current_internal_scope = '#global'
+    avail.reset_local_counters()
 
 
 def p_np_add_main_internal_scope(p):
