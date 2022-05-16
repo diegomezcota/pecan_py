@@ -63,3 +63,14 @@ Modificación de palabras reservadas para soportar el ciclo for en nuestra gram�
 Generación de cuádruplos para condicionales if e if else y ciclos while, do while y for.
 Administración de memoria virtual para variables y constantes.
 
+## Avance 5: Generación de Código de Funciones
+
+### constants.py
+Agregamos la clase Constants que maneja las direcciones virtuales de constantes de tipos atómicos.
+
+### function_directory.py
+Agregamos las funciones necesarias para apoyar la creación de cuádruplos para declaración y llamadas de funciones.
+
+### pecan_parser.py
+Generación de cuádruplos e implementación de puntos neurálgicos para la definición y llamada a funciones/módulos con sus validaciones pertinentes.
+
