@@ -12,6 +12,7 @@ import json
 # TODO: Usar direcciones para todo
 # TODO: Resolver discrepancia entre que los cuadruplos que usen variables temporales, a veces usamos tupla y en otras veces no
 # TODO: Hacer tabla de constantes y asignar memoria
+# TODO: Arreglar for loop cuadruplo repetido
 
 function_directory = None
 avail = None
@@ -28,13 +29,16 @@ current_var_name = None
 current_var_type = None
 current_var_data_type = None
 
+# For function calls
+function_param_counter = None 
+current_function_call_name = None
 
 def p_program(p):
     '''
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
-    print(json.dumps(function_directory.table, indent=2))
-    #print(quads.list)
+    #print(json.dumps(function_directory.table, indent=2))
+    print(quads.list)
     pass
 
 
@@ -299,7 +303,7 @@ def p_statement(p):
                 | cycle
                 | read
                 | write
-                | function_call
+                | function_call SEMICOLON
     '''
     p[0] = p[1]
     pass
@@ -784,26 +788,75 @@ def p_hyper_exp_loop1(p):
 
 def p_function_call(p):
     '''
-    function_call : ID function_call1 OPEN_PARENTHESIS function_call2 CLOSE_PARENTHESIS SEMICOLON
+    function_call : ID function_call1 OPEN_PARENTHESIS np_start_function_param_counter function_call2 CLOSE_PARENTHESIS
     '''
-    p[0] = ("Function call " + p[1], 'string')
-
+    param_signature_length = function_directory.get_param_signature_length('#global', current_function_call_name)
+    if param_signature_length != function_param_counter:
+        raise ParamLengthMismatch()
+    else:
+        function_start_quad = function_directory.get_function_start_quad('#global', current_function_call_name)
+        quads.generate_quad('GOSUB', current_function_call_name, None, function_start_quad)
 
 def p_function_call1(p):
     '''
     function_call1 : DOT ID
-                    | epsilon
+                    | np_validate_function_existance_and_era
     '''
-    pass
+    ...
 
+def p_np_validate_function_existence_and_era(p):
+    '''
+    np_validate_function_existance_and_era : epsilon
+    '''
+    global current_function_call_name
+    current_function_call_name = p[-1]
+    # Checar si existe la funcion "global", luego soportaremos clases
+    if not function_directory.has_internal_scope('#global', current_function_call_name):
+        raise FunctionNotDeclared()
+    else:
+        quads.generate_quad('ERA', None, None, current_function_call_name)
+        
+def p_np_start_function_param_counter(p):
+    '''
+    np_start_function_param_counter : epsilon
+    '''
+    global function_param_counter
+    function_param_counter = 0
 
 def p_function_call2(p):
     '''
-    function_call2 : hyper_exp_loop
+    function_call2 : function_hyper_exp_loop
                     | epsilon
     '''
     pass
 
+def p_function_hyper_exp_loop(p):
+    '''
+    function_hyper_exp_loop : hyper_exp np_check_param_match function_hyper_exp_loop1
+    '''
+    pass
+
+
+def p_function_hyper_exp_loop1(p):
+    '''
+    function_hyper_exp_loop1 : COMMA hyper_exp np_check_param_match function_hyper_exp_loop1
+                    | epsilon
+
+    '''
+    pass
+
+def p_np_check_param_match(p):
+    '''
+    np_check_param_match : epsilon
+    '''
+    global function_param_counter
+    param_address, param_type = operand_stack.pop()
+    nth_signature_type = function_directory.get_nth_param_type('#global', current_function_call_name, function_param_counter)
+    if nth_signature_type != param_type:
+        raise ParamTypeMismatch()
+    else:
+        quads.generate_quad('PARAM', param_address, None, function_param_counter)
+        function_param_counter += 1
 
 def p_class_function(p):
     '''
@@ -906,6 +959,14 @@ class FunctionReturnError(Exception):
 class VariableNotDefined(Exception):
     pass
 
+class FunctionNotDeclared(Exception):
+    ...
+
+class ParamTypeMismatch(Exception):
+    ...
+
+class ParamLengthMismatch(Exception):
+    ...
 
 def p_error(p):
     print('syntax error', p)

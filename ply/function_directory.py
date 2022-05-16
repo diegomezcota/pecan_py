@@ -28,6 +28,20 @@ class FunctionDirectory:
                 "workspace" : {}
             }
 
+    def get_nth_param_type(self, general_name, internal_name, n):
+        # Raise error if n is bigger than array size
+        param_signature_arr = self.table[general_name][internal_name]['param_signature'] 
+        if n >= len(param_signature_arr):
+            raise FunctionParamLengthMismatch()
+        else:
+            return param_signature_arr[n]
+        
+    def get_param_signature_length(self, general_name, internal_name):
+        return len(self.table[general_name][internal_name]['param_signature'])
+    
+    def get_function_start_quad(self, general_name, internal_name):
+        return self.table[general_name][internal_name]['start_quad']
+
     def set_temps_workspace(self, general_name, internal_name, temps_workspace):
         self.table[general_name][internal_name]['workspace']['temps_workspace'] = temps_workspace
 
@@ -81,3 +95,6 @@ class FunctionAlreadyDeclared(Exception):
 
 class VariableAlreadyDeclared(Exception):
     pass
+
+class FunctionParamLengthMismatch(Exception):
+    ...
