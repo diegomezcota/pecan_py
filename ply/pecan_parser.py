@@ -7,7 +7,6 @@ import ply.yacc as yacc
 from lexer import tokens
 
 import json
-# TODO: Resolver discrepancia entre que los cuadruplos que usen variables temporales, a veces usamos tupla y en otras veces no
 # TODO: Arreglar for loop cuadruplo repetido
 
 function_directory = None
@@ -81,6 +80,9 @@ def p_np_start_state(p):
     current_var_type = None
     current_var_data_type = None
     constants = Constants()
+    # Agregar constante 1 para funcionalidad for
+    one_constant_address = avail.get_new_address('int', 'constants')
+    constants.add_constant('int', one_constant_address, 1)
 
 
 def p_np_start_func_dir(p):
@@ -429,9 +431,9 @@ def add_exp_quad(operator_list):
         operator = operator_stack.pop()
         result_type = semantic_cube.is_type_match(lo_type, ro_type, operator)
         if result_type:
-            new_temp = avail.get_new_temp(result_type)
-            quads.generate_quad(operator, lo_value, ro_value, new_temp)
-            operand_stack.append(new_temp)
+            temp_address, temp_type = avail.get_new_temp(result_type)
+            quads.generate_quad(operator, lo_value, ro_value, temp_address)
+            operand_stack.append((temp_address, temp_type))
         else:
             raise TypeMismatchError()
 
@@ -539,8 +541,7 @@ def p_np_add_parameters_to_var_table(p):
         parameter_dt, parameter_name = parameter
         # Checar si el parametro ya existe
         if function_directory.has_variable(current_general_scope, current_internal_scope, parameter_name):
-            print('Parametro doblemente declarado')
-            # TODO: Raise error
+            raise ParamAlreadyDeclared()
         else:
             # pedimos memoria local
             param_address = avail.get_new_address(parameter_dt, 'locals')
@@ -668,12 +669,13 @@ def p_np_for_4(p):
     np_for_4 : epsilon
     '''
     control_variable_address, _ = control_variable_stack.pop()
-    new_temp = avail.get_new_temp('int')
-    # TODO: Pedir temporal de constante 1
-    quads.generate_quad('+', control_variable_address, 1, new_temp)
-    quads.generate_quad('=', new_temp[0], None, control_variable_address)
+    temp_address, _ = avail.get_new_temp('int')
+    one_constant_address = constants.get_constant_address('int', 1)
+    quads.generate_quad('+', control_variable_address,
+                        one_constant_address, temp_address)
+    quads.generate_quad('=', temp_address, None, control_variable_address)
     id_original_address, _ = operand_stack.pop()
-    quads.generate_quad('=', new_temp[0], None, id_original_address)
+    quads.generate_quad('=', temp_address, None, id_original_address)
     end_for = jump_stack.pop()
     return_for = jump_stack.pop()
     quads.generate_quad('GOTO', None, None, return_for)
@@ -788,8 +790,8 @@ def p_np_add_write_quad(p):
     '''
     np_add_write_quad : epsilon
     '''
-    operand_tuple = operand_stack.pop()  # TODO: Check further what to do with the type
-    quads.generate_quad('WRITE', None, None, operand_tuple)
+    operand_address, _ = operand_stack.pop()
+    quads.generate_quad('WRITE', None, None, operand_address)
 
 
 def p_hyper_exp_loop(p):
@@ -1024,6 +1026,10 @@ class ParamTypeMismatch(Exception):
 
 
 class ParamLengthMismatch(Exception):
+    ...
+
+
+class ParamAlreadyDeclared(Exception):
     ...
 
 
