@@ -2,16 +2,12 @@ from function_directory import FunctionDirectory
 from avail import Avail
 from quadruples import Quadruples
 from semantic_cube import SemanticCube
+from constants import Constants
 import ply.yacc as yacc
 from lexer import tokens
 
 import json
-
-# TODO: Hacer cuadruplos de las llamadas funciones
-# TODO: checar existencia de funciones
-# TODO: Usar direcciones para todo
 # TODO: Resolver discrepancia entre que los cuadruplos que usen variables temporales, a veces usamos tupla y en otras veces no
-# TODO: Hacer tabla de constantes y asignar memoria
 # TODO: Arreglar for loop cuadruplo repetido
 
 function_directory = None
@@ -22,6 +18,7 @@ operand_stack = None
 operator_stack = None
 jump_stack = None
 control_variable_stack = None
+constants = None
 
 current_general_scope = None
 current_internal_scope = None
@@ -69,7 +66,7 @@ def p_np_start_state(p):
     np_start_state : epsilon
     '''
     global function_directory, avail, quads, semantic_cube, operand_stack, operator_stack, jump_stack, control_variable_stack
-    global current_general_scope, current_internal_scope, current_var_name, current_var_type, current_var_data_type
+    global current_general_scope, current_internal_scope, current_var_name, current_var_type, current_var_data_type, constants
     function_directory = FunctionDirectory()
     avail = Avail()
     quads = Quadruples()
@@ -83,6 +80,7 @@ def p_np_start_state(p):
     current_var_name = None
     current_var_type = None
     current_var_data_type = None
+    constants = Constants()
 
 
 def p_np_start_func_dir(p):
@@ -441,16 +439,34 @@ def add_exp_quad(operator_list):
 def p_factor(p):
     '''
     factor  : function_call
-            | FLOAT_VALUE
-            | INT_VALUE
-            | BOOL_VALUE
-            | STRING_VALUE
+            | FLOAT_VALUE np_add_constant_virtual_address
+            | INT_VALUE np_add_constant_virtual_address
+            | BOOL_VALUE np_add_constant_virtual_address
+            | STRING_VALUE np_add_constant_virtual_address
             | variable
             | OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
     '''
     if len(p) == 2:
         temp_tuple = p[1]
         operand_stack.append(temp_tuple)
+    elif len(p) == 3:
+        _, const_type = p[1]
+        temp_tuple = (p[2], const_type)
+        operand_stack.append(temp_tuple)
+
+
+def p_np_add_constant_virtual_address(p):
+    '''
+    np_add_constant_virtual_address : epsilon
+    '''
+    global constants
+    const_value, const_type = p[-1]
+
+    if not constants.has_constant(const_type, const_value):
+        new_const_address = avail.get_new_address(const_type, 'constants')
+        constants.add_constant(const_type, new_const_address, const_value)
+
+    p[0] = constants.get_constant_address(const_type, const_value)
 
 
 def p_np_add_open_parenthesis(p):

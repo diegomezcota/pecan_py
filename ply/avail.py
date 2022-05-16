@@ -23,7 +23,7 @@ class Avail:
             temp_tuple = (self.table['temps'][type][0], type)
             self.table['temps'][type][0] += 1
             return temp_tuple
-        
+
     def get_new_global(self, type):
         if self.table['globals'][type][0] == self.table['globals'][type][2]:
             raise TooManyVariables()
@@ -46,8 +46,10 @@ class Avail:
 
     def get_counter_summary(self, block):
         type_counters = self.table[block]
-        counter_summary = { data_type : dt_array[0] - dt_array[1] for data_type, dt_array in type_counters.items() }
+        counter_summary = {data_type: dt_array[0] - dt_array[1]
+                           for data_type, dt_array in type_counters.items()}
         return counter_summary
+
 
 class TooManyVariables(Exception):
     pass
