@@ -3,7 +3,6 @@ class FunctionDirectory:
     def __init__(self):
         self.table = {}
 
-    # TODO: Add parameter to vars table of each declared function
     # TODO: Add checking for already declared function and not declared header, using has_been_implented flag
 #    class_name	-> #global 		    -> vars_table
         # 		-> function_name 	-> vars_table
