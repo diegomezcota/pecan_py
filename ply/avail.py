@@ -24,11 +24,31 @@ class Avail:
             self.table['temps'][type][0] += 1
             return temp_tuple
 
+    def get_new_global(self, type):
+        if self.table['globals'][type][0] == self.table['globals'][type][2]:
+            raise TooManyVariables()
+        else:
+            global_address = self.table['globals'][type][0]
+            self.table['globals'][type][0] += 1
+            return global_address
+
     def reset_local_counters(self):
+        # Reset local counters
         self.table['locals']['int'][0] = self.table['locals']['int'][1]
         self.table['locals']['float'][0] = self.table['locals']['float'][1]
         self.table['locals']['bool'][0] = self.table['locals']['bool'][1]
         self.table['locals']['string'][0] = self.table['locals']['string'][1]
+        # Reset temporal local counters
+        self.table['temps']['int'][0] = self.table['temps']['int'][1]
+        self.table['temps']['float'][0] = self.table['temps']['float'][1]
+        self.table['temps']['bool'][0] = self.table['temps']['bool'][1]
+        self.table['temps']['string'][0] = self.table['temps']['string'][1]
+
+    def get_counter_summary(self, block):
+        type_counters = self.table[block]
+        counter_summary = {data_type: dt_array[0] - dt_array[1]
+                           for data_type, dt_array in type_counters.items()}
+        return counter_summary
 
 
 class TooManyVariables(Exception):
