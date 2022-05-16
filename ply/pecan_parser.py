@@ -7,7 +7,7 @@ from lexer import tokens
 
 import json
 
-# TODO: Hacer cuadruplos de las llamadas funciones 
+# TODO: Hacer cuadruplos de las llamadas funciones
 # TODO: checar existencia de funciones
 # TODO: Usar direcciones para todo
 # TODO: Resolver discrepancia entre que los cuadruplos que usen variables temporales, a veces usamos tupla y en otras veces no
@@ -30,8 +30,9 @@ current_var_type = None
 current_var_data_type = None
 
 # For function calls
-function_param_counter = None 
+function_param_counter = None
 current_function_call_name = None
+
 
 def p_program(p):
     '''
@@ -512,6 +513,7 @@ def p_parameter1(p):
     else:
         p[0] = []
 
+
 def p_np_add_parameters_to_var_table(p):
     '''
     np_add_parameters_to_var_table : epsilon
@@ -527,8 +529,11 @@ def p_np_add_parameters_to_var_table(p):
             # pedimos memoria local
             param_address = avail.get_new_address(parameter_dt, 'locals')
             # Agregar variable a var table y agregar la firma de parametros
-            function_directory.add_variable(current_general_scope, current_internal_scope, parameter_name, 'var', parameter_dt, param_address)
-            function_directory.add_to_param_signature(current_general_scope, current_internal_scope, parameter_dt)
+            function_directory.add_variable(
+                current_general_scope, current_internal_scope, parameter_name, 'var', parameter_dt, param_address)
+            function_directory.add_to_param_signature(
+                current_general_scope, current_internal_scope, parameter_dt)
+
 
 def p_conditional(p):
     '''
@@ -589,6 +594,7 @@ def p_cycle_for(p):
     cycle_for  : OPEN_KEY statement_loop CLOSE_KEY np_for_4
     '''
     pass
+
 
 def p_np_for_1(p):
     '''
@@ -790,12 +796,22 @@ def p_function_call(p):
     '''
     function_call : ID function_call1 OPEN_PARENTHESIS np_start_function_param_counter function_call2 CLOSE_PARENTHESIS
     '''
-    param_signature_length = function_directory.get_param_signature_length('#global', current_function_call_name)
+    param_signature_length = function_directory.get_param_signature_length(
+        '#global', current_function_call_name)
     if param_signature_length != function_param_counter:
         raise ParamLengthMismatch()
     else:
-        function_start_quad = function_directory.get_function_start_quad('#global', current_function_call_name)
-        quads.generate_quad('GOSUB', current_function_call_name, None, function_start_quad)
+        function_start_quad = function_directory.get_function_start_quad(
+            '#global', current_function_call_name)
+        quads.generate_quad(
+            'GOSUB', current_function_call_name, None, function_start_quad)
+        function_return_type = function_directory.get_function_type(
+            '#global', current_function_call_name)
+        if function_return_type != 'void':
+            function_var_address = function_directory.get_function_virtual_address(
+                '#global', '#global', current_function_call_name)
+            p[0] = (function_var_address, function_return_type)
+
 
 def p_function_call1(p):
     '''
@@ -803,6 +819,7 @@ def p_function_call1(p):
                     | np_validate_function_existance_and_era
     '''
     ...
+
 
 def p_np_validate_function_existence_and_era(p):
     '''
@@ -815,7 +832,8 @@ def p_np_validate_function_existence_and_era(p):
         raise FunctionNotDeclared()
     else:
         quads.generate_quad('ERA', None, None, current_function_call_name)
-        
+
+
 def p_np_start_function_param_counter(p):
     '''
     np_start_function_param_counter : epsilon
@@ -823,12 +841,14 @@ def p_np_start_function_param_counter(p):
     global function_param_counter
     function_param_counter = 0
 
+
 def p_function_call2(p):
     '''
     function_call2 : function_hyper_exp_loop
                     | epsilon
     '''
     pass
+
 
 def p_function_hyper_exp_loop(p):
     '''
@@ -845,18 +865,22 @@ def p_function_hyper_exp_loop1(p):
     '''
     pass
 
+
 def p_np_check_param_match(p):
     '''
     np_check_param_match : epsilon
     '''
     global function_param_counter
     param_address, param_type = operand_stack.pop()
-    nth_signature_type = function_directory.get_nth_param_type('#global', current_function_call_name, function_param_counter)
+    nth_signature_type = function_directory.get_nth_param_type(
+        '#global', current_function_call_name, function_param_counter)
     if nth_signature_type != param_type:
         raise ParamTypeMismatch()
     else:
-        quads.generate_quad('PARAM', param_address, None, function_param_counter)
+        quads.generate_quad('PARAM', param_address,
+                            None, function_param_counter)
         function_param_counter += 1
+
 
 def p_class_function(p):
     '''
@@ -874,27 +898,34 @@ def p_function_declaration(p):
     current_internal_scope = '#global'
     avail.reset_local_counters()
 
+
 def p_np_generate_variable_workspace(p):
     '''
     np_generate_variable_workspace : epsilon
     '''
-    function_directory.generate_variable_workspace(current_general_scope, current_internal_scope)
-    
+    function_directory.generate_variable_workspace(
+        current_general_scope, current_internal_scope)
+
+
 def p_np_add_function_start_quad(p):
     '''
     np_add_function_start_quad : epsilon
     '''
-    function_directory.set_start_quad(current_general_scope, current_internal_scope, quads.counter)
-    
+    function_directory.set_start_quad(
+        current_general_scope, current_internal_scope, quads.counter)
+
+
 def p_np_end_function(p):
     '''
     np_end_function : epsilon
     '''
-    function_directory.delete_vars_table(current_general_scope, current_internal_scope)
+    function_directory.delete_vars_table(
+        current_general_scope, current_internal_scope)
     quads.generate_quad('ENDFUNC', None, None, None)
     temps_workspace = avail.get_counter_summary('temps')
-    function_directory.set_temps_workspace(current_general_scope, current_internal_scope, temps_workspace)
-    
+    function_directory.set_temps_workspace(
+        current_general_scope, current_internal_scope, temps_workspace)
+
 
 def p_np_add_function_internal_scope(p):
     '''
@@ -919,15 +950,18 @@ def p_function_return(p):
     function_return : RETURN hyper_exp SEMICOLON
                     | RETURN SEMICOLON
     '''
-    function_return_type = function_directory.table[current_general_scope][current_internal_scope]['function_type']
+    function_return_type = function_directory.table[
+        current_general_scope][current_internal_scope]['function_type']
     if len(p) == 4:
         return_exp_address, return_exp_type = operand_stack.pop()
         if return_exp_type != function_return_type:
             raise FunctionReturnError()
         else:
             function_address = avail.get_new_global(function_return_type)
-            function_directory.add_variable('#global', '#global', current_internal_scope, 'var', function_return_type, function_address)
-            quads.generate_quad('=', return_exp_address, None, function_address)
+            function_directory.add_variable(
+                '#global', '#global', current_internal_scope, 'var', function_return_type, function_address)
+            quads.generate_quad('=', return_exp_address,
+                                None, function_address)
     else:
         if function_return_type != 'void':
             raise FunctionReturnError()
@@ -953,20 +987,26 @@ class SyntaxError(Exception):
 class TypeMismatchError(Exception):
     pass
 
+
 class FunctionReturnError(Exception):
     ...
+
 
 class VariableNotDefined(Exception):
     pass
 
+
 class FunctionNotDeclared(Exception):
     ...
+
 
 class ParamTypeMismatch(Exception):
     ...
 
+
 class ParamLengthMismatch(Exception):
     ...
+
 
 def p_error(p):
     print('syntax error', p)
