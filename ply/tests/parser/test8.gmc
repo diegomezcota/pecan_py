@@ -1,0 +1,10 @@
+program a;
+
+function tres() returns float {
+    return 3.0;
+}
+
+main() {
+    var float a;
+    a = tres() + tres();
+}

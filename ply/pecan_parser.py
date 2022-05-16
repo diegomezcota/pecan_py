@@ -828,8 +828,8 @@ def p_function_call(p):
         if function_return_type != 'void':
             function_var_address = function_directory.get_function_virtual_address(
                 '#global', '#global', current_function_call_name)
-            p[0] = (function_var_address, function_return_type)
             new_temp_address, _ = avail.get_new_temp(function_return_type)
+            p[0] = (new_temp_address, function_return_type)
             quads.generate_quad('=', function_var_address,
                                 None, new_temp_address)
 
