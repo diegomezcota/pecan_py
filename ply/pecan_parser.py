@@ -7,7 +7,6 @@ import ply.yacc as yacc
 from lexer import tokens
 
 import json
-# TODO: Arreglar for loop cuadruplo repetido
 
 function_directory = None
 avail = None
@@ -30,13 +29,11 @@ function_param_counter = None
 current_function_call_name = None
 
 
-# TODO: Checar error de mandar insuficiente numero de parametros
-
 def p_program(p):
     '''
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
-    #print(json.dumps(function_directory.table, indent=2))
+    # print(json.dumps(function_directory.table, indent=2))
     print(*quads.list, sep='\n')
     pass
 
@@ -152,7 +149,8 @@ def p_variable(p):
             'var_virtual_address'], variable_map['var_data_type']
         p[0] = (variable_address, variable_data_type)
     else:
-        raise VariableNotDefined("Variable " + p[1] + " not defined in line " + str(p.lineno(1)))
+        raise VariableNotDefined(
+            "Variable " + p[1] + " not defined in line " + str(p.lineno(1)))
 
 
 def p_variable1(p):
@@ -314,7 +312,7 @@ def p_statement(p):
 
 def p_assignment(p):
     '''
-    assignment  : variable ASSIGN hyper_exp SEMICOLON
+    assignment  : variable np_variable_assignment ASSIGN hyper_exp SEMICOLON
     '''
     var_value, var_type = p[1]
     exp_value, exp_type = operand_stack.pop()
@@ -324,6 +322,16 @@ def p_assignment(p):
     else:
         error_msg = "Impossible assignment between " + var_type + " and " + exp_type
         raise TypeMismatchError(error_msg + " in line " + str(p.lineno(3)))
+
+
+def p_np_variable_assignment(p):
+    '''
+    np_variable_assignment : epsilon
+    '''
+    var_address, _ = p[-1]
+    if var_address in control_variable_stack:
+        raise Exception(
+            "Changing the control variable inside a for loop is invalid in line " + str(p.lineno(1)))
 
 
 def p_np_add_operator(p):
@@ -438,8 +446,10 @@ def add_exp_quad(operator_list, program_line_no='indefinite_line'):
             quads.generate_quad(operator, lo_value, ro_value, temp_address)
             operand_stack.append((temp_address, temp_type))
         else:
-            error_msg = "Invalid operator " + operator + " between " + lo_type + " type and " + ro_type + " type"  
-            raise TypeMismatchError(error_msg +  " in line " + str(program_line_no))
+            error_msg = "Invalid operator " + operator + " between " + \
+                lo_type + " type and " + ro_type + " type"
+            raise TypeMismatchError(
+                error_msg + " in line " + str(program_line_no))
 
 
 def p_factor(p):
@@ -545,7 +555,8 @@ def p_np_add_parameters_to_var_table(p):
         parameter_dt, parameter_name = parameter
         # Checar si el parametro ya existe
         if function_directory.has_variable(current_general_scope, current_internal_scope, parameter_name):
-            raise ParamAlreadyDeclared("Parameter '" + parameter_name + "' already declared in line " + str(p.lineno(1)))
+            raise ParamAlreadyDeclared(
+                "Parameter '" + parameter_name + "' already declared in line " + str(p.lineno(1)))
         else:
             # pedimos memoria local
             param_address = avail.get_new_address(parameter_dt, 'locals')
@@ -577,7 +588,8 @@ def p_np_if_1(p):
     '''
     res_address, res_type = operand_stack.pop()
     if res_type != 'bool':
-        raise TypeMismatchError("Boolean expression expected and received " + res_type + " in line " + str(p.lineno(1)))
+        raise TypeMismatchError(
+            "Boolean expression expected and received " + res_type + " in line " + str(p.lineno(1)))
     else:
         quads.generate_quad('GOTOF', res_address, None, None)
         jump_stack.append(quads.counter - 1)
@@ -621,15 +633,33 @@ def p_np_for_1(p):
     '''
     np_for_1 : epsilon
     '''
+    var_address = None
+    var_data_type = None
     # Check existence for variable
     if not (function_directory.has_variable(current_general_scope, current_internal_scope, p[-1])):
         if not (function_directory.has_variable(current_general_scope, '#global', p[-1])):
-            raise VariableNotDefined("Variable " + p[-1] + " not defined in line " + str(p.lineno(1)))
-        # else get variable address
-    # TODO: Hacer el query para la direccion de memoria de la variable ya que solo tomamos el id
-    var_address = p[-1]
-    # TODO: Checar que el var_type de p[-1] sea int
-    operand_stack.append((var_address, 'int'))
+            raise VariableNotDefined(
+                "Variable " + p[-1] + " not defined in line " + str(p.lineno(1)))
+        else:
+            var_address = function_directory.get_variable_virtual_address(
+                current_general_scope, '#global', p[-1])
+            var_data_type = function_directory.get_variable_data_type(
+                current_general_scope, '#global', p[-1])
+    else:
+        var_address = function_directory.get_variable_virtual_address(
+            current_general_scope, current_internal_scope, p[-1])
+        var_data_type = function_directory.get_variable_data_type(
+            current_general_scope, current_internal_scope, p[-1])
+
+    # Checar que el var_type de p[-1] sea int
+    if var_data_type != 'int':
+        raise Exception('Control variable ' +
+                        p[-1] + ' should be of type int in line ' + str(p.lineno(1)))
+    if var_address in control_variable_stack:
+        raise Exception(
+            "Changing the control variable " + p[-1] + " inside a for loop is invalid in line " + str(p.lineno(1)))
+    else:
+        operand_stack.append((var_address, 'int'))
 
 
 def p_np_for_2(p):
@@ -638,16 +668,18 @@ def p_np_for_2(p):
     '''
     exp_address, exp_type = operand_stack.pop()
     if exp_type != 'int':
-        raise TypeMismatchError("Expected int value but received " + exp_type + " in line " + str(p.lineno(1)))
+        raise TypeMismatchError(
+            "Expected int value but received " + exp_type + " in line " + str(p.lineno(1)))
     else:
-        control_var_address, control_var_type = operand_stack[-1] # TODO: Hacer el checkeo en control stack
-        control_variable_stack.append((control_var_address, control_var_type))
+        control_var_address, control_var_type = operand_stack[-1]
+        control_variable_stack.append(control_var_address)
         result_type = semantic_cube.is_type_match(
             control_var_type, exp_type, '=')
         if result_type:
             quads.generate_quad('=', exp_address, None, control_var_address)
         else:
-            error_msg = "No possible assignment between " + control_var_type + " and " + result_type
+            error_msg = "No possible assignment between " + \
+                control_var_type + " and " + result_type
             raise TypeMismatchError(error_msg + " in line " + str(p.lineno(1)))
 
 
@@ -657,14 +689,15 @@ def p_np_for_3(p):
     '''
     exp_address, exp_type = operand_stack.pop()
     if exp_type != 'int':
-        raise TypeMismatchError("Expected int type but received " + exp_type + " in line " + str(p.lineno(1)))
+        raise TypeMismatchError(
+            "Expected int type but received " + exp_type + " in line " + str(p.lineno(1)))
     else:
         variable_final_address, _ = avail.get_new_temp('int')
         quads.generate_quad('=', exp_address, None, variable_final_address)
-        new_temp_address, new_temp_type = avail.get_new_temp('bool')
-        control_variable_address, _ = control_variable_stack[-1]
+        new_temp_address, _ = avail.get_new_temp('bool')
+        control_variable_address = control_variable_stack[-1]
         quads.generate_quad('<', control_variable_address,
-                            variable_final_address, (new_temp_address, new_temp_type)) # TODO: Cambiar a que solo se guarde la direccion en el temporal
+                            variable_final_address, new_temp_address)
         jump_stack.append(quads.counter - 1)
         quads.generate_quad('GOTOF', new_temp_address, None, None)
         jump_stack.append(quads.counter - 1)
@@ -674,7 +707,7 @@ def p_np_for_4(p):
     '''
     np_for_4 : epsilon
     '''
-    control_variable_address, _ = control_variable_stack.pop()
+    control_variable_address = control_variable_stack.pop()
     temp_address, _ = avail.get_new_temp('int')
     one_constant_address = constants.get_constant_address('int', '1')
     quads.generate_quad('+', control_variable_address,
@@ -708,7 +741,8 @@ def p_np_while_2(p):
     '''
     res_address, res_type = operand_stack.pop()
     if res_type != 'bool':
-        raise TypeMismatchError("Expected bool type but received " + res_type + " in line " + str(p.lineno(1)))
+        raise TypeMismatchError(
+            "Expected bool type but received " + res_type + " in line " + str(p.lineno(1)))
     else:
         quads.generate_quad('GOTOF', res_address, None, None)
         jump_stack.append(quads.counter - 1)
@@ -738,7 +772,8 @@ def p_np_do_while_2(p):
     quad_id_to_return_to = jump_stack.pop()
     res_address, res_type = operand_stack.pop()
     if res_type != 'bool':
-        raise TypeMismatchError("Expected bool type but received " + res_type + " in line " + str(p.lineno(1)))
+        raise TypeMismatchError(
+            "Expected bool type but received " + res_type + " in line " + str(p.lineno(1)))
     else:
         quads.generate_quad('GOTOT', res_address, None, quad_id_to_return_to)
 
@@ -823,7 +858,9 @@ def p_function_call(p):
     param_signature_length = function_directory.get_param_signature_length(
         '#global', current_function_call_name)
     if param_signature_length != function_param_counter:
-        error_msg = "'" + current_function_call_name + "'" + " function call expected " + str(param_signature_length) + " params but received " + str(function_param_counter)
+        error_msg = "'" + current_function_call_name + "'" + " function call expected " + \
+            str(param_signature_length) + " params but received " + \
+            str(function_param_counter)
         raise ParamLengthMismatch(error_msg + " in line " + str(p.lineno(6)))
     else:
         function_start_quad = function_directory.get_function_start_quad(
@@ -904,8 +941,10 @@ def p_np_check_param_match(p):
     nth_signature_type = function_directory.get_nth_param_type(
         '#global', current_function_call_name, function_param_counter)
     if nth_signature_type != param_type:
-        error_msg = "Expected " + nth_signature_type + " type for " + str(function_param_counter + 1) + "th param "
-        error_msg += "in '" + current_function_call_name + "' function call, but received " + param_type
+        error_msg = "Expected " + nth_signature_type + " type for " + \
+            str(function_param_counter + 1) + "th param "
+        error_msg += "in '" + current_function_call_name + \
+            "' function call, but received " + param_type
         raise ParamTypeMismatch(error_msg + " in line " + str(p.lineno(1)))
     else:
         quads.generate_quad('PARAM', param_address,
@@ -986,8 +1025,10 @@ def p_function_return(p):
     if len(p) == 4:
         return_exp_address, return_exp_type = operand_stack.pop()
         if return_exp_type != function_return_type:
-            error_msg = "Expected return type to be " + function_return_type + " but received " + return_exp_type
-            raise FunctionReturnError(error_msg + " in line " + str(p.lineno(3)))
+            error_msg = "Expected return type to be " + \
+                function_return_type + " but received " + return_exp_type
+            raise FunctionReturnError(
+                error_msg + " in line " + str(p.lineno(3)))
         else:
             # TODO: Para apoyar a la recursion, pedir la direccion de esta funcion al inicio de la declaracion,
             # creo que no cambia nada el pedirla aqui, solo habria que hacer la query por la function address en este punto
@@ -999,7 +1040,8 @@ def p_function_return(p):
     else:
         if function_return_type != 'void':
             error_msg = "Not returning the expected " + function_return_type
-            raise FunctionReturnError(error_msg + " in line " + str(p.lineno(2)))
+            raise FunctionReturnError(
+                error_msg + " in line " + str(p.lineno(2)))
 
 
 def p_function_statement_loop(p):
@@ -1021,6 +1063,7 @@ class SyntaxError(Exception):
 
 class TypeMismatchError(Exception):
     ...
+
 
 class FunctionReturnError(Exception):
     ...
@@ -1047,7 +1090,8 @@ class ParamAlreadyDeclared(Exception):
 
 
 def p_error(p):
-    error_msg = 'syntax error in line ' + str(p.lineno) + ' when parsing ' +  str(p)
+    error_msg = 'syntax error in line ' + \
+        str(p.lineno) + ' when parsing ' + str(p)
     raise SyntaxError(error_msg)
 
 

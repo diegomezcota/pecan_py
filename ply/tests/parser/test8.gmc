@@ -1,10 +1,11 @@
 program a;
 
-function a(float a) returns int {
-    return 1;
-}
-
 main() {
     var int i;
-    a();
+    var string j;
+    i = 5;
+    for j = 3*10 to 33 {
+        write("hola");
+    }
+    write(i+3);
 }
