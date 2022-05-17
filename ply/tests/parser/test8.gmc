@@ -1,10 +1,10 @@
 program a;
 
-function tres() returns float {
-    return 3.0;
+function a(float a) returns int {
+    return 1;
 }
 
 main() {
-    var float a;
-    a = tres() + tres();
+    var int i;
+    a();
 }

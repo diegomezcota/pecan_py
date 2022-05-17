@@ -13,13 +13,13 @@ class FunctionDirectory:
         # 		-> main		        -> vars_table
     def add_general_scope(self, name):
         if name in self.table.keys():
-            raise GeneralScopeAlreadyDeclared()
+            raise GeneralScopeAlreadyDeclared("General scope of " + name + " has already been declared.")
         else:
             self.table[name] = {}
 
     def add_internal_scope(self, general_name, name):
         if name in self.table[general_name].keys():
-            raise FunctionAlreadyDeclared()
+            raise FunctionAlreadyDeclared("Function '" + name + "' has already been declared")
         else:
             self.table[general_name][name] = {
                 "vars_table": {},
@@ -31,7 +31,8 @@ class FunctionDirectory:
         # Raise error if n is bigger than array size
         param_signature_arr = self.table[general_name][internal_name]['param_signature']
         if n >= len(param_signature_arr):
-            raise FunctionParamLengthMismatch()
+            error_msg = "Sending too many parameters for function '" + internal_name + "' when " + str(len(param_signature_arr)) + " are expected."
+            raise FunctionParamLengthMismatch(error_msg)
         else:
             return param_signature_arr[n]
 
@@ -58,7 +59,7 @@ class FunctionDirectory:
 
     def add_variable(self, general_name, internal_name, var_name, var_type, var_data_type, var_virtual_address):
         if var_name in self.table[general_name][internal_name]['vars_table'].keys():
-            raise VariableAlreadyDeclared()
+            raise VariableAlreadyDeclared("Variable named " + var_name + " has already been declared in the same scope.")
         else:
             self.table[general_name][internal_name]['vars_table'][var_name] = {
                 'var_type': var_type,
