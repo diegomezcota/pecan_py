@@ -2,9 +2,10 @@ program a;
 
 main() {
     var int i;
+    var string j;
     i = 5;
-    for i = 3*10 to 33 {
-        i = i * 1;
+    for j = 3*10 to 33 {
+        write("hola");
     }
     write(i+3);
 }

@@ -7,7 +7,6 @@ import ply.yacc as yacc
 from lexer import tokens
 
 import json
-# TODO: Arreglar for loop cuadruplo repetido
 
 function_directory = None
 avail = None
@@ -30,13 +29,11 @@ function_param_counter = None
 current_function_call_name = None
 
 
-# TODO: Checar error de mandar insuficiente numero de parametros
-
 def p_program(p):
     '''
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
-    #print(json.dumps(function_directory.table, indent=2))
+    # print(json.dumps(function_directory.table, indent=2))
     print(*quads.list, sep='\n')
     pass
 
@@ -331,9 +328,10 @@ def p_np_variable_assignment(p):
     '''
     np_variable_assignment : epsilon
     '''
-    if p[-1] in control_variable_stack:
-        raise Exception("Changing the control variable " +
-                        p[-1] + " inside a for loop is invalid")
+    var_address, _ = p[-1]
+    if var_address in control_variable_stack:
+        raise Exception(
+            "Changing the control variable inside a for loop is invalid in line " + str(p.lineno(1)))
 
 
 def p_np_add_operator(p):
@@ -635,16 +633,33 @@ def p_np_for_1(p):
     '''
     np_for_1 : epsilon
     '''
+    var_address = None
+    var_data_type = None
     # Check existence for variable
     if not (function_directory.has_variable(current_general_scope, current_internal_scope, p[-1])):
         if not (function_directory.has_variable(current_general_scope, '#global', p[-1])):
             raise VariableNotDefined(
                 "Variable " + p[-1] + " not defined in line " + str(p.lineno(1)))
-        # else get variable address
-    # TODO: Hacer el query para la direccion de memoria de la variable ya que solo tomamos el id
-    var_address = p[-1]
-    # TODO: Checar que el var_type de p[-1] sea int
-    operand_stack.append((var_address, 'int'))
+        else:
+            var_address = function_directory.get_variable_virtual_address(
+                current_general_scope, '#global', p[-1])
+            var_data_type = function_directory.get_variable_data_type(
+                current_general_scope, '#global', p[-1])
+    else:
+        var_address = function_directory.get_variable_virtual_address(
+            current_general_scope, current_internal_scope, p[-1])
+        var_data_type = function_directory.get_variable_data_type(
+            current_general_scope, current_internal_scope, p[-1])
+
+    # Checar que el var_type de p[-1] sea int
+    if var_data_type != 'int':
+        raise Exception('Control variable ' +
+                        p[-1] + ' should be of type int in line ' + str(p.lineno(1)))
+    if var_address in control_variable_stack:
+        raise Exception(
+            "Changing the control variable " + p[-1] + " inside a for loop is invalid in line " + str(p.lineno(1)))
+    else:
+        operand_stack.append((var_address, 'int'))
 
 
 def p_np_for_2(p):
@@ -656,9 +671,8 @@ def p_np_for_2(p):
         raise TypeMismatchError(
             "Expected int value but received " + exp_type + " in line " + str(p.lineno(1)))
     else:
-        # TODO: Hacer el checkeo en control stack
         control_var_address, control_var_type = operand_stack[-1]
-        control_variable_stack.append((control_var_address, control_var_type))
+        control_variable_stack.append(control_var_address)
         result_type = semantic_cube.is_type_match(
             control_var_type, exp_type, '=')
         if result_type:
@@ -680,10 +694,10 @@ def p_np_for_3(p):
     else:
         variable_final_address, _ = avail.get_new_temp('int')
         quads.generate_quad('=', exp_address, None, variable_final_address)
-        new_temp_address, new_temp_type = avail.get_new_temp('bool')
-        control_variable_address, _ = control_variable_stack[-1]
+        new_temp_address, _ = avail.get_new_temp('bool')
+        control_variable_address = control_variable_stack[-1]
         quads.generate_quad('<', control_variable_address,
-                            variable_final_address, (new_temp_address, new_temp_type))  # TODO: Cambiar a que solo se guarde la direccion en el temporal
+                            variable_final_address, new_temp_address)
         jump_stack.append(quads.counter - 1)
         quads.generate_quad('GOTOF', new_temp_address, None, None)
         jump_stack.append(quads.counter - 1)
@@ -693,7 +707,7 @@ def p_np_for_4(p):
     '''
     np_for_4 : epsilon
     '''
-    control_variable_address, _ = control_variable_stack.pop()
+    control_variable_address = control_variable_stack.pop()
     temp_address, _ = avail.get_new_temp('int')
     one_constant_address = constants.get_constant_address('int', '1')
     quads.generate_quad('+', control_variable_address,
