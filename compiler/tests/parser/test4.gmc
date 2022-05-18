@@ -1,0 +1,19 @@
+// Test 4: Dedicado a usar todas las estructuras de flujo de control
+program flujos_de_control;
+
+main() {
+    var string hola;
+    if (a > b && c) {
+        b = 10 || c;
+        write(a, b, 3 * 10);
+        read(x, y, z);
+    } else {
+        a = 2.456 * c + 45;
+        write(10 * a * bxascsa);
+        read(x, y, z);
+    }
+
+    if (1 + 3 + 5 * 10 && c) {
+        hola = "que paso";
+    }
+}

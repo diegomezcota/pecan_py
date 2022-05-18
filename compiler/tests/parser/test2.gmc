@@ -1,0 +1,44 @@
+// Test 2: probando declaraciones (variables, clases, funciones)
+program hello_pecan_py;
+
+var int a;
+var float b;
+var string my_string;
+var bool is_seattle;
+
+group arr = float[10];
+
+obj person = Persona();
+obj person = Persona(3 * i, 10 + 1.0, nombre);
+
+class Student is Person {
+    var string nombre;
+    function saludar(var string saludo) returns string;
+    function estudiar() returns void;
+};
+
+constructor Student(var string matricula) {
+    nombre = "Diego";
+    read(apellido, calificacion);
+}
+
+// class function with return statement
+@class Student function estudiar() returns int {
+    read(a, b, c);
+    return 3;
+}
+
+// class function with no return statement
+@class Student function pedir_revision(var float calificacion) returns void {
+    write("Me saque muy mala calificacion de:", calificacion);
+}
+
+function create(obj Figura rectangulo) returns string {
+    return "creado";
+}
+
+main() {
+    obj student =  Student("A00824758");
+    write("Hello, Pecan Py!");
+    student.estudiar();
+}

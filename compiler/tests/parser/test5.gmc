@@ -1,0 +1,34 @@
+// Test 5: dedicado a usar llamadas a funciones (read, write, funciones definidas o de clase)
+program test5;
+
+function sayHi(var string text) returns void {
+    var int times;
+    write(text);
+}
+
+// Requisito para la clase es que tenga atributos y funciones
+class Saludador {
+    var float a;
+    function run(var string text, var int times) returns void;
+};
+
+constructor Saludador() {
+    a = b;
+}
+
+@class Saludador function run(var string text, var int times) returns void {
+    return a;
+}
+
+main() {
+    var int a;
+    var float b;
+    var string c;
+    obj saludador = Saludador();
+
+    read(a, b, c);
+    write(6 * 14.3 + a || c, c, b);
+
+    sayHi("Como estan todos?");
+    saludador.run("Hola", 4); 
+}

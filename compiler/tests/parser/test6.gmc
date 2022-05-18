@@ -1,0 +1,57 @@
+// Testeo de la presencia de parameters y hyper exp loops (clases, funciones)
+program test6;
+
+class Animal {
+    var string name;
+    var string color;
+    var bool isOviparo;
+    var int speed_limit;
+    function makeSound() returns void; // sin parámetros
+    function run(var int speed) returns bool; // con parámetros
+};
+
+// sin parámetros
+constructor Animal() {
+    name = "N/A";
+    color = "N/A";
+    isOviparo = "N/A";
+    speed_limit = 10;
+}
+
+@class Animal function makeSound() returns void {
+    write("Grrrrr");
+}
+
+@class Animal function run(var int s) returns bool {
+    return s > speed_limit;
+}
+
+// function con parametros
+function makeCalculations(var float factor) returns float {
+    currentResult = 0;
+    currentResult = currentResult + 104 * 100 - 4 / 2.0;
+    if (currentResult > 4) {
+        currentResult = 10.13;
+    } else {
+        currentResult = 15;
+    }
+    return factor * currentResult;
+}
+
+// function sin parametros
+function writeVariables() returns void {
+    var string a;
+    group my_list = string[5];
+    obj perro = Animal();
+    write("Mis variables son:", a, b, c);
+}
+
+main() {
+    obj nala = Animal();
+    // llamar metodos con y sin parametros
+    nala.makeSound();
+    nala.run(100 / 14 + 10);
+    // lamar funciones con y sin parametros
+    makeCalculations(3);
+    writeVariables();
+}

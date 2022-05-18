@@ -1,0 +1,22 @@
+// test7: Tests Temporales
+program test;
+
+var int i;
+
+function a(int a) returns float {
+    a = a + 3;
+    return 3.14 * 2 + 3;
+}
+
+main() {
+    var bool isShori;
+    var float pelos; 
+    var float pelos2;
+    write("hola");
+    a(1 + 3);
+    //isShori = "tripsi";
+    pelos = a(true);
+    pelos = 3.14;
+    pelos2 = 7.9808;
+
+}
