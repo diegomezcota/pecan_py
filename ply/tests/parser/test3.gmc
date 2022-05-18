@@ -1,9 +1,0 @@
-// Test 3: Dedicado a usar todos los tipos de hyper_exp
-program p3;
-
-main() {
-    var int a;
-    var float b;
-    a = 3 * 4 + 5 > 10 && 8 == 7;
-    b = 5.1235 + 10 - a * (1 + 2 + 3);
-}
