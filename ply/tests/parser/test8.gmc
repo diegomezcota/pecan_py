@@ -1,11 +1,10 @@
 program a;
 
+var int i;
+
 main() {
-    var int i;
-    var string j;
+    var int j;
     i = 5;
-    for j = 3*10 to 33 {
-        write("hola");
-    }
+    j = 10;
     write(i+3);
 }

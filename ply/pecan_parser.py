@@ -58,6 +58,9 @@ def p_np_add_main_internal_scope(p):
     function_directory.set_function_type(
         current_general_scope, current_internal_scope, 'void')
 
+    # Llenar el numero de cuadruplo de inicio de la funcion main al primer cuadruplo
+    quads.fill_quad(0, 3, quads.counter)
+
 
 def p_np_start_state(p):
     '''
@@ -82,6 +85,9 @@ def p_np_start_state(p):
     # Agregar constante 1 para funcionalidad for
     one_constant_address = avail.get_new_address('int', 'constants')
     constants.add_constant('int', one_constant_address, '1')
+
+    # Primer cuadruplo para empezar en el main
+    quads.generate_quad('GOTOMAIN', None, None, None)
 
 
 def p_np_start_func_dir(p):
