@@ -1,0 +1,118 @@
+{
+  "function_directory": {
+    "#global": {
+      "#global": {
+        "vars_table": {},
+        "param_signature": [],
+        "workspace": {},
+        "function_type": "void"
+      },
+      "main": {
+        "vars_table": {},
+        "param_signature": [],
+        "workspace": {
+          "variables_workspace": {
+            "int": 2,
+            "float": 0,
+            "string": 0,
+            "bool": 0
+          },
+          "temps_workspace": {
+            "int": 4,
+            "float": 0,
+            "bool": 1,
+            "string": 0
+          }
+        },
+        "function_type": "void",
+        "start_quad": 0
+      }
+    }
+  },
+  "quads": [
+    [
+      "=",
+      24001,
+      null,
+      8000
+    ],
+    [
+      "*",
+      24002,
+      24003,
+      16000
+    ],
+    [
+      "=",
+      16000,
+      null,
+      8001
+    ],
+    [
+      "=",
+      24004,
+      null,
+      16001
+    ],
+    [
+      "<",
+      8001,
+      16001,
+      20000
+    ],
+    [
+      "GOTOF",
+      20000,
+      null,
+      11
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      30000
+    ],
+    [
+      "+",
+      8001,
+      24000,
+      16002
+    ],
+    [
+      "=",
+      16002,
+      null,
+      8001
+    ],
+    [
+      "=",
+      16002,
+      null,
+      8001
+    ],
+    [
+      "GOTO",
+      null,
+      null,
+      4
+    ],
+    [
+      "+",
+      8000,
+      24002,
+      16003
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      16003
+    ],
+    [
+      "ENDFUNC",
+      null,
+      null,
+      null
+    ]
+  ]
+}

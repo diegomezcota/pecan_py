@@ -33,9 +33,10 @@ def p_program(p):
     '''
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
-    # print(json.dumps(function_directory.table, indent=2))
     print(*quads.list, sep='\n')
-    pass
+    obj = { "function_directory" : function_directory.table, "quads" : quads.list }
+    with open('../ovejota.json', "w") as output_file:
+        json.dump(obj, output_file, indent=2)
 
 
 def p_main_function(p):

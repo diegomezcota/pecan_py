@@ -3,6 +3,7 @@ program a;
 var int i;
 
 main() {
+    var int i;
     var int j;
     i = 5;
     j = 10;
