@@ -2,7 +2,13 @@
   "function_directory": {
     "#global": {
       "#global": {
-        "vars_table": {},
+        "vars_table": {
+          "i": {
+            "var_type": "var",
+            "var_data_type": "int",
+            "var_virtual_address": 0
+          }
+        },
         "param_signature": [],
         "workspace": {},
         "function_type": "void"
@@ -18,18 +24,24 @@
             "bool": 0
           },
           "temps_workspace": {
-            "int": 4,
+            "int": 1,
             "float": 0,
-            "bool": 1,
+            "bool": 0,
             "string": 0
           }
         },
         "function_type": "void",
-        "start_quad": 0
+        "start_quad": 1
       }
     }
   },
   "quads": [
+    [
+      "GOTOMAIN",
+      null,
+      null,
+      1
+    ],
     [
       "=",
       24001,
@@ -37,76 +49,22 @@
       8000
     ],
     [
-      "*",
+      "=",
       24002,
-      24003,
-      16000
-    ],
-    [
-      "=",
-      16000,
       null,
       8001
-    ],
-    [
-      "=",
-      24004,
-      null,
-      16001
-    ],
-    [
-      "<",
-      8001,
-      16001,
-      20000
-    ],
-    [
-      "GOTOF",
-      20000,
-      null,
-      11
-    ],
-    [
-      "WRITE",
-      null,
-      null,
-      30000
-    ],
-    [
-      "+",
-      8001,
-      24000,
-      16002
-    ],
-    [
-      "=",
-      16002,
-      null,
-      8001
-    ],
-    [
-      "=",
-      16002,
-      null,
-      8001
-    ],
-    [
-      "GOTO",
-      null,
-      null,
-      4
     ],
     [
       "+",
       8000,
-      24002,
-      16003
+      24003,
+      16000
     ],
     [
       "WRITE",
       null,
       null,
-      16003
+      16000
     ],
     [
       "ENDFUNC",

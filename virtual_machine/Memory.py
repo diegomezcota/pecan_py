@@ -2,11 +2,15 @@
 # TODO: Mandar tamaños por parametros
 
 class LocalMemory:
-    def __init__(self):
+    def __init__(self, vars_sizes, temps_sizes):
+
+        vars_int, vars_float, vars_bool, vars_string = vars_sizes
+
+        temps_int, temps_float, temps_bool, temps_string = temps_sizes
 
         self.table = {
-            'vars': {'int': [None] * 10, 'float': [None] * 10, 'bool': [None] * 10, 'string': [None] * 10},
-            'temps': {'int': [None] * 10, 'float': [None] * 10, 'bool': [None] * 10, 'string': [None] * 10}
+            'vars': {'int': [None] * vars_int, 'float': [None] * vars_float, 'bool': [None] * vars_bool, 'string': [None] * vars_string},
+            'temps': {'int': [None] * temps_int, 'float': [None] * temps_float, 'bool': [None] * temps_bool, 'string': [None] * temps_string}
         }
 
     def get_scope_key(self, address):
@@ -65,10 +69,12 @@ class LocalMemory:
 
 
 class GlobalMemory:
-    def __init__(self):
+    def __init__(self, vars_sizes):
+
+        vars_int, vars_float, vars_bool, vars_string = vars_sizes
 
         self.table = {
-            'vars': {'int': [None] * 10, 'float': [None] * 10, 'bool': [None] * 10, 'string': [None] * 10}
+            'vars': {'int': [None] * vars_int, 'float': [None] * vars_float, 'bool': [None] * vars_bool, 'string': [None] * vars_string}
         }
 
     def get_table_keys(self, address):
