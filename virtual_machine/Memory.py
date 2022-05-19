@@ -106,8 +106,3 @@ class GlobalMemory:
         data_type, index = self.get_table_keys(address)
 
         return self.table['vars'][data_type][index]
-
-
-gm = GlobalMemory()
-gm.set_value_in_address(2003, 3.14)
-print(gm.table)
