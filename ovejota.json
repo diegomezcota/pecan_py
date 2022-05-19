@@ -2,15 +2,16 @@
   "function_directory": {
     "#global": {
       "#global": {
-        "vars_table": {
-          "i": {
-            "var_type": "var",
-            "var_data_type": "int",
-            "var_virtual_address": 0
+        "vars_table": {},
+        "param_signature": [],
+        "workspace": {
+          "variables_workspace": {
+            "int": 1,
+            "float": 0,
+            "string": 0,
+            "bool": 0
           }
         },
-        "param_signature": [],
-        "workspace": {},
         "function_type": "void"
       },
       "main": {

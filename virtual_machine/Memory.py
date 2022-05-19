@@ -1,5 +1,4 @@
 # TODO: Mandar tabla de constantes thru ovejota
-# TODO: Mandar tamaños por parametros
 
 class LocalMemory:
     def __init__(self, vars_sizes, temps_sizes):
