@@ -11,11 +11,16 @@ class OvejotaManager:
 
         self.quads = self.ovejota['quads']
 
+        self.constants = self.ovejota['constants']
+
     def get_variable_workspace(self, general_name, internal_name):
         return self.function_directory[general_name][internal_name]['workspace']['variables_workspace']
 
     def get_temps_workspace(self, general_name, internal_name):
         return self.function_directory[general_name][internal_name]['workspace']['temps_workspace']
+
+    def get_constants_table(self):
+        return self.constants
 
 
 #om = OvejotaManager()

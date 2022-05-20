@@ -73,5 +73,11 @@
       null,
       null
     ]
-  ]
+  ],
+  "constants": {
+    "int": 4,
+    "float": 0,
+    "bool": 0,
+    "string": 0
+  }
 }

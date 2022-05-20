@@ -39,7 +39,10 @@ def p_program(p):
 
     function_directory.delete_vars_table('#global', '#global')
 
-    obj = {"function_directory": function_directory.table, "quads": quads.list}
+    constants_table = avail.get_counter_summary('constants')
+
+    obj = {"function_directory": function_directory.table,
+           "quads": quads.list, "constants": constants_table}
     with open('../ovejota.json', "w") as output_file:
         json.dump(obj, output_file, indent=2)
 

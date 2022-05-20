@@ -68,13 +68,18 @@ class LocalMemory:
 
 
 class GlobalMemory:
-    def __init__(self, vars_sizes):
+    def __init__(self, vars_sizes, consts_sizes):
 
         vars_int, vars_float, vars_bool, vars_string = vars_sizes
 
+        consts_int, consts_float, consts_bool, consts_string = consts_sizes
+
         self.table = {
-            'vars': {'int': [None] * vars_int, 'float': [None] * vars_float, 'bool': [None] * vars_bool, 'string': [None] * vars_string}
+            'vars': {'int': [None] * vars_int, 'float': [None] * vars_float, 'bool': [None] * vars_bool, 'string': [None] * vars_string},
+            'constants': {'int': [None] * consts_int, 'float': [None] * consts_float, 'bool': [None] * consts_bool, 'string': [None] * consts_string}
         }
+
+        # print(self.table)
 
     def get_table_keys(self, address):
 
