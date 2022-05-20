@@ -17,8 +17,6 @@ class LocalMemory:
             return 'locals'
         elif (address >= 16000 and address < 24000):
             return 'temps'
-        else:
-            return 'constants'
 
     def get_data_type(self, address):
         if (address >= 0 and address < 2000):
@@ -68,7 +66,7 @@ class LocalMemory:
 
 
 class GlobalMemory:
-    def __init__(self, vars_sizes, consts_sizes):
+    def __init__(self, vars_sizes, consts_sizes, consts_table):
 
         vars_int, vars_float, vars_bool, vars_string = vars_sizes
 
@@ -79,10 +77,18 @@ class GlobalMemory:
             'constants': {'int': [None] * consts_int, 'float': [None] * consts_float, 'bool': [None] * consts_bool, 'string': [None] * consts_string}
         }
 
-        # print(self.table)
+        for data_type, value_dict in consts_table.items():
+            for value, address in value_dict.items():
+                self.set_value_in_address(address, value)
 
-    def get_table_keys(self, address):
+        print(self.table)
 
+    def get_scope_key(self, address):
+        if (address >= 0 and address < 8000):
+            return 'vars'
+        return 'constants'
+
+    def get_data_type(self, address):
         data_type = None
 
         if address >= 0 and address < 2000:
@@ -97,14 +103,23 @@ class GlobalMemory:
         else:
             data_type = 'string'
             address -= 6000
-
         return (data_type, address)
+
+    def get_table_keys(self, address):
+
+        scope_key = self.get_scope_key(address)
+        if scope_key == 'vars':
+            address -= 0
+        else:
+            address -= 24000
+        data_type, index = self.get_data_type(address)
+        return (scope_key, data_type, index)
 
     def set_value_in_address(self, address, value):
 
-        data_type, index = self.get_table_keys(address)
+        table_scope, data_type, index = self.get_table_keys(address)
 
-        self.table['vars'][data_type][index] = value
+        self.table[table_scope][data_type][index] = value
 
     def get_value_from_address(self, address):
 
