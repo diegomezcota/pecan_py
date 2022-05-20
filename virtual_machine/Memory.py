@@ -1,4 +1,5 @@
 # TODO: Mandar tabla de constantes thru ovejota
+from formatter import Formatter
 
 class LocalMemory:
     def __init__(self, vars_sizes, temps_sizes):
@@ -17,6 +18,7 @@ class LocalMemory:
             return 'locals'
         elif (address >= 16000 and address < 24000):
             return 'temps'
+        return None
 
     def get_data_type(self, address):
         if (address >= 0 and address < 2000):
@@ -31,6 +33,8 @@ class LocalMemory:
     def get_table_keys(self, address):
 
         scope_key = self.get_scope_key(address)
+        if not scope_key:
+            return (None, None, None)
         table_scope = None
         data_type = None
 
@@ -49,15 +53,19 @@ class LocalMemory:
 
         table_scope, data_type, index = self.get_table_keys(address)
 
-        print(index)
+        if not table_scope:
+            return None
 
         self.table[table_scope][data_type][index] = value
 
     def get_value_from_address(self, address):
 
         table_scope, data_type, index = self.get_table_keys(address)
+        
+        if not table_scope:
+            return (None, None)
 
-        return self.table[table_scope][data_type][index]
+        return (data_type, self.table[table_scope][data_type][index])
 
 
 # gm = LocalMemory()
@@ -71,6 +79,8 @@ class GlobalMemory:
         vars_int, vars_float, vars_bool, vars_string = vars_sizes
 
         consts_int, consts_float, consts_bool, consts_string = consts_sizes
+        
+        self.fm = Formatter()
 
         self.table = {
             'vars': {'int': [None] * vars_int, 'float': [None] * vars_float, 'bool': [None] * vars_bool, 'string': [None] * vars_string},
@@ -79,9 +89,8 @@ class GlobalMemory:
 
         for data_type, value_dict in consts_table.items():
             for value, address in value_dict.items():
-                self.set_value_in_address(address, value)
-
-        print(self.table)
+                self.set_const_in_address(address, value)
+        #print(self.table)
 
     def get_scope_key(self, address):
         if (address >= 0 and address < 8000):
@@ -115,14 +124,21 @@ class GlobalMemory:
         data_type, index = self.get_data_type(address)
         return (scope_key, data_type, index)
 
+    def set_const_in_address(self, address, value):
+        # We're using our own Formatter here due to constants loading are not defined in quads
+        table_scope, data_type, index = self.get_table_keys(address)
+        value = self.fm.cast(value, data_type)
+        self.table[table_scope][data_type][index] = value
+
     def set_value_in_address(self, address, value):
 
         table_scope, data_type, index = self.get_table_keys(address)
-
         self.table[table_scope][data_type][index] = value
 
     def get_value_from_address(self, address):
 
-        data_type, index = self.get_table_keys(address)
+        table_scope, data_type, index = self.get_table_keys(address)
+        
+        value = self.table[table_scope][data_type][index]
 
-        return self.table['vars'][data_type][index]
+        return (data_type, value)
