@@ -6,10 +6,10 @@
         "param_signature": [],
         "workspace": {
           "variables_workspace": {
-            "int": 1,
+            "int": 2,
             "float": 0,
             "string": 0,
-            "bool": 0
+            "bool": 1
           }
         },
         "function_type": "void"
@@ -19,15 +19,15 @@
         "param_signature": [],
         "workspace": {
           "variables_workspace": {
-            "int": 2,
+            "int": 0,
             "float": 0,
             "string": 0,
-            "bool": 0
+            "bool": 3
           },
           "temps_workspace": {
-            "int": 1,
+            "int": 0,
             "float": 0,
-            "bool": 0,
+            "bool": 4,
             "string": 0
           }
         },
@@ -47,31 +47,61 @@
       "=",
       24001,
       null,
-      8000
+      0
     ],
     [
       "=",
       24002,
       null,
-      8001
+      1
+    ],
+    [
+      ">",
+      0,
+      1,
+      20000
     ],
     [
       "=",
-      24003,
+      20000,
       null,
-      0
+      4000
     ],
     [
-      "+",
-      8000,
-      24004,
-      16000
+      "<",
+      0,
+      1,
+      20001
     ],
     [
-      "WRITE",
+      "=",
+      20001,
       null,
+      12000
+    ],
+    [
+      "&&",
+      0,
+      1,
+      20002
+    ],
+    [
+      "=",
+      20002,
       null,
-      16000
+      12001
+    ],
+    [
+      "||",
+      28000,
+      28000,
+      20003
+    ],
+    [
+      "=",
+      20003,
+      null,
+      12002
     ],
     [
       "ENDFUNC",
@@ -81,21 +111,21 @@
     ]
   ],
   "constants_summary": {
-    "int": 5,
+    "int": 3,
     "float": 0,
-    "bool": 0,
+    "bool": 1,
     "string": 0
   },
   "constants_table": {
     "int": {
       "1": 24000,
-      "5": 24001,
-      "10": 24002,
-      "15": 24003,
-      "3": 24004
+      "3": 24001,
+      "2": 24002
     },
     "float": {},
-    "bool": {},
+    "bool": {
+      "false": 28000
+    },
     "string": {}
   }
 }

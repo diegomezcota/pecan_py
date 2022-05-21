@@ -1,12 +1,21 @@
 program a;
 
-var int k;
+var int a;
+var int b;
+var bool c;
 
 main() {
-    var int i;
-    var int j;
-    i = 5;
-    j = 10;
-    k = 15;
-    write(i+3);
+
+    var bool d;
+    var bool e;
+    var bool f;
+
+    a = 3;
+    b = 2;
+
+    c = a > b;
+    d = a < b;
+    e = a && b;
+    f = false || false;
+
 }
