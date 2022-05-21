@@ -34,7 +34,15 @@ def p_program(p):
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
     print(*quads.list, sep='\n')
-    obj = { "function_directory" : function_directory.table, "quads" : quads.list }
+
+    function_directory.generate_variable_workspace('#global', '#global')
+
+    function_directory.delete_vars_table('#global', '#global')
+
+    constants_table = avail.get_counter_summary('constants')
+
+    obj = {"function_directory": function_directory.table,
+           "quads": quads.list, "constants_summary": constants_table, "constants_table": constants.table}
     with open('../ovejota.json', "w") as output_file:
         json.dump(obj, output_file, indent=2)
 
