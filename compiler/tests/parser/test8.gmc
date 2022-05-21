@@ -1,11 +1,12 @@
 program a;
 
-var int i;
+var int k;
 
 main() {
     var int i;
     var int j;
     i = 5;
     j = 10;
+    k = 15;
     write(i+3);
 }

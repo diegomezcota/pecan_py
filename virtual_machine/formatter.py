@@ -14,6 +14,3 @@ class Formatter:
         if type == 'string':
             return value
         
-        
-fm = Formatter()
-print(fm.cast('true', 'bool'))
