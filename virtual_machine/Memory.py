@@ -10,8 +10,8 @@ class LocalMemory:
         temps_int, temps_float, temps_bool, temps_string = temps_sizes
 
         self.table = {
-            'vars': {'int': [None] * vars_int, 'float': [None] * vars_float, 'bool': [None] * vars_bool, 'string': [None] * vars_string},
-            'temps': {'int': [None] * temps_int, 'float': [None] * temps_float, 'bool': [None] * temps_bool, 'string': [None] * temps_string}
+            'vars': {'int': [0] * vars_int, 'float': [0.0] * vars_float, 'bool': [False] * vars_bool, 'string': [''] * vars_string},
+            'temps': {'int': [0] * temps_int, 'float': [0.0] * temps_float, 'bool': [False] * temps_bool, 'string': [''] * temps_string}
         }
 
     def get_scope_key(self, address):
@@ -84,8 +84,8 @@ class GlobalMemory:
         self.fm = Formatter()
 
         self.table = {
-            'vars': {'int': [None] * vars_int, 'float': [None] * vars_float, 'bool': [None] * vars_bool, 'string': [None] * vars_string},
-            'constants': {'int': [None] * consts_int, 'float': [None] * consts_float, 'bool': [None] * consts_bool, 'string': [None] * consts_string}
+            'vars': {'int': [0] * vars_int, 'float': [0.0] * vars_float, 'bool': [False] * vars_bool, 'string': [''] * vars_string},
+            'constants': {'int': [0] * consts_int, 'float': [0.0] * consts_float, 'bool': [False] * consts_bool, 'string': [''] * consts_string}
         }
 
         for data_type, value_dict in consts_table.items():
