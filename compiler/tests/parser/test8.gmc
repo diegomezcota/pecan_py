@@ -1,21 +1,23 @@
 program a;
 
-var int a;
+var float a;
 var int b;
 var bool c;
+var string d;
 
 main() {
+    var float i;
+    var int j;
+    var bool k;
+    var string l;
 
-    var bool d;
-    var bool e;
-    var bool f;
+    a = 3.14;
+    i = 5.19;
+    b = 1;
+    j = 2;
+    c = true;
+    k = false;
+    d = "hola";
+    l = "brussels";
 
-    a = 3;
-    b = 2;
-
-    c = a > b;
-    d = a < b;
-    e = a && b;
-    f = false || true && true;
-    write(c, d, e, f);
 }

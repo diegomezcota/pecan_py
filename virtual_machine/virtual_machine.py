@@ -65,6 +65,8 @@ def set_value_in_memory(address, local_memory, value):
     return local_memory
 
 
+print('--------------------START OF EXECUTION-----------------------------')
+
 while (instruction_pointer < len(quads)):
     current_quad = quads[instruction_pointer]
 
@@ -177,8 +179,59 @@ while (instruction_pointer < len(quads)):
         memory_stack[-1] = set_value_in_memory(
             current_quad[3], memory_stack[-1], or_result)
 
+    # Write execution
+    elif current_quad[0] == 'WRITE':
+        to_write_type, to_write_value = get_type_and_value(
+            memory_stack[-1], current_quad[3])
+        print(to_write_value)
+
+    # Read execution
+    elif current_quad[0] == 'READ':
+        to_save_type, to_save_value = get_type_and_value(
+            memory_stack[-1], current_quad[3])
+        to_save_value = input()
+        # print(type(to_save_value))
+        if to_save_type == 'int':
+            try:
+                to_save_value = int(to_save_value)
+                set_value_in_memory(
+                    current_quad[3],  memory_stack[-1], to_save_value)
+            except Exception as e:
+                raise Exception(
+                    'Input type mismatch, expected: ' + to_save_type)
+        elif to_save_type == 'float':
+            # If Pythono cast to int is successful, then break since it is not a PecanPy float
+            try:
+                if '.' not in to_save_value:
+                    raise Exception(
+                        'Input type mismatch, expected: ' + to_save_type)
+                to_save_value = float(to_save_value)
+                set_value_in_memory(
+                    current_quad[3],  memory_stack[-1], to_save_value)
+            except Exception as e:
+                raise Exception(e)
+
+        elif to_save_type == 'bool':
+            if to_save_value == 'true' or to_save_value == 'false':
+                to_save_value = to_save_value == 'true'
+                set_value_in_memory(
+                    current_quad[3],  memory_stack[-1], to_save_value)
+            else:
+                raise Exception(
+                    'Input type mismatch, expected: ' + to_save_type)
+
+        elif to_save_type == 'string':
+            if '"' in to_save_value:
+                raise Exception(
+                    'Input type mismatch, expected: ' + to_save_type)
+            else:
+                set_value_in_memory(
+                    current_quad[3],  memory_stack[-1], to_save_value)
+        else:
+            raise Exception('Input type mismatch, expected: ' + to_save_type)
+
     instruction_pointer += 1
 
-
+print('--------------------END OF EXECUTION-----------------------------')
 print(memory_stack[-1].table)
 print(global_memory.table)

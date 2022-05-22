@@ -4,7 +4,7 @@ import json
 class OvejotaManager:
     def __init__(self):
 
-        with open('../ovejota.json') as json_file:
+        with open('ovejota.json') as json_file:
             self.ovejota = json.load(json_file)
 
         self.function_directory = self.ovejota['function_directory']
