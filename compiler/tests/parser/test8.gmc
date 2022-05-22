@@ -1,12 +1,23 @@
 program a;
 
-var int k;
+var float a;
+var int b;
+var bool c;
+var string d;
 
 main() {
-    var int i;
+    var float i;
     var int j;
-    i = 5;
-    j = 10;
-    k = 15;
-    write(i+3);
+    var bool k;
+    var string l;
+
+    a = 3.14;
+    i = 5.19;
+    b = 1;
+    j = 2;
+    c = true;
+    k = false;
+    d = "hola";
+    l = "brussels";
+
 }

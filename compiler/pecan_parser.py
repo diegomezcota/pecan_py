@@ -33,7 +33,7 @@ def p_program(p):
     '''
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
-    print(*quads.list, sep='\n')
+    #print(*quads.list, sep='\n')
 
     function_directory.generate_variable_workspace('#global', '#global')
 
@@ -43,7 +43,7 @@ def p_program(p):
 
     obj = {"function_directory": function_directory.table,
            "quads": quads.list, "constants_summary": constants_table, "constants_table": constants.table}
-    with open('../ovejota.json', "w") as output_file:
+    with open('ovejota.json', "w") as output_file:
         json.dump(obj, output_file, indent=2)
 
 
@@ -798,7 +798,8 @@ def p_read(p):
     read : READ OPEN_PARENTHESIS variable_loop CLOSE_PARENTHESIS SEMICOLON
     '''
     for variable in p[3]:
-        quads.generate_quad('READ', None, None, variable)
+        variable_address, variable_type = variable
+        quads.generate_quad('READ', None, None, variable_address)
 
 
 def p_variable_loop(p):

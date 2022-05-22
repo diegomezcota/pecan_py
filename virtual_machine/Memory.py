@@ -1,6 +1,7 @@
 # TODO: Mandar tabla de constantes thru ovejota
 from formatter import Formatter
 
+
 class LocalMemory:
     def __init__(self, vars_sizes, temps_sizes):
 
@@ -9,8 +10,8 @@ class LocalMemory:
         temps_int, temps_float, temps_bool, temps_string = temps_sizes
 
         self.table = {
-            'vars': {'int': [None] * vars_int, 'float': [None] * vars_float, 'bool': [None] * vars_bool, 'string': [None] * vars_string},
-            'temps': {'int': [None] * temps_int, 'float': [None] * temps_float, 'bool': [None] * temps_bool, 'string': [None] * temps_string}
+            'vars': {'int': [0] * vars_int, 'float': [0.0] * vars_float, 'bool': [False] * vars_bool, 'string': [''] * vars_string},
+            'temps': {'int': [0] * temps_int, 'float': [0.0] * temps_float, 'bool': [False] * temps_bool, 'string': [''] * temps_string}
         }
 
     def get_scope_key(self, address):
@@ -61,7 +62,7 @@ class LocalMemory:
     def get_value_from_address(self, address):
 
         table_scope, data_type, index = self.get_table_keys(address)
-        
+
         if not table_scope:
             return (None, None)
 
@@ -79,18 +80,18 @@ class GlobalMemory:
         vars_int, vars_float, vars_bool, vars_string = vars_sizes
 
         consts_int, consts_float, consts_bool, consts_string = consts_sizes
-        
+
         self.fm = Formatter()
 
         self.table = {
-            'vars': {'int': [None] * vars_int, 'float': [None] * vars_float, 'bool': [None] * vars_bool, 'string': [None] * vars_string},
-            'constants': {'int': [None] * consts_int, 'float': [None] * consts_float, 'bool': [None] * consts_bool, 'string': [None] * consts_string}
+            'vars': {'int': [0] * vars_int, 'float': [0.0] * vars_float, 'bool': [False] * vars_bool, 'string': [''] * vars_string},
+            'constants': {'int': [0] * consts_int, 'float': [0.0] * consts_float, 'bool': [False] * consts_bool, 'string': [''] * consts_string}
         }
 
         for data_type, value_dict in consts_table.items():
             for value, address in value_dict.items():
                 self.set_const_in_address(address, value)
-        #print(self.table)
+        # print(self.table)
 
     def get_scope_key(self, address):
         if (address >= 0 and address < 8000):
@@ -138,7 +139,7 @@ class GlobalMemory:
     def get_value_from_address(self, address):
 
         table_scope, data_type, index = self.get_table_keys(address)
-        
+
         value = self.table[table_scope][data_type][index]
 
         return (data_type, value)

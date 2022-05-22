@@ -124,17 +124,22 @@ def t_INT_VALUE(t):
 
 
 def t_STRING_VALUE(t):
-    r'".*"'
+    r'"[^"]*"'
     t.type = reserved.get(t.value, 'STRING_VALUE')
+    t.value = t.value[1:len(t.value)-1]  # Remove comillas
     t.value = (t.value, 'string')
     return t
 
 # Line number tracking
+
+
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
 # Error handling rule
+
+
 def t_error(t):
     print("Illegal character '%s'" % t.value[0])
     t.lexer.skip(1)

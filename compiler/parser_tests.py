@@ -11,7 +11,7 @@ print("---PROBANDO ANALIZADOR SINTÁCTICO---")
 
 if test_no:
     try:
-        s = open('tests/parser/' + 'test' + test_no + '.gmc', 'r').read()
+        s = open('compiler/tests/parser/' + 'test' + test_no + '.gmc', 'r').read()
         parser.parse(s, tracking=True)
         print('test no.', test_no, ': apropiado')
     except Exception as e:
@@ -19,7 +19,7 @@ if test_no:
 else:
     for i, test in enumerate(test_files):
         try:
-            s = open('tests/parser/' + test, 'r').read()
+            s = open('compiler/tests/parser/' + test, 'r').read()
             parser.parse(s, tracking=True)
             print('test no.', i + 1, ': apropiado')
         except Exception as e:
