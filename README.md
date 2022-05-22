@@ -74,3 +74,20 @@ Agregamos las funciones necesarias para apoyar la creación de cuádruplos para 
 ### pecan_parser.py
 Generación de cuádruplos e implementación de puntos neurálgicos para la definición y llamada a funciones/módulos con sus validaciones pertinentes.
 
+## Avance 6: Mapa de Memoria de Ejecución para la Máquina Virtual y Ejecución de Expresiones Aritméticas y Estatutos Secuenciales
+
+### ovejota.json
+Se crea archivo tipo obj como resultado de la compilación con información como directorio de funciones, tabla de constantes y cuádruplos para dar de input a la máquina virtual.
+
+### ovejota_manager.py
+Manejador que carga el archivo ovejota.json y administra sus contenidos para la máquina virtual.
+
+### Memory.py
+Clase manejadora de memoria de ejecución siguiendo el esquema definido en nuestro archivo avail con las direcciones virtuales de los valores y sus métodos correspondientes de búsqueda y agregación.
+
+### formatter.py
+Clase que maneja el casteo de tipos de datos entre Python y PecanPy.
+
+### virtual_machine.py
+Archivo que se encarga del manejo de la ejecución de los quádruplos. Para esta entrega se manejan los cuádruplos de estatutos secuenciales y expresiones aritméticas como suma, resta, multiplicación, división, asignación, operadores relacionales, operadores lógicos, escritura y lectura dentro del scope global y main.
+
