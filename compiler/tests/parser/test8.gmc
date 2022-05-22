@@ -16,6 +16,6 @@ main() {
     c = a > b;
     d = a < b;
     e = a && b;
-    f = false || false;
-
+    f = false || true && true;
+    write(c, d, e, f);
 }

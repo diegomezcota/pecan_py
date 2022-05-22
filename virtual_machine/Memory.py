@@ -1,6 +1,7 @@
 # TODO: Mandar tabla de constantes thru ovejota
 from formatter import Formatter
 
+
 class LocalMemory:
     def __init__(self, vars_sizes, temps_sizes):
 
@@ -61,7 +62,7 @@ class LocalMemory:
     def get_value_from_address(self, address):
 
         table_scope, data_type, index = self.get_table_keys(address)
-        
+
         if not table_scope:
             return (None, None)
 
@@ -79,7 +80,7 @@ class GlobalMemory:
         vars_int, vars_float, vars_bool, vars_string = vars_sizes
 
         consts_int, consts_float, consts_bool, consts_string = consts_sizes
-        
+
         self.fm = Formatter()
 
         self.table = {
@@ -90,7 +91,7 @@ class GlobalMemory:
         for data_type, value_dict in consts_table.items():
             for value, address in value_dict.items():
                 self.set_const_in_address(address, value)
-        #print(self.table)
+        # print(self.table)
 
     def get_scope_key(self, address):
         if (address >= 0 and address < 8000):
@@ -138,7 +139,7 @@ class GlobalMemory:
     def get_value_from_address(self, address):
 
         table_scope, data_type, index = self.get_table_keys(address)
-        
+
         value = self.table[table_scope][data_type][index]
 
         return (data_type, value)
