@@ -1,23 +1,15 @@
 program a;
 
 var float a;
-var int b;
+var int i;
 var bool c;
 var string d;
 
 main() {
-    var float i;
-    var int j;
-    var bool k;
-    var string l;
 
-    a = 3.14;
-    i = 5.19;
-    b = 1;
-    j = 2;
-    c = true;
-    k = false;
-    d = "hola";
-    l = "brussels";
-
+    do {
+        write("queremos la bise");
+        i = i + 2;
+    } while (i < 10);
+    
 }

@@ -19,15 +19,15 @@
         "param_signature": [],
         "workspace": {
           "variables_workspace": {
-            "int": 1,
-            "float": 1,
-            "string": 1,
-            "bool": 1
-          },
-          "temps_workspace": {
             "int": 0,
             "float": 0,
-            "bool": 0,
+            "string": 0,
+            "bool": 0
+          },
+          "temps_workspace": {
+            "int": 1,
+            "float": 0,
+            "bool": 1,
             "string": 0
           }
         },
@@ -44,52 +44,34 @@
       1
     ],
     [
-      "=",
-      26000,
+      "WRITE",
       null,
-      2000
+      null,
+      30000
+    ],
+    [
+      "+",
+      0,
+      24001,
+      16000
     ],
     [
       "=",
-      26001,
-      null,
-      10000
-    ],
-    [
-      "=",
-      24000,
+      16000,
       null,
       0
     ],
     [
-      "=",
-      24001,
-      null,
-      8000
+      "<",
+      0,
+      24002,
+      20000
     ],
     [
-      "=",
-      28000,
+      "GOTOT",
+      20000,
       null,
-      4000
-    ],
-    [
-      "=",
-      28001,
-      null,
-      12000
-    ],
-    [
-      "=",
-      30000,
-      null,
-      6000
-    ],
-    [
-      "=",
-      30001,
-      null,
-      14000
+      1
     ],
     [
       "ENDFUNC",
@@ -99,27 +81,21 @@
     ]
   ],
   "constants_summary": {
-    "int": 2,
-    "float": 2,
-    "bool": 2,
-    "string": 2
+    "int": 3,
+    "float": 0,
+    "bool": 0,
+    "string": 1
   },
   "constants_table": {
     "int": {
       "1": 24000,
-      "2": 24001
+      "2": 24001,
+      "10": 24002
     },
-    "float": {
-      "3.14": 26000,
-      "5.19": 26001
-    },
-    "bool": {
-      "true": 28000,
-      "false": 28001
-    },
+    "float": {},
+    "bool": {},
     "string": {
-      "hola": 30000,
-      "brussels": 30001
+      "queremos la bise": 30000
     }
   }
 }

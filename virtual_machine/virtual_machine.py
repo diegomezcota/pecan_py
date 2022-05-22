@@ -1,5 +1,5 @@
-from memory import GlobalMemory
-from memory import LocalMemory
+from Memory import GlobalMemory
+from Memory import LocalMemory
 from ovejota_manager import OvejotaManager
 from formatter import Formatter
 
@@ -230,8 +230,30 @@ while (instruction_pointer < len(quads)):
         else:
             raise Exception('Input type mismatch, expected: ' + to_save_type)
 
+     # GOTO execution
+    elif current_quad[0] == 'GOTO':
+        instruction_pointer = current_quad[3]
+        continue
+
+    # GOTOF execution
+    elif current_quad[0] == 'GOTOF':
+        _, condition_value = get_type_and_value(
+            memory_stack[-1], current_quad[1])
+        if not condition_value:
+            instruction_pointer = current_quad[3]
+            continue
+
+    # GOTOT execution
+    elif current_quad[0] == 'GOTOT':
+        _, condition_value = get_type_and_value(
+            memory_stack[-1], current_quad[1])
+        if condition_value:
+            instruction_pointer = current_quad[3]
+            continue
+
     instruction_pointer += 1
 
 print('--------------------END OF EXECUTION-----------------------------')
-print(memory_stack[-1].table)
-print(global_memory.table)
+print(*quads, sep='\n')
+# print(memory_stack[-1].table)
+# print(global_memory.table)
