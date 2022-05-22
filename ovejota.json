@@ -1,0 +1,125 @@
+{
+  "function_directory": {
+    "#global": {
+      "#global": {
+        "vars_table": {},
+        "param_signature": [],
+        "workspace": {
+          "variables_workspace": {
+            "int": 1,
+            "float": 1,
+            "string": 1,
+            "bool": 1
+          }
+        },
+        "function_type": "void"
+      },
+      "main": {
+        "vars_table": {},
+        "param_signature": [],
+        "workspace": {
+          "variables_workspace": {
+            "int": 1,
+            "float": 1,
+            "string": 1,
+            "bool": 1
+          },
+          "temps_workspace": {
+            "int": 0,
+            "float": 0,
+            "bool": 0,
+            "string": 0
+          }
+        },
+        "function_type": "void",
+        "start_quad": 1
+      }
+    }
+  },
+  "quads": [
+    [
+      "GOTOMAIN",
+      null,
+      null,
+      1
+    ],
+    [
+      "=",
+      26000,
+      null,
+      2000
+    ],
+    [
+      "=",
+      26001,
+      null,
+      10000
+    ],
+    [
+      "=",
+      24000,
+      null,
+      0
+    ],
+    [
+      "=",
+      24001,
+      null,
+      8000
+    ],
+    [
+      "=",
+      28000,
+      null,
+      4000
+    ],
+    [
+      "=",
+      28001,
+      null,
+      12000
+    ],
+    [
+      "=",
+      30000,
+      null,
+      6000
+    ],
+    [
+      "=",
+      30001,
+      null,
+      14000
+    ],
+    [
+      "ENDFUNC",
+      null,
+      null,
+      null
+    ]
+  ],
+  "constants_summary": {
+    "int": 2,
+    "float": 2,
+    "bool": 2,
+    "string": 2
+  },
+  "constants_table": {
+    "int": {
+      "1": 24000,
+      "2": 24001
+    },
+    "float": {
+      "3.14": 26000,
+      "5.19": 26001
+    },
+    "bool": {
+      "true": 28000,
+      "false": 28001
+    },
+    "string": {
+      "hola": 30000,
+      "brussels": 30001
+    }
+  }
+}
