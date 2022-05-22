@@ -6,10 +6,7 @@ var bool c;
 var string d;
 
 main() {
-
-    do {
-        write("queremos la bise");
-        i = i + 2;
-    } while (i < 10);
-    
+    // uso de este ejemplo para fundamentar uso de -num desde el lexer
+    read(i);
+    write(i);
 }

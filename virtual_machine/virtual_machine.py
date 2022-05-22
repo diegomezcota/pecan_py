@@ -3,6 +3,7 @@ from Memory import LocalMemory
 from ovejota_manager import OvejotaManager
 from formatter import Formatter
 
+# try to read ovejota for successful compilation
 ovejota_manager = OvejotaManager()
 formatter = Formatter()
 

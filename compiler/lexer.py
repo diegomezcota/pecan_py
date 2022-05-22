@@ -110,14 +110,14 @@ def t_ID(t):
 
 
 def t_FLOAT_VALUE(t):
-    r'[0-9]+\.[0-9]+'
+    r'-?[0-9]+\.[0-9]+'
     t.type = reserved.get(t.value, 'FLOAT_VALUE')
     t.value = (t.value, 'float')
     return t
 
 
 def t_INT_VALUE(t):
-    r'[0-9]+'
+    r'-?[0-9]+'
     t.type = reserved.get(t.value, 'INT_VALUE')
     t.value = (t.value, 'int')
     return t
