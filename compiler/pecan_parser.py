@@ -257,7 +257,7 @@ def p_variable_declaration_loop(p):
 def p_variable_declaration(p):
     '''
     variable_declaration    : VAR np_set_current_var_type data_type np_set_current_var_data_type ID np_set_current_var_name SEMICOLON np_add_variable
-                            | GROUP np_set_current_var_type ID np_set_current_var_name ASSIGN data_type np_set_current_var_data_type OPEN_BRACKET INT_VALUE CLOSE_BRACKET SEMICOLON np_add_variable
+                            | GROUP np_set_current_var_type ID np_set_current_var_name ASSIGN data_type np_set_current_var_data_type OPEN_BRACKET INT_VALUE CLOSE_BRACKET group1 SEMICOLON np_add_variable
                             | OBJ np_set_current_var_type ID np_set_current_var_name ASSIGN ID OPEN_PARENTHESIS variable_declaration1 CLOSE_PARENTHESIS SEMICOLON np_add_variable
 
     '''
@@ -303,6 +303,13 @@ def p_np_add_variable(p):
 
     function_directory.add_variable(current_general_scope, current_internal_scope,
                                     current_var_name, current_var_type, current_var_data_type, new_variable_address)
+
+
+def p_group1(p):
+    '''
+    group1  : epsilon
+            | OPEN_BRACKET INT_VALUE CLOSE_BRACKET
+    '''
 
 
 def p_variable_declaration1(p):

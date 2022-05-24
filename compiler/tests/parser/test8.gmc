@@ -5,6 +5,9 @@ var int i;
 var bool c;
 var string d;
 
+group mat = int[3][3];
+group arr = bool[9];
+
 main() {
     // uso de este ejemplo para fundamentar uso de -num desde el lexer
     read(i);
