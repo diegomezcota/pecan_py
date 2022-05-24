@@ -1,0 +1,3 @@
+Proponer el handleo de negativos y checar algunos tests correspondientes
+
+Agregar el chequeo que el read no pueda leer la variable de control i

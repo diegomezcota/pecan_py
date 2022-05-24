@@ -799,6 +799,7 @@ def p_read(p):
     '''
     for variable in p[3]:
         variable_address, variable_type = variable
+        # TODO: If variable address in variable stack raise error
         quads.generate_quad('READ', None, None, variable_address)
 
 

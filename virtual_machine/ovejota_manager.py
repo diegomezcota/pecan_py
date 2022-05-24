@@ -6,6 +6,9 @@ class OvejotaManager:
 
         with open('ovejota.json') as json_file:
             self.ovejota = json.load(json_file)
+        
+        if 'error' in self.ovejota.keys():
+            raise Exception(self.ovejota['error'])
 
         self.function_directory = self.ovejota['function_directory']
 
