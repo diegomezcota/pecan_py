@@ -34,6 +34,7 @@ def p_program(p):
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
     #print(*quads.list, sep='\n')
+    print(json.dumps(function_directory.table, indent=2))
 
     function_directory.generate_variable_workspace('#global', '#global')
 
@@ -257,7 +258,7 @@ def p_variable_declaration_loop(p):
 def p_variable_declaration(p):
     '''
     variable_declaration    : VAR np_set_current_var_type data_type np_set_current_var_data_type ID np_set_current_var_name SEMICOLON np_add_variable
-                            | GROUP np_set_current_var_type ID np_set_current_var_name ASSIGN data_type np_set_current_var_data_type OPEN_BRACKET INT_VALUE CLOSE_BRACKET group1 SEMICOLON np_add_variable
+                            | GROUP np_set_current_var_type ID np_set_current_var_name ASSIGN data_type np_set_current_var_data_type np_add_variable OPEN_BRACKET np_add_dim1_list INT_VALUE np_add_dim1 CLOSE_BRACKET group1 SEMICOLON
                             | OBJ np_set_current_var_type ID np_set_current_var_name ASSIGN ID OPEN_PARENTHESIS variable_declaration1 CLOSE_PARENTHESIS SEMICOLON np_add_variable
 
     '''
@@ -308,8 +309,68 @@ def p_np_add_variable(p):
 def p_group1(p):
     '''
     group1  : epsilon
-            | OPEN_BRACKET INT_VALUE CLOSE_BRACKET
+            | OPEN_BRACKET np_add_dim2_list INT_VALUE np_add_dim2 CLOSE_BRACKET
     '''
+    function_directory.generate_dim_ms(
+        current_general_scope, current_internal_scope, current_var_name)
+
+    group_scope = None
+    if (current_general_scope == '#global'):
+        if (current_internal_scope == '#global'):
+            group_scope = 'globals'
+        else:
+            group_scope = 'locals'
+
+    group_size = function_directory.get_group_size(
+        current_general_scope, current_internal_scope, current_var_name)
+
+    # size - 1 : the original id is assigned to an address in np_add_variable
+    avail.get_group_addresses(current_var_data_type,
+                              group_scope, group_size - 1)
+
+
+def p_np_add_dim1_list(p):
+    '''
+    np_add_dim1_list : epsilon
+    '''
+    function_directory.add_dim1_list(
+        current_general_scope, current_internal_scope, current_var_name)
+
+
+def p_np_add_dim2_list(p):
+    '''
+    np_add_dim2_list : epsilon
+    '''
+    function_directory.add_dim2_list(
+        current_general_scope, current_internal_scope, current_var_name)
+
+
+def p_np_add_dim1(p):
+    '''
+    np_add_dim1 : epsilon
+    '''
+    dim_size, _ = p[-1]
+    dim_size = int(dim_size)
+    function_directory.add_dim_size_and_update_r(
+        current_general_scope, current_internal_scope, current_var_name, 0, dim_size)
+
+    # Add size's int value as constant
+    constant_address = avail.get_new_address('int', 'constants')
+    constants.add_constant('int', constant_address, p[-1][0])
+
+
+def p_np_add_dim2(p):
+    '''
+    np_add_dim2 : epsilon
+    '''
+    dim_size, _ = p[-1]
+    dim_size = int(dim_size)
+    function_directory.add_dim_size_and_update_r(
+        current_general_scope, current_internal_scope, current_var_name, 1, dim_size)
+
+    # Add size's int value as constant
+    constant_address = avail.get_new_address('int', 'constants')
+    constants.add_constant('int', constant_address, p[-1][0])
 
 
 def p_variable_declaration1(p):
@@ -317,6 +378,7 @@ def p_variable_declaration1(p):
     variable_declaration1   : hyper_exp_loop
                             | epsilon
     '''
+    pass
 
 
 def p_statement(p):

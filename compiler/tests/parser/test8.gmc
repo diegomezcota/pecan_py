@@ -1,15 +1,9 @@
 program a;
 
-var float a;
-var int i;
-var bool c;
-var string d;
-
-group mat = int[3][3];
-group arr = bool[9];
+group mat = int[4][3];
+group arr = int[9];
+var int hola;
 
 main() {
-    // uso de este ejemplo para fundamentar uso de -num desde el lexer
-    read(i);
-    write(i);
+    write("hola");
 }

@@ -6,10 +6,10 @@
         "param_signature": [],
         "workspace": {
           "variables_workspace": {
-            "int": 2,
-            "float": 1,
-            "string": 1,
-            "bool": 2
+            "int": 3,
+            "float": 0,
+            "string": 0,
+            "bool": 0
           }
         },
         "function_type": "void"
@@ -44,16 +44,10 @@
       1
     ],
     [
-      "READ",
-      null,
-      null,
-      0
-    ],
-    [
       "WRITE",
       null,
       null,
-      0
+      30000
     ],
     [
       "ENDFUNC",
@@ -63,17 +57,22 @@
     ]
   ],
   "constants_summary": {
-    "int": 1,
+    "int": 4,
     "float": 0,
     "bool": 0,
-    "string": 0
+    "string": 1
   },
   "constants_table": {
     "int": {
-      "1": 24000
+      "1": 24000,
+      "4": 24001,
+      "3": 24002,
+      "9": 24003
     },
     "float": {},
     "bool": {},
-    "string": {}
+    "string": {
+      "hola": 30000
+    }
   }
 }

@@ -9,16 +9,24 @@ class Avail:
         }
 
     def get_new_address(self, type, block):
-        if self.table[block][type][0] == self.table[block][type][2]:
-            raise TooManyVariables()
+        if self.table[block][type][0] > self.table[block][type][2]:
+            raise Exception("Too many variables for type " + type)
         else:
             current_address = self.table[block][type][0]
             self.table[block][type][0] += 1
             return current_address
 
+    def get_group_addresses(self, type, block, size):
+        if self.table[block][type][0] + size > self.table[block][type][2]:
+            raise Exception("Too many variables for type " + type)
+        else:
+            current_address = self.table[block][type][0]
+            self.table[block][type][0] += size
+            return current_address
+
     def get_new_temp(self, type):
         if self.table['temps'][type][0] == self.table['temps'][type][2]:
-            raise TooManyVariables()
+            raise Exception("Too many variables for type " + type)
         else:
             temp_tuple = (self.table['temps'][type][0], type)
             self.table['temps'][type][0] += 1
@@ -26,7 +34,7 @@ class Avail:
 
     def get_new_global(self, type):
         if self.table['globals'][type][0] == self.table['globals'][type][2]:
-            raise TooManyVariables()
+            raise Exception("Too many variables for type " + type)
         else:
             global_address = self.table['globals'][type][0]
             self.table['globals'][type][0] += 1
@@ -49,7 +57,3 @@ class Avail:
         counter_summary = {data_type: dt_array[0] - dt_array[1]
                            for data_type, dt_array in type_counters.items()}
         return counter_summary
-
-
-class TooManyVariables(Exception):
-    pass
