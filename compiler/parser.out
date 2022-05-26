@@ -20,7 +20,7 @@ Rule 14    variable -> ID variable1
 Rule 15    variable1 -> np_array_access1 OPEN_BRACKET np_array_access2 hyper_exp np_array_access3 CLOSE_BRACKET group_access
 Rule 16    variable1 -> DOT ID
 Rule 17    variable1 -> epsilon
-Rule 18    group_access -> np_array_access4 OPEN_BRACKET np_array_access2 hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5
+Rule 18    group_access -> np_array_access4 OPEN_BRACKET hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5
 Rule 19    group_access -> np_array_access5
 Rule 20    np_array_access1 -> epsilon
 Rule 21    np_array_access2 -> epsilon
@@ -275,7 +275,7 @@ np_add_parameters_to_var_table : 152
 np_add_variable      : 40 41 42
 np_add_write_quad    : 133 134
 np_array_access1     : 15
-np_array_access2     : 15 18
+np_array_access2     : 15
 np_array_access3     : 15 18
 np_array_access4     : 18
 np_array_access5     : 18 19
@@ -5202,7 +5202,7 @@ state 335
 state 336
 
     (15) variable1 -> np_array_access1 OPEN_BRACKET np_array_access2 hyper_exp np_array_access3 CLOSE_BRACKET . group_access
-    (18) group_access -> . np_array_access4 OPEN_BRACKET np_array_access2 hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5
+    (18) group_access -> . np_array_access4 OPEN_BRACKET hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5
     (19) group_access -> . np_array_access5
     (23) np_array_access4 -> . epsilon
     (24) np_array_access5 -> . epsilon
@@ -5617,7 +5617,7 @@ state 362
 
 state 363
 
-    (18) group_access -> np_array_access4 . OPEN_BRACKET np_array_access2 hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5
+    (18) group_access -> np_array_access4 . OPEN_BRACKET hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5
 
     OPEN_BRACKET    shift and go to state 378
 
@@ -5876,19 +5876,35 @@ state 377
 
 state 378
 
-    (18) group_access -> np_array_access4 OPEN_BRACKET . np_array_access2 hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5
-    (21) np_array_access2 -> . epsilon
-    (162) epsilon -> .
+    (18) group_access -> np_array_access4 OPEN_BRACKET . hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5
+    (64) hyper_exp -> . super_exp np_hyper_exp hyper_exp1
+    (69) super_exp -> . exp np_super_exp super_exp1
+    (76) exp -> . term np_exp exp1
+    (81) term -> . factor np_term term1
+    (86) factor -> . function_call
+    (87) factor -> . FLOAT_VALUE np_add_constant_virtual_address
+    (88) factor -> . INT_VALUE np_add_constant_virtual_address
+    (89) factor -> . BOOL_VALUE np_add_constant_virtual_address
+    (90) factor -> . STRING_VALUE np_add_constant_virtual_address
+    (91) factor -> . variable
+    (92) factor -> . OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
+    (140) function_call -> . ID function_call1 OPEN_PARENTHESIS np_start_function_param_counter function_call2 CLOSE_PARENTHESIS
+    (14) variable -> . ID variable1
 
-    FLOAT_VALUE     reduce using rule 162 (epsilon -> .)
-    INT_VALUE       reduce using rule 162 (epsilon -> .)
-    BOOL_VALUE      reduce using rule 162 (epsilon -> .)
-    STRING_VALUE    reduce using rule 162 (epsilon -> .)
-    OPEN_PARENTHESIS reduce using rule 162 (epsilon -> .)
-    ID              reduce using rule 162 (epsilon -> .)
+    FLOAT_VALUE     shift and go to state 113
+    INT_VALUE       shift and go to state 114
+    BOOL_VALUE      shift and go to state 115
+    STRING_VALUE    shift and go to state 116
+    OPEN_PARENTHESIS shift and go to state 103
+    ID              shift and go to state 102
 
-    np_array_access2               shift and go to state 390
-    epsilon                        shift and go to state 228
+    hyper_exp                      shift and go to state 390
+    super_exp                      shift and go to state 108
+    exp                            shift and go to state 109
+    term                           shift and go to state 110
+    factor                         shift and go to state 111
+    function_call                  shift and go to state 112
+    variable                       shift and go to state 117
 
 state 379
 
@@ -6016,35 +6032,14 @@ state 389
 
 state 390
 
-    (18) group_access -> np_array_access4 OPEN_BRACKET np_array_access2 . hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5
-    (64) hyper_exp -> . super_exp np_hyper_exp hyper_exp1
-    (69) super_exp -> . exp np_super_exp super_exp1
-    (76) exp -> . term np_exp exp1
-    (81) term -> . factor np_term term1
-    (86) factor -> . function_call
-    (87) factor -> . FLOAT_VALUE np_add_constant_virtual_address
-    (88) factor -> . INT_VALUE np_add_constant_virtual_address
-    (89) factor -> . BOOL_VALUE np_add_constant_virtual_address
-    (90) factor -> . STRING_VALUE np_add_constant_virtual_address
-    (91) factor -> . variable
-    (92) factor -> . OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
-    (140) function_call -> . ID function_call1 OPEN_PARENTHESIS np_start_function_param_counter function_call2 CLOSE_PARENTHESIS
-    (14) variable -> . ID variable1
+    (18) group_access -> np_array_access4 OPEN_BRACKET hyper_exp . np_array_access3 CLOSE_BRACKET np_array_access5
+    (22) np_array_access3 -> . epsilon
+    (162) epsilon -> .
 
-    FLOAT_VALUE     shift and go to state 113
-    INT_VALUE       shift and go to state 114
-    BOOL_VALUE      shift and go to state 115
-    STRING_VALUE    shift and go to state 116
-    OPEN_PARENTHESIS shift and go to state 103
-    ID              shift and go to state 102
+    CLOSE_BRACKET   reduce using rule 162 (epsilon -> .)
 
-    hyper_exp                      shift and go to state 404
-    super_exp                      shift and go to state 108
-    exp                            shift and go to state 109
-    term                           shift and go to state 110
-    factor                         shift and go to state 111
-    function_call                  shift and go to state 112
-    variable                       shift and go to state 117
+    np_array_access3               shift and go to state 404
+    epsilon                        shift and go to state 303
 
 state 391
 
@@ -6231,14 +6226,10 @@ state 403
 
 state 404
 
-    (18) group_access -> np_array_access4 OPEN_BRACKET np_array_access2 hyper_exp . np_array_access3 CLOSE_BRACKET np_array_access5
-    (22) np_array_access3 -> . epsilon
-    (162) epsilon -> .
+    (18) group_access -> np_array_access4 OPEN_BRACKET hyper_exp np_array_access3 . CLOSE_BRACKET np_array_access5
 
-    CLOSE_BRACKET   reduce using rule 162 (epsilon -> .)
+    CLOSE_BRACKET   shift and go to state 416
 
-    np_array_access3               shift and go to state 416
-    epsilon                        shift and go to state 303
 
 state 405
 
@@ -6382,10 +6373,30 @@ state 415
 
 state 416
 
-    (18) group_access -> np_array_access4 OPEN_BRACKET np_array_access2 hyper_exp np_array_access3 . CLOSE_BRACKET np_array_access5
+    (18) group_access -> np_array_access4 OPEN_BRACKET hyper_exp np_array_access3 CLOSE_BRACKET . np_array_access5
+    (24) np_array_access5 -> . epsilon
+    (162) epsilon -> .
 
-    CLOSE_BRACKET   shift and go to state 421
+    MULTIPLICATION  reduce using rule 162 (epsilon -> .)
+    DIVISION        reduce using rule 162 (epsilon -> .)
+    PLUS            reduce using rule 162 (epsilon -> .)
+    MINUS           reduce using rule 162 (epsilon -> .)
+    GREATER_THAN    reduce using rule 162 (epsilon -> .)
+    LESS_THAN       reduce using rule 162 (epsilon -> .)
+    EQUAL_TO        reduce using rule 162 (epsilon -> .)
+    NOT_EQUAL_TO    reduce using rule 162 (epsilon -> .)
+    AND             reduce using rule 162 (epsilon -> .)
+    OR              reduce using rule 162 (epsilon -> .)
+    COMMA           reduce using rule 162 (epsilon -> .)
+    CLOSE_PARENTHESIS reduce using rule 162 (epsilon -> .)
+    ASSIGN          reduce using rule 162 (epsilon -> .)
+    CLOSE_BRACKET   reduce using rule 162 (epsilon -> .)
+    SEMICOLON       reduce using rule 162 (epsilon -> .)
+    TO              reduce using rule 162 (epsilon -> .)
+    OPEN_KEY        reduce using rule 162 (epsilon -> .)
 
+    np_array_access5               shift and go to state 421
+    epsilon                        shift and go to state 422
 
 state 417
 
@@ -6415,7 +6426,7 @@ state 417
     WRITE           shift and go to state 172
     ID              shift and go to state 102
 
-    statement_loop                 shift and go to state 422
+    statement_loop                 shift and go to state 423
     statement                      shift and go to state 159
     assignment                     shift and go to state 160
     conditional                    shift and go to state 161
@@ -6429,7 +6440,7 @@ state 418
 
     (117) cycle_for -> OPEN_KEY statement_loop . CLOSE_KEY np_for_4
 
-    CLOSE_KEY       shift and go to state 423
+    CLOSE_KEY       shift and go to state 424
 
 
 state 419
@@ -6451,99 +6462,33 @@ state 420
 
     (151) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return . CLOSE_KEY
 
-    CLOSE_KEY       shift and go to state 424
+    CLOSE_KEY       shift and go to state 425
 
 
 state 421
 
-    (18) group_access -> np_array_access4 OPEN_BRACKET np_array_access2 hyper_exp np_array_access3 CLOSE_BRACKET . np_array_access5
-    (24) np_array_access5 -> . epsilon
-    (162) epsilon -> .
+    (18) group_access -> np_array_access4 OPEN_BRACKET hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .
 
-    MULTIPLICATION  reduce using rule 162 (epsilon -> .)
-    DIVISION        reduce using rule 162 (epsilon -> .)
-    PLUS            reduce using rule 162 (epsilon -> .)
-    MINUS           reduce using rule 162 (epsilon -> .)
-    GREATER_THAN    reduce using rule 162 (epsilon -> .)
-    LESS_THAN       reduce using rule 162 (epsilon -> .)
-    EQUAL_TO        reduce using rule 162 (epsilon -> .)
-    NOT_EQUAL_TO    reduce using rule 162 (epsilon -> .)
-    AND             reduce using rule 162 (epsilon -> .)
-    OR              reduce using rule 162 (epsilon -> .)
-    COMMA           reduce using rule 162 (epsilon -> .)
-    CLOSE_PARENTHESIS reduce using rule 162 (epsilon -> .)
-    ASSIGN          reduce using rule 162 (epsilon -> .)
-    CLOSE_BRACKET   reduce using rule 162 (epsilon -> .)
-    SEMICOLON       reduce using rule 162 (epsilon -> .)
-    TO              reduce using rule 162 (epsilon -> .)
-    OPEN_KEY        reduce using rule 162 (epsilon -> .)
+    MULTIPLICATION  reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
+    DIVISION        reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
+    PLUS            reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
+    MINUS           reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
+    GREATER_THAN    reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
+    LESS_THAN       reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
+    EQUAL_TO        reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
+    NOT_EQUAL_TO    reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
+    AND             reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
+    OR              reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
+    COMMA           reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
+    CLOSE_PARENTHESIS reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
+    ASSIGN          reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
+    CLOSE_BRACKET   reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
+    SEMICOLON       reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
+    TO              reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
+    OPEN_KEY        reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
 
-    np_array_access5               shift and go to state 425
-    epsilon                        shift and go to state 426
 
 state 422
-
-    (109) conditional1 -> ELSE np_if_3 OPEN_KEY statement_loop . CLOSE_KEY np_if_2
-
-    CLOSE_KEY       shift and go to state 427
-
-
-state 423
-
-    (117) cycle_for -> OPEN_KEY statement_loop CLOSE_KEY . np_for_4
-    (121) np_for_4 -> . epsilon
-    (162) epsilon -> .
-
-    IF              reduce using rule 162 (epsilon -> .)
-    FOR             reduce using rule 162 (epsilon -> .)
-    WHILE           reduce using rule 162 (epsilon -> .)
-    DO              reduce using rule 162 (epsilon -> .)
-    READ            reduce using rule 162 (epsilon -> .)
-    WRITE           reduce using rule 162 (epsilon -> .)
-    ID              reduce using rule 162 (epsilon -> .)
-    CLOSE_KEY       reduce using rule 162 (epsilon -> .)
-    RETURN          reduce using rule 162 (epsilon -> .)
-
-    np_for_4                       shift and go to state 428
-    epsilon                        shift and go to state 429
-
-state 424
-
-    (151) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .
-
-    AT_CLASS        reduce using rule 151 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
-    CLASS           reduce using rule 151 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
-    VAR             reduce using rule 151 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
-    GROUP           reduce using rule 151 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
-    OBJ             reduce using rule 151 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
-    FUNCTION        reduce using rule 151 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
-    MAIN            reduce using rule 151 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
-
-
-state 425
-
-    (18) group_access -> np_array_access4 OPEN_BRACKET np_array_access2 hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .
-
-    MULTIPLICATION  reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET np_array_access2 hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
-    DIVISION        reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET np_array_access2 hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
-    PLUS            reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET np_array_access2 hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
-    MINUS           reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET np_array_access2 hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
-    GREATER_THAN    reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET np_array_access2 hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
-    LESS_THAN       reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET np_array_access2 hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
-    EQUAL_TO        reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET np_array_access2 hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
-    NOT_EQUAL_TO    reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET np_array_access2 hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
-    AND             reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET np_array_access2 hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
-    OR              reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET np_array_access2 hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
-    COMMA           reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET np_array_access2 hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
-    CLOSE_PARENTHESIS reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET np_array_access2 hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
-    ASSIGN          reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET np_array_access2 hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
-    CLOSE_BRACKET   reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET np_array_access2 hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
-    SEMICOLON       reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET np_array_access2 hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
-    TO              reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET np_array_access2 hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
-    OPEN_KEY        reduce using rule 18 (group_access -> np_array_access4 OPEN_BRACKET np_array_access2 hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5 .)
-
-
-state 426
 
     (24) np_array_access5 -> epsilon .
 
@@ -6566,7 +6511,46 @@ state 426
     OPEN_KEY        reduce using rule 24 (np_array_access5 -> epsilon .)
 
 
-state 427
+state 423
+
+    (109) conditional1 -> ELSE np_if_3 OPEN_KEY statement_loop . CLOSE_KEY np_if_2
+
+    CLOSE_KEY       shift and go to state 426
+
+
+state 424
+
+    (117) cycle_for -> OPEN_KEY statement_loop CLOSE_KEY . np_for_4
+    (121) np_for_4 -> . epsilon
+    (162) epsilon -> .
+
+    IF              reduce using rule 162 (epsilon -> .)
+    FOR             reduce using rule 162 (epsilon -> .)
+    WHILE           reduce using rule 162 (epsilon -> .)
+    DO              reduce using rule 162 (epsilon -> .)
+    READ            reduce using rule 162 (epsilon -> .)
+    WRITE           reduce using rule 162 (epsilon -> .)
+    ID              reduce using rule 162 (epsilon -> .)
+    CLOSE_KEY       reduce using rule 162 (epsilon -> .)
+    RETURN          reduce using rule 162 (epsilon -> .)
+
+    np_for_4                       shift and go to state 427
+    epsilon                        shift and go to state 428
+
+state 425
+
+    (151) class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .
+
+    AT_CLASS        reduce using rule 151 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
+    CLASS           reduce using rule 151 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
+    VAR             reduce using rule 151 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
+    GROUP           reduce using rule 151 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
+    OBJ             reduce using rule 151 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
+    FUNCTION        reduce using rule 151 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
+    MAIN            reduce using rule 151 (class_function -> AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY .)
+
+
+state 426
 
     (109) conditional1 -> ELSE np_if_3 OPEN_KEY statement_loop CLOSE_KEY . np_if_2
     (112) np_if_2 -> . epsilon
@@ -6582,10 +6566,10 @@ state 427
     CLOSE_KEY       reduce using rule 162 (epsilon -> .)
     RETURN          reduce using rule 162 (epsilon -> .)
 
-    np_if_2                        shift and go to state 430
+    np_if_2                        shift and go to state 429
     epsilon                        shift and go to state 397
 
-state 428
+state 427
 
     (117) cycle_for -> OPEN_KEY statement_loop CLOSE_KEY np_for_4 .
 
@@ -6600,7 +6584,7 @@ state 428
     RETURN          reduce using rule 117 (cycle_for -> OPEN_KEY statement_loop CLOSE_KEY np_for_4 .)
 
 
-state 429
+state 428
 
     (121) np_for_4 -> epsilon .
 
@@ -6615,7 +6599,7 @@ state 429
     RETURN          reduce using rule 121 (np_for_4 -> epsilon .)
 
 
-state 430
+state 429
 
     (109) conditional1 -> ELSE np_if_3 OPEN_KEY statement_loop CLOSE_KEY np_if_2 .
 

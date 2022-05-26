@@ -37,7 +37,7 @@ def p_program(p):
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
     # print(*quads.list, sep='\n')
-    print(json.dumps(function_directory.table, indent=2))
+    #print(json.dumps(function_directory.table, indent=2))
 
     function_directory.generate_variable_workspace('#global', '#global')
 
@@ -193,20 +193,20 @@ def p_variable1(p):
 
 def p_group_access(p):
     '''
-    group_access    : np_array_access4 OPEN_BRACKET np_array_access2 hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5
+    group_access    : np_array_access4 OPEN_BRACKET hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5
                     | np_array_access5
     '''
     if len(p) == 2:
         p[0] = p[1]
     else:
-        p[0] = p[7]
+        p[0] = p[6]
 
 
 def p_np_array_access1(p):
     '''
     np_array_access1 : epsilon
     '''
-    global current_var_name, current_group_internal_scope
+    global current_var_name, current_group_internal_scope, current_dim
 
     if (function_directory.has_variable(current_general_scope, current_internal_scope, p[-1])):
         variable_map = function_directory.table[current_general_scope][
@@ -224,6 +224,7 @@ def p_np_array_access1(p):
             "Variable " + p[-1] + " not defined in line " + str(p.lineno(1)))
 
     current_var_name = p[-1]
+    current_dim = 0
     operand_stack.append((variable_address, variable_data_type))
 
 
@@ -277,7 +278,7 @@ def p_np_array_access3(p):
         aux1_address, _ = operand_stack.pop()
         temp_address = avail.get_new_address('int', 'temps')
         quads.generate_quad('+', aux1_address, aux2_address, temp_address)
-        operand_stack.append(temp_address)
+        operand_stack.append((temp_address, 'int'))
 
 
 def p_np_array_access4(p):
@@ -297,8 +298,11 @@ def p_np_array_access5(p):
     aux1_address, _ = operand_stack.pop()
     group_virtual_address = function_directory.get_variable_virtual_address(
         current_general_scope, current_group_internal_scope, current_var_name)
-    new_address = avail.get_new_address('int', 'constants')
-    constants.add_constant('int', new_address, group_virtual_address)
+    if not constants.has_constant('int', str(group_virtual_address)):
+        new_address = avail.get_new_address('int', 'constants')
+        constants.add_constant('int', new_address, str(group_virtual_address))
+    else:
+        new_address = constants.get_constant_address('int', str(group_virtual_address))
     new_temp_address = avail.get_new_address('int', 'temps')
     quads.generate_quad('+', aux1_address, new_address, new_temp_address)
     pointer_address = '&' + str(new_temp_address)
@@ -483,8 +487,9 @@ def p_np_add_dim1(p):
         current_general_scope, current_internal_scope, current_var_name, 0, dim_size)
 
     # Add size's int value as constant
-    constant_address = avail.get_new_address('int', 'constants')
-    constants.add_constant('int', constant_address, p[-1][0])
+    if not constants.has_constant('int', p[-1][0]):
+        constant_address = avail.get_new_address('int', 'constants')
+        constants.add_constant('int', constant_address, p[-1][0])
 
 
 def p_np_add_dim2(p):
@@ -497,8 +502,9 @@ def p_np_add_dim2(p):
         current_general_scope, current_internal_scope, current_var_name, 1, dim_size)
 
     # Add size's int value as constant
-    constant_address = avail.get_new_address('int', 'constants')
-    constants.add_constant('int', constant_address, p[-1][0])
+    if not constants.has_constant('int', p[-1][0]):
+        constant_address = avail.get_new_address('int', 'constants')
+        constants.add_constant('int', constant_address, p[-1][0])
 
 
 def p_variable_declaration1(p):
@@ -557,7 +563,6 @@ def p_hyper_exp(p):
     '''
     hyper_exp   : super_exp np_hyper_exp hyper_exp1
     '''
-    pass
 
 
 def p_hyper_exp1(p):
@@ -687,7 +692,6 @@ def p_np_add_constant_virtual_address(p):
     '''
     np_add_constant_virtual_address : epsilon
     '''
-    global constants
     const_value, const_type = p[-1]
 
     if not constants.has_constant(const_type, const_value):
@@ -1304,8 +1308,11 @@ class ParamAlreadyDeclared(Exception):
 
 
 def p_error(p):
-    error_msg = 'syntax error in line ' + \
-        str(p.lineno) + ' when parsing ' + str(p)
+    if not p:
+        error_msg = "Syntax error"
+    else:
+        error_msg = 'syntax error in line ' + \
+            str(p.lineno) + ' when parsing ' + str(p)
     raise SyntaxError(error_msg)
 
 
