@@ -17,12 +17,15 @@ operator_stack = None
 jump_stack = None
 control_variable_stack = None
 constants = None
+dim_stack = None
 
 current_general_scope = None
 current_internal_scope = None
 current_var_name = None
 current_var_type = None
 current_var_data_type = None
+current_group_internal_scope = None
+current_dim = None
 
 # For function calls
 function_param_counter = None
@@ -33,7 +36,7 @@ def p_program(p):
     '''
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
-    #print(*quads.list, sep='\n')
+    # print(*quads.list, sep='\n')
     print(json.dumps(function_directory.table, indent=2))
 
     function_directory.generate_variable_workspace('#global', '#global')
@@ -77,7 +80,7 @@ def p_np_start_state(p):
     np_start_state : epsilon
     '''
     global function_directory, avail, quads, semantic_cube, operand_stack, operator_stack, jump_stack, control_variable_stack
-    global current_general_scope, current_internal_scope, current_var_name, current_var_type, current_var_data_type, constants
+    global current_general_scope, current_internal_scope, current_var_name, current_var_type, current_var_data_type, constants, dim_stack, current_group_internal_scope, current_dim
     function_directory = FunctionDirectory()
     avail = Avail()
     quads = Quadruples()
@@ -92,12 +95,17 @@ def p_np_start_state(p):
     current_var_type = None
     current_var_data_type = None
     constants = Constants()
+    dim_stack = []
     # Agregar constante 1 para funcionalidad for
     one_constant_address = avail.get_new_address('int', 'constants')
     constants.add_constant('int', one_constant_address, '1')
 
     # Primer cuadruplo para empezar en el main
     quads.generate_quad('GOTOMAIN', None, None, None)
+
+    # Arrays and matrices
+    current_group_internal_scope = None
+    current_dim = None
 
 
 def p_np_start_func_dir(p):
@@ -154,29 +162,149 @@ def p_variable(p):
     '''
     variable    : ID variable1
     '''
-    if (function_directory.has_variable(current_general_scope, current_internal_scope, p[1])):
-        variable_map = function_directory.table[current_general_scope][current_internal_scope]['vars_table'][p[1]]
-        variable_address, variable_data_type = variable_map[
-            'var_virtual_address'], variable_map['var_data_type']
-        p[0] = (variable_address, variable_data_type)
-    elif (function_directory.has_variable(current_general_scope, '#global', p[1])):
-        variable_map = function_directory.table[current_general_scope]['#global']['vars_table'][p[1]]
-        variable_address, variable_data_type = variable_map[
-            'var_virtual_address'], variable_map['var_data_type']
-        p[0] = (variable_address, variable_data_type)
-    else:
-        raise VariableNotDefined(
-            "Variable " + p[1] + " not defined in line " + str(p.lineno(1)))
+    p[0] = p[2]
 
 
 def p_variable1(p):
     '''
-    variable1   : OPEN_BRACKET hyper_exp CLOSE_BRACKET
+    variable1   : np_array_access1 OPEN_BRACKET np_array_access2 hyper_exp np_array_access3 CLOSE_BRACKET group_access
                 | DOT ID
                 | epsilon
 
     '''
-    pass
+    if len(p) == 2:
+        if (function_directory.has_variable(current_general_scope, current_internal_scope, p[-1])):
+            variable_map = function_directory.table[current_general_scope][
+                current_internal_scope]['vars_table'][p[-1]]
+            variable_address, variable_data_type = variable_map[
+                'var_virtual_address'], variable_map['var_data_type']
+            p[0] = (variable_address, variable_data_type)
+        elif (function_directory.has_variable(current_general_scope, '#global', p[-1])):
+            variable_map = function_directory.table[current_general_scope]['#global']['vars_table'][p[-1]]
+            variable_address, variable_data_type = variable_map[
+                'var_virtual_address'], variable_map['var_data_type']
+            p[0] = (variable_address, variable_data_type)
+        else:
+            raise VariableNotDefined(
+                "Variable " + p[-1] + " not defined in line " + str(p.lineno(1)))
+    elif len(p) == 8:
+        p[0] = p[7]
+
+
+def p_group_access(p):
+    '''
+    group_access    : np_array_access4 OPEN_BRACKET np_array_access2 hyper_exp np_array_access3 CLOSE_BRACKET np_array_access5
+                    | np_array_access5
+    '''
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = p[7]
+
+
+def p_np_array_access1(p):
+    '''
+    np_array_access1 : epsilon
+    '''
+    global current_var_name, current_group_internal_scope
+
+    if (function_directory.has_variable(current_general_scope, current_internal_scope, p[-1])):
+        variable_map = function_directory.table[current_general_scope][
+            current_internal_scope]['vars_table'][p[-1]]
+        variable_address, variable_data_type = variable_map[
+            'var_virtual_address'], variable_map['var_data_type']
+        current_group_internal_scope = current_internal_scope
+    elif (function_directory.has_variable(current_general_scope, '#global', p[-1])):
+        variable_map = function_directory.table[current_general_scope]['#global']['vars_table'][p[-1]]
+        variable_address, variable_data_type = variable_map[
+            'var_virtual_address'], variable_map['var_data_type']
+        current_group_internal_scope = '#global'
+    else:
+        raise VariableNotDefined(
+            "Variable " + p[-1] + " not defined in line " + str(p.lineno(1)))
+
+    current_var_name = p[-1]
+    operand_stack.append((variable_address, variable_data_type))
+
+
+def p_np_array_access2(p):
+    '''
+    np_array_access2 : epsilon
+    '''
+    global current_dim
+
+    group_id_address, _ = operand_stack.pop()
+    group_dim = function_directory.get_group_dimensions(
+        current_general_scope, current_group_internal_scope, current_var_name)
+
+    if group_dim > 0:
+        current_dim = 1
+        dim_arr = [group_id_address, current_dim]
+        dim_stack.append(dim_arr)
+        operator_stack.append('[')
+    else:
+        raise Exception(
+            'Variable does not have dimensions ' + current_var_name)
+
+
+def p_np_array_access3(p):
+    '''
+    np_array_access3 : epsilon
+    '''
+    group_size = function_directory.get_group_size(
+        current_general_scope, current_group_internal_scope, current_var_name)
+    index = operand_stack[-1]
+
+    quads.generate_quad('VERIFY', group_size, index, None)
+
+    group_dim = function_directory.get_group_dimensions(
+        current_general_scope, current_group_internal_scope, current_var_name)
+
+    if group_dim > current_dim:
+        aux_address, aux_type = operand_stack.pop()
+        if aux_type != 'int':
+            raise Exception('Can not index variable ' +
+                            current_var_name + ' with type ' + aux_type)
+        mdim = function_directory.get_m_dim(
+            current_general_scope, current_group_internal_scope, current_var_name, current_dim)
+        new_address = constants.get_constant_address('int', str(int(mdim)))
+        temp_address = avail.get_new_address('int', 'temps')
+        quads.generate_quad('*', aux_address, new_address, temp_address)
+        operand_stack.append((temp_address, 'int'))
+
+    if current_dim > 1:
+        aux2_address, _ = operand_stack.pop()
+        aux1_address, _ = operand_stack.pop()
+        temp_address = avail.get_new_address('int', 'temps')
+        quads.generate_quad('+', aux1_address, aux2_address, temp_address)
+        operand_stack.append(temp_address)
+
+
+def p_np_array_access4(p):
+    '''
+    np_array_access4 : epsilon
+    '''
+    global current_dim, dim_stack
+
+    current_dim += 1
+    dim_stack[-1][1] = current_dim
+
+
+def p_np_array_access5(p):
+    '''
+    np_array_access5 : epsilon
+    '''
+    aux1_address, _ = operand_stack.pop()
+    group_virtual_address = function_directory.get_variable_virtual_address(
+        current_general_scope, current_group_internal_scope, current_var_name)
+    new_address = avail.get_new_address('int', 'constants')
+    constants.add_constant('int', new_address, group_virtual_address)
+    new_temp_address = avail.get_new_address('int', 'temps')
+    quads.generate_quad('+', aux1_address, new_address, new_temp_address)
+    pointer_address = '&' + str(new_temp_address)
+    dim_stack.pop()
+    operator_stack.pop()
+    p[0] = (pointer_address, 'int')
 
 
 def p_class_declaration(p):

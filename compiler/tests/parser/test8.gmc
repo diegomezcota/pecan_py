@@ -6,4 +6,7 @@ var int hola;
 
 main() {
     write("hola");
+
+    mat[1][1] = 3;
+    hola = arr[3] + arr[4];
 }
