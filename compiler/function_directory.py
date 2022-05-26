@@ -121,7 +121,10 @@ class FunctionDirectory:
         # ir por todo el var table y sumar cada tipo
         vars_table = self.table[general_name][internal_name]['vars_table']
         for _, var_dict in vars_table.items():
-            variable_workspace[var_dict['var_data_type']] += 1
+            if var_dict['var_type'] != 'group':
+                variable_workspace[var_dict['var_data_type']] += 1
+            else:
+                variable_workspace[var_dict['var_data_type']] += var_dict['group_size']
         self.table[general_name][internal_name]['workspace']['variables_workspace'] = variable_workspace
 
     def generate_dim_ms(self, general_name, internal_name, var_name):
