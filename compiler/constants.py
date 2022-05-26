@@ -7,7 +7,7 @@ class Constants:
         self.table[type][constant] = virtual_address
 
     def has_constant(self, type, constant):
-        return constant in self.table[type]
+        return constant in self.table[type].keys()
 
     def get_constant_address(self, type, constant):
         return self.table[type][constant]
