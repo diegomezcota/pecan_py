@@ -66,11 +66,22 @@ def set_value_in_memory(address, local_memory, value):
     return local_memory
 
 
+def clean_quad_addresses(current_quad, memory):
+    for i, element in enumerate(current_quad):
+        if element is not None and str(element)[0] == '&':
+            element = element[1:]
+            element = int(element)
+            _, new_address = get_type_and_value(memory, element)
+            current_quad[i] = new_address
+    return current_quad
+
+
 print('--------------------START OF EXECUTION-----------------------------')
 
 while (instruction_pointer < len(quads)):
     current_quad = quads[instruction_pointer]
-
+    if memory_stack:
+        current_quad = clean_quad_addresses(current_quad, memory_stack[-1])
     # GOTOMAIN execution
     if current_quad[0] == 'GOTOMAIN':
         main_vw = ovejota_manager.get_variable_workspace('#global', 'main')
