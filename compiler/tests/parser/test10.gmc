@@ -1,0 +1,6 @@
+program arreglos_dimensiones;
+
+main() {
+    group a = int[10];
+    write(a);
+}

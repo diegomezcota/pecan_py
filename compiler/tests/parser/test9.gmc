@@ -1,15 +1,14 @@
 program a;
 
+group mat = int[4][5];
+group vect = int[2];
+
 main() {
-    var int i;
-    var int j;
-    i = 0;
-    while (i < 2) {
-        j = 0;
-        while (j < 2) {
-            write(i);
-            j = j + 1;
-        }
-        i = i + 1;
-    }
+    vect[0] = 1;
+    vect[1] = 2;
+    mat[vect[vect[0]] + vect[0]][vect[0]] = 18;
+    write(mat[0][1]);
+    write(vect[0]);
+    write(mat[3][1]);
+    //write(mat[0][2]);
 }

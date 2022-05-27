@@ -1,13 +1,12 @@
 program a;
 
-group mat = int[2][2];
-group arr = int[9];
-var int hola;
+var int i;
+var int j;
 
 main() {
-    var int i;
-    var int j;
-    mat[0][0] = 9;
+    group mat = int[2][2];
+    group arr = int[9];
+    mat[0][1 - 1] = 9;
     i = 0;
     while (i < 2) {
         j = 0;

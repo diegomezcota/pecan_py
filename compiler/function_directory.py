@@ -60,6 +60,9 @@ class FunctionDirectory:
     def get_group_size(self, general_name, internal_name, var_name):
         return self.table[general_name][internal_name]['vars_table'][var_name]['group_size']
 
+    def get_dim_size(self, general_name, internal_name, var_name, dim):
+        return self.table[general_name][internal_name]['vars_table'][var_name]['dim_list'][dim-1]['size']
+
     def get_group_dimensions(self, general_name, internal_name, var_name):
         if 'dim_list' in self.table[general_name][internal_name]['vars_table'][var_name].keys():
             return len(self.table[general_name][internal_name]['vars_table'][var_name]['dim_list'])
