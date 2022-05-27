@@ -20,6 +20,8 @@ quads = ovejota_manager.quads
 
 instruction_pointer = 0
 memory_stack = []
+memories_to_be = []
+instruction_pointer_stack = []
 
 
 def get_type_and_value_global(address):
@@ -270,6 +272,44 @@ while (instruction_pointer < len(quads)):
             memory_stack[-1], current_quad[2])
         if 0 > index_value or index_value >= dim_size:
             raise Exception('Group index out of bounds')
+
+    elif current_quad[0] == 'GOSUB':
+        function_name = current_quad[1]
+        function_start_quad = current_quad[3]
+        new_memory_to_execute = memories_to_be.pop()
+        memory_stack.append(new_memory_to_execute[0])
+        instruction_pointer_stack.append(instruction_pointer)
+        instruction_pointer = function_start_quad
+        continue
+
+    elif current_quad[0] == 'ERA':
+        function_name = current_quad[3]
+        function_vw = ovejota_manager.get_variable_workspace(
+            '#global', function_name)
+        function_tw = ovejota_manager.get_temps_workspace(
+            '#global', function_name)
+        function_variable_workspace = (
+            function_vw['int'], function_vw['float'], function_vw['bool'], function_vw['string'])
+        function_temps_workspace = (
+            function_tw['int'], function_tw['float'], function_tw['bool'], function_tw['string'])
+        function_memory = LocalMemory(
+            function_variable_workspace, function_temps_workspace)
+        memories_to_be.append(
+            [function_memory, {'int': 8000, 'float': 10000, 'bool': 12000, 'string': 14000}])
+
+    elif current_quad[0] == 'PARAM':
+        param_address = current_quad[1]
+        param_index = current_quad[3]
+        param_type, param_value = get_type_and_value(
+            memory_stack[-1], param_address)
+        new_param_address = memories_to_be[-1][1][param_type]
+        memories_to_be[-1][0].set_value_in_address(
+            new_param_address, param_value)
+        memories_to_be[-1][1][param_type] += 1
+
+    elif current_quad[0] == 'ENDFUNC':
+        memory_stack.pop()
+        instruction_pointer = instruction_pointer_stack.pop()
 
     instruction_pointer += 1
 

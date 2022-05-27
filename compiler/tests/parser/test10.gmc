@@ -13,5 +13,5 @@ function c() returns int {
 }
 
 main() {
-    a(b(c()), c());
+    write(a(b(c()), c()));
 }

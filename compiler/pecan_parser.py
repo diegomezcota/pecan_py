@@ -37,7 +37,7 @@ def p_program(p):
     '''
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
-    #print(*quads.list, sep='\n')
+    print(*quads.list, sep='\n')
     #print(json.dumps(function_directory.table, indent=2))
 
     function_directory.generate_variable_workspace('#global', '#global')
@@ -54,7 +54,7 @@ def p_program(p):
 
 def p_main_function(p):
     '''
-    main_function : MAIN np_add_main_internal_scope OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_KEY variable_declaration_loop np_generate_variable_workspace np_add_function_start_quad statement_loop CLOSE_KEY np_end_function
+    main_function : MAIN np_add_main_internal_scope OPEN_PARENTHESIS CLOSE_PARENTHESIS OPEN_KEY variable_declaration_loop np_generate_variable_workspace np_add_function_start_quad statement_loop CLOSE_KEY np_end_function_main
     '''
     global current_internal_scope
     current_internal_scope = '#global'
@@ -686,6 +686,7 @@ def p_factor(p):
             | variable
             | OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
     '''
+    #print('soy factor')
     if len(p) == 2:
         temp_tuple = p[1]
         operand_stack.append(temp_tuple)
@@ -1216,6 +1217,17 @@ def p_np_add_function_start_quad(p):
         current_general_scope, current_internal_scope, quads.counter)
 
 
+def p_np_end_function_main(p):
+    '''
+    np_end_function_main : epsilon
+    '''
+    function_directory.delete_vars_table(
+        current_general_scope, current_internal_scope)
+    temps_workspace = avail.get_counter_summary('temps')
+    function_directory.set_temps_workspace(
+        current_general_scope, current_internal_scope, temps_workspace)
+
+
 def p_np_end_function(p):
     '''
     np_end_function : epsilon
@@ -1244,6 +1256,9 @@ def p_np_set_function_return_type(p):
     '''
     function_directory.set_function_type(
         current_general_scope, current_internal_scope, p[-1])
+    new_address = avail.get_new_address(p[-1], 'globals')
+    function_directory.add_variable(
+        '#global', '#global', current_internal_scope, 'var', p[-1], new_address)
 
 
 def p_function_return(p):
@@ -1263,9 +1278,11 @@ def p_function_return(p):
         else:
             # TODO: Para apoyar a la recursion, pedir la direccion de esta funcion al inicio de la declaracion,
             # creo que no cambia nada el pedirla aqui, solo habria que hacer la query por la function address en este punto
-            function_address = avail.get_new_global(function_return_type)
-            function_directory.add_variable(
-                '#global', '#global', current_internal_scope, 'var', function_return_type, function_address)
+            #function_address = avail.get_new_global(function_return_type)
+            # function_directory.add_variable(
+            #    '#global', '#global', current_internal_scope, 'var', function_return_type, function_address)
+            function_address = function_directory.get_function_virtual_address(
+                '#global', '#global', current_internal_scope)
             quads.generate_quad('=', return_exp_address,
                                 None, function_address)
     else:
