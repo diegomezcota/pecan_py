@@ -79,7 +79,7 @@ def clean_quad_addresses(current_quad, memory):
 print('--------------------START OF EXECUTION-----------------------------')
 
 while (instruction_pointer < len(quads)):
-    current_quad = quads[instruction_pointer]
+    current_quad = quads[instruction_pointer].copy()
     if memory_stack:
         current_quad = clean_quad_addresses(current_quad, memory_stack[-1])
     # GOTOMAIN execution
@@ -195,7 +195,7 @@ while (instruction_pointer < len(quads)):
     elif current_quad[0] == 'WRITE':
         to_write_type, to_write_value = get_type_and_value(
             memory_stack[-1], current_quad[3])
-        print(to_write_value)
+        print(to_write_value) # This is functionality and not for testing
 
     # Read execution
     elif current_quad[0] == 'READ':
