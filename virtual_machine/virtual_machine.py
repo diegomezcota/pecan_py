@@ -195,7 +195,7 @@ while (instruction_pointer < len(quads)):
     elif current_quad[0] == 'WRITE':
         to_write_type, to_write_value = get_type_and_value(
             memory_stack[-1], current_quad[3])
-        print(to_write_value) # This is functionality and not for testing
+        print(to_write_value)  # This is functionality and not for testing
 
     # Read execution
     elif current_quad[0] == 'READ':
@@ -262,6 +262,14 @@ while (instruction_pointer < len(quads)):
         if condition_value:
             instruction_pointer = current_quad[3]
             continue
+
+    # VERIFY execution (for group data structures)
+    elif current_quad[0] == 'VERIFY':
+        dim_size = current_quad[1]
+        index_type, index_value = get_type_and_value(
+            memory_stack[-1], current_quad[2])
+        if 0 > index_value or index_value >= dim_size:
+            raise Exception('Group index out of bounds')
 
     instruction_pointer += 1
 

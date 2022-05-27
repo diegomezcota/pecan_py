@@ -236,7 +236,8 @@ def p_np_array_access2(p):
 
     # TODO: Check for second dimension validation
     if group_dim > 0:
-        dim_arr = [group_id_address, 1, current_group_internal_scope, current_var_name]
+        dim_arr = [group_id_address, 1,
+                   current_group_internal_scope, current_var_name]
         dim_stack.append(dim_arr)
         operator_stack.append('[')
     else:
@@ -252,11 +253,8 @@ def p_np_array_access3(p):
         current_general_scope, dim_stack[-1][2], dim_stack[-1][3], dim_stack[-1][1])
     index = operand_stack[-1][0]
 
-    # TODO : Guardar el dim size en una constante o tener la consideracion que el verifica guarda un entero
     quads.generate_quad('VERIFY', dim_size, index, None)
-    # TODO: Checar con mariana, este group dim no es necesario ya que esto se hace para 1 y 2 dimensiones
-    #group_dim = function_directory.get_group_dimensions(current_general_scope, current_group_internal_scope, current_var_name)
-    # TODO: Checar con mariana esto en la ppt pues no se estaba haciendo
+
     aux_address, aux_type = operand_stack.pop()
     if aux_type != 'int':
         raise Exception('Can not index variable ' +
@@ -282,7 +280,13 @@ def p_np_array_access4(p):
     '''
     global dim_stack
 
-    dim_stack[-1][1] += 1
+    # dim_stack[-1][2] contiene el internal_scope del group
+    # dim_stack[-1][3] contiene el nombre de la variable del group
+    if function_directory.get_group_dimensions(current_general_scope, dim_stack[-1][2], dim_stack[-1][3]) != 2:
+        raise Exception(
+            'Variable ' + dim_stack[-1][3] + ' has only one dimension')
+    else:
+        dim_stack[-1][1] += 1
 
 
 def p_np_array_access5(p):
@@ -297,7 +301,8 @@ def p_np_array_access5(p):
         new_address = avail.get_new_address('int', 'constants')
         constants.add_constant('int', new_address, str(group_virtual_address))
     else:
-        new_address = constants.get_constant_address('int', str(group_virtual_address))
+        new_address = constants.get_constant_address(
+            'int', str(group_virtual_address))
     new_temp_address = avail.get_new_address('int', 'temps')
     quads.generate_quad('+', aux1_address, new_address, new_temp_address)
     pointer_address = '&' + str(new_temp_address)

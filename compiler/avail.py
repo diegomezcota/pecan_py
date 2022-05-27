@@ -17,7 +17,7 @@ class Avail:
             return current_address
 
     def get_group_addresses(self, type, block, size):
-        if self.table[block][type][0] + size > self.table[block][type][2]:
+        if self.table[block][type][0] + size - 1 > self.table[block][type][2]:
             raise Exception("Too many variables for type " + type)
         else:
             current_address = self.table[block][type][0]

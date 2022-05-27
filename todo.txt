@@ -4,3 +4,5 @@ Agregar el chequeo que el read no pueda leer la variable de control i
 
 
 Checar validaciones de dimensiones (si es matrix y se accesa el puro identificador, si es de 1  dimension, etc)
+
+Preguntar a elda como manejar los accesos de arrays tipo mat[0] o mat 
