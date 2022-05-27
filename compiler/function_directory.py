@@ -57,6 +57,18 @@ class FunctionDirectory:
     def get_variable_data_type(self, general_name, internal_name, var_name):
         return self.table[general_name][internal_name]['vars_table'][var_name]['var_data_type']
 
+    def get_group_size(self, general_name, internal_name, var_name):
+        return self.table[general_name][internal_name]['vars_table'][var_name]['group_size']
+
+    def get_group_dimensions(self, general_name, internal_name, var_name):
+        if 'dim_list' in self.table[general_name][internal_name]['vars_table'][var_name].keys():
+            return len(self.table[general_name][internal_name]['vars_table'][var_name]['dim_list'])
+        else:
+            return 0
+
+    def get_m_dim(self, general_name, internal_name, var_name, dim):
+        return self.table[general_name][internal_name]['vars_table'][var_name]['dim_list'][dim-1]['m']
+
     def set_temps_workspace(self, general_name, internal_name, temps_workspace):
         self.table[general_name][internal_name]['workspace']['temps_workspace'] = temps_workspace
 
@@ -81,6 +93,20 @@ class FunctionDirectory:
         self.table[general_name][internal_name]['param_signature'].append(
             parameter_type)
 
+    def add_dim1_list(self, general_name, internal_name, var_name):
+        self.table[general_name][internal_name]['vars_table'][var_name]['dim_list'] = [{
+            'dim': 1, 'size': None}]
+        self.table[general_name][internal_name]['vars_table'][var_name]['r'] = 1
+
+    def add_dim2_list(self, general_name, internal_name, var_name):
+        self.table[general_name][internal_name]['vars_table'][var_name]['dim_list'].append({
+            'dim': 2, 'size': None})
+
+    def add_dim_size_and_update_r(self, general_name, internal_name, var_name, index, size):
+        r = self.table[general_name][internal_name]['vars_table'][var_name]['r']
+        self.table[general_name][internal_name]['vars_table'][var_name]['dim_list'][index]['size'] = size
+        self.table[general_name][internal_name]['vars_table'][var_name]['r'] = r * size
+
     def has_general_scope(self, name):
         return (name in self.table.keys())
 
@@ -95,8 +121,22 @@ class FunctionDirectory:
         # ir por todo el var table y sumar cada tipo
         vars_table = self.table[general_name][internal_name]['vars_table']
         for _, var_dict in vars_table.items():
-            variable_workspace[var_dict['var_data_type']] += 1
+            if var_dict['var_type'] != 'group':
+                variable_workspace[var_dict['var_data_type']] += 1
+            else:
+                variable_workspace[var_dict['var_data_type']] += var_dict['group_size']
         self.table[general_name][internal_name]['workspace']['variables_workspace'] = variable_workspace
+
+    def generate_dim_ms(self, general_name, internal_name, var_name):
+        size = self.table[general_name][internal_name]['vars_table'][var_name]['r']
+
+        for dim in self.table[general_name][internal_name]['vars_table'][var_name]['dim_list']:
+            r = self.table[general_name][internal_name]['vars_table'][var_name]['r']
+            dim_size = dim['size']
+            dim['m'] = r / dim_size
+            self.table[general_name][internal_name]['vars_table'][var_name]['r'] = dim['m']
+
+        self.table[general_name][internal_name]['vars_table'][var_name]['group_size'] = size
 
     def delete_vars_table(self, general_name, internal_name):
         self.table[general_name][internal_name]['vars_table'] = {}
