@@ -6,7 +6,7 @@
         "param_signature": [],
         "workspace": {
           "variables_workspace": {
-            "int": 2,
+            "int": 3,
             "float": 0,
             "string": 0,
             "bool": 0
@@ -14,12 +14,77 @@
         },
         "function_type": "void"
       },
+      "a": {
+        "vars_table": {},
+        "param_signature": [
+          "int",
+          "int"
+        ],
+        "workspace": {
+          "variables_workspace": {
+            "int": 2,
+            "float": 0,
+            "string": 0,
+            "bool": 0
+          },
+          "temps_workspace": {
+            "int": 1,
+            "float": 0,
+            "bool": 0,
+            "string": 0
+          }
+        },
+        "function_type": "int",
+        "start_quad": 1
+      },
+      "b": {
+        "vars_table": {},
+        "param_signature": [
+          "int"
+        ],
+        "workspace": {
+          "variables_workspace": {
+            "int": 1,
+            "float": 0,
+            "string": 0,
+            "bool": 0
+          },
+          "temps_workspace": {
+            "int": 0,
+            "float": 0,
+            "bool": 0,
+            "string": 0
+          }
+        },
+        "function_type": "int",
+        "start_quad": 4
+      },
+      "c": {
+        "vars_table": {},
+        "param_signature": [],
+        "workspace": {
+          "variables_workspace": {
+            "int": 0,
+            "float": 0,
+            "string": 0,
+            "bool": 0
+          },
+          "temps_workspace": {
+            "int": 0,
+            "float": 0,
+            "bool": 0,
+            "string": 0
+          }
+        },
+        "function_type": "int",
+        "start_quad": 6
+      },
       "main": {
         "vars_table": {},
         "param_signature": [],
         "workspace": {
           "variables_workspace": {
-            "int": 2000,
+            "int": 0,
             "float": 0,
             "string": 0,
             "bool": 0
@@ -32,7 +97,7 @@
           }
         },
         "function_type": "void",
-        "start_quad": 1
+        "start_quad": 8
       }
     }
   },
@@ -41,55 +106,139 @@
       "GOTOMAIN",
       null,
       null,
-      1
+      8
     ],
     [
-      "VERIFY",
-      1,
-      24002,
-      null
-    ],
-    [
-      "*",
-      24002,
-      24001,
+      "+",
+      8000,
+      8001,
       16000
     ],
     [
-      "VERIFY",
-      2000,
-      24002,
+      "=",
+      16000,
+      null,
+      0
+    ],
+    [
+      "ENDFUNC",
+      null,
+      null,
       null
     ],
     [
-      "*",
-      24002,
+      "=",
       24000,
+      null,
+      1
+    ],
+    [
+      "ENDFUNC",
+      null,
+      null,
+      null
+    ],
+    [
+      "=",
+      24001,
+      null,
+      2
+    ],
+    [
+      "ENDFUNC",
+      null,
+      null,
+      null
+    ],
+    [
+      "ERA",
+      null,
+      null,
+      "a"
+    ],
+    [
+      "ERA",
+      null,
+      null,
+      "b"
+    ],
+    [
+      "ERA",
+      null,
+      null,
+      "c"
+    ],
+    [
+      "GOSUB",
+      "c",
+      null,
+      6
+    ],
+    [
+      "=",
+      2,
+      null,
+      16000
+    ],
+    [
+      "PARAM",
+      16000,
+      null,
+      0
+    ],
+    [
+      "GOSUB",
+      "b",
+      null,
+      4
+    ],
+    [
+      "=",
+      1,
+      null,
       16001
     ],
     [
-      "+",
-      16000,
+      "PARAM",
       16001,
+      null,
+      0
+    ],
+    [
+      "ERA",
+      null,
+      null,
+      "c"
+    ],
+    [
+      "GOSUB",
+      "c",
+      null,
+      6
+    ],
+    [
+      "=",
+      2,
+      null,
       16002
     ],
     [
-      "+",
+      "PARAM",
       16002,
-      24003,
+      null,
+      1
+    ],
+    [
+      "GOSUB",
+      "a",
+      null,
+      1
+    ],
+    [
+      "=",
+      0,
+      null,
       16003
-    ],
-    [
-      "=",
-      24004,
-      null,
-      "&16003"
-    ],
-    [
-      "=",
-      24002,
-      null,
-      0
     ],
     [
       "ENDFUNC",
@@ -99,7 +248,7 @@
     ]
   ],
   "constants_summary": {
-    "int": 5,
+    "int": 2,
     "float": 0,
     "bool": 0,
     "string": 0
@@ -107,10 +256,7 @@
   "constants_table": {
     "int": {
       "1": 24000,
-      "2000": 24001,
-      "0": 24002,
-      "8000": 24003,
-      "14": 24004
+      "2": 24001
     },
     "float": {},
     "bool": {},

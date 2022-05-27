@@ -1,6 +1,17 @@
 program arreglos_dimensiones;
 
+function a(int a, int b) returns int {
+    return a + b;
+} 
+
+function b(int a) returns int {
+    return 1;
+}
+
+function c() returns int {
+    return 2;
+}
+
 main() {
-    group a = int[10];
-    write(a);
+    a(b(c()), c());
 }

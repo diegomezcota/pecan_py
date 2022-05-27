@@ -29,6 +29,8 @@ current_group_internal_scope = None
 # For function calls
 function_param_counter = None
 current_function_call_name = None
+current_function_call_name_stack = None
+function_param_counter_stack = None
 
 
 def p_program(p):
@@ -79,7 +81,7 @@ def p_np_start_state(p):
     np_start_state : epsilon
     '''
     global function_directory, avail, quads, semantic_cube, operand_stack, operator_stack, jump_stack, control_variable_stack
-    global current_general_scope, current_internal_scope, current_var_name, current_var_type, current_var_data_type, constants, dim_stack, current_group_internal_scope
+    global current_general_scope, current_internal_scope, current_var_name, current_var_type, current_var_data_type, constants, dim_stack, current_group_internal_scope, current_function_call_name_stack, function_param_counter_stack
     function_directory = FunctionDirectory()
     avail = Avail()
     quads = Quadruples()
@@ -94,7 +96,7 @@ def p_np_start_state(p):
     current_var_type = None
     current_var_data_type = None
     constants = Constants()
-    dim_stack = []
+
     # Agregar constante 1 para funcionalidad for
     one_constant_address = avail.get_new_address('int', 'constants')
     constants.add_constant('int', one_constant_address, '1')
@@ -104,6 +106,11 @@ def p_np_start_state(p):
 
     # Arrays and matrices
     current_group_internal_scope = None
+    dim_stack = []
+
+    # Funciones
+    current_function_call_name_stack = []
+    function_param_counter_stack = []
 
 
 def p_np_start_func_dir(p):
@@ -1074,26 +1081,28 @@ def p_function_call(p):
     function_call : ID function_call1 OPEN_PARENTHESIS np_start_function_param_counter function_call2 CLOSE_PARENTHESIS
     '''
     param_signature_length = function_directory.get_param_signature_length(
-        '#global', current_function_call_name)
-    if param_signature_length != function_param_counter:
-        error_msg = "'" + current_function_call_name + "'" + " function call expected " + \
+        '#global', current_function_call_name_stack[-1])
+    if param_signature_length != function_param_counter_stack[-1]:
+        error_msg = "'" + current_function_call_name_stack[-1] + "'" + " function call expected " + \
             str(param_signature_length) + " params but received " + \
-            str(function_param_counter)
+            str(function_param_counter_stack[-1])
         raise ParamLengthMismatch(error_msg + " in line " + str(p.lineno(6)))
     else:
         function_start_quad = function_directory.get_function_start_quad(
-            '#global', current_function_call_name)
+            '#global', current_function_call_name_stack[-1])
         quads.generate_quad(
-            'GOSUB', current_function_call_name, None, function_start_quad)
+            'GOSUB', current_function_call_name_stack[-1], None, function_start_quad)
         function_return_type = function_directory.get_function_type(
-            '#global', current_function_call_name)
+            '#global', current_function_call_name_stack[-1])
         if function_return_type != 'void':
             function_var_address = function_directory.get_function_virtual_address(
-                '#global', '#global', current_function_call_name)
+                '#global', '#global', current_function_call_name_stack[-1])
             new_temp_address, _ = avail.get_new_temp(function_return_type)
             p[0] = (new_temp_address, function_return_type)
             quads.generate_quad('=', function_var_address,
                                 None, new_temp_address)
+    current_function_call_name_stack.pop()
+    function_param_counter_stack.pop()
 
 
 def p_function_call1(p):
@@ -1110,12 +1119,15 @@ def p_np_validate_function_existence_and_era(p):
     '''
     global current_function_call_name
     current_function_call_name = p[-1]
+    current_function_call_name_stack.append(current_function_call_name)
     # Checar si existe la funcion "global", luego soportaremos clases
-    if not function_directory.has_internal_scope('#global', current_function_call_name):
-        error_msg = "'" + current_function_call_name + "' function does not exist"
+    if not function_directory.has_internal_scope('#global', current_function_call_name_stack[-1]):
+        error_msg = "'" + \
+            current_function_call_name_stack[-1] + "' function does not exist"
         raise FunctionNotDeclared(error_msg + " in line " + str(p.lineno(1)))
     else:
-        quads.generate_quad('ERA', None, None, current_function_call_name)
+        quads.generate_quad('ERA', None, None,
+                            current_function_call_name_stack[-1])
 
 
 def p_np_start_function_param_counter(p):
@@ -1124,6 +1136,7 @@ def p_np_start_function_param_counter(p):
     '''
     global function_param_counter
     function_param_counter = 0
+    function_param_counter_stack.append(function_param_counter)
 
 
 def p_function_call2(p):
@@ -1154,20 +1167,20 @@ def p_np_check_param_match(p):
     '''
     np_check_param_match : epsilon
     '''
-    global function_param_counter
+    global function_param_counter_stack
     param_address, param_type = operand_stack.pop()
     nth_signature_type = function_directory.get_nth_param_type(
-        '#global', current_function_call_name, function_param_counter)
+        '#global', current_function_call_name_stack[-1], function_param_counter_stack[-1])
     if nth_signature_type != param_type:
         error_msg = "Expected " + nth_signature_type + " type for " + \
-            str(function_param_counter + 1) + "th param "
-        error_msg += "in '" + current_function_call_name + \
+            str(function_param_counter_stack[-1] + 1) + "th param "
+        error_msg += "in '" + current_function_call_name_stack[-1] + \
             "' function call, but received " + param_type
         raise ParamTypeMismatch(error_msg + " in line " + str(p.lineno(1)))
     else:
         quads.generate_quad('PARAM', param_address,
-                            None, function_param_counter)
-        function_param_counter += 1
+                            None, function_param_counter_stack[-1])
+        function_param_counter_stack[-1] += 1
 
 
 def p_class_function(p):
