@@ -266,6 +266,6 @@ while (instruction_pointer < len(quads)):
     instruction_pointer += 1
 
 print('--------------------END OF EXECUTION-----------------------------')
-print(*quads, sep='\n')
+# print(*quads, sep='\n')
 # print(memory_stack[-1].table)
 # print(global_memory.table)

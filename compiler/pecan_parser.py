@@ -25,7 +25,6 @@ current_var_name = None
 current_var_type = None
 current_var_data_type = None
 current_group_internal_scope = None
-current_dim = None
 
 # For function calls
 function_param_counter = None
@@ -36,7 +35,7 @@ def p_program(p):
     '''
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
-    # print(*quads.list, sep='\n')
+    #print(*quads.list, sep='\n')
     #print(json.dumps(function_directory.table, indent=2))
 
     function_directory.generate_variable_workspace('#global', '#global')
@@ -80,7 +79,7 @@ def p_np_start_state(p):
     np_start_state : epsilon
     '''
     global function_directory, avail, quads, semantic_cube, operand_stack, operator_stack, jump_stack, control_variable_stack
-    global current_general_scope, current_internal_scope, current_var_name, current_var_type, current_var_data_type, constants, dim_stack, current_group_internal_scope, current_dim
+    global current_general_scope, current_internal_scope, current_var_name, current_var_type, current_var_data_type, constants, dim_stack, current_group_internal_scope
     function_directory = FunctionDirectory()
     avail = Avail()
     quads = Quadruples()
@@ -105,7 +104,6 @@ def p_np_start_state(p):
 
     # Arrays and matrices
     current_group_internal_scope = None
-    current_dim = None
 
 
 def p_np_start_func_dir(p):
@@ -206,7 +204,7 @@ def p_np_array_access1(p):
     '''
     np_array_access1 : epsilon
     '''
-    global current_var_name, current_group_internal_scope, current_dim
+    global current_var_name, current_group_internal_scope
 
     if (function_directory.has_variable(current_general_scope, current_internal_scope, p[-1])):
         variable_map = function_directory.table[current_general_scope][
@@ -224,7 +222,6 @@ def p_np_array_access1(p):
             "Variable " + p[-1] + " not defined in line " + str(p.lineno(1)))
 
     current_var_name = p[-1]
-    current_dim = 0
     operand_stack.append((variable_address, variable_data_type))
 
 
@@ -232,48 +229,46 @@ def p_np_array_access2(p):
     '''
     np_array_access2 : epsilon
     '''
-    global current_dim
 
     group_id_address, _ = operand_stack.pop()
     group_dim = function_directory.get_group_dimensions(
         current_general_scope, current_group_internal_scope, current_var_name)
 
+    # TODO: Check for second dimension validation
     if group_dim > 0:
-        current_dim = 1
-        dim_arr = [group_id_address, current_dim]
+        dim_arr = [group_id_address, 1, current_group_internal_scope, current_var_name]
         dim_stack.append(dim_arr)
         operator_stack.append('[')
     else:
         raise Exception(
-            'Variable does not have dimensions ' + current_var_name)
+            'Variable ' + current_var_name + ' does not have dimensions.')
 
 
 def p_np_array_access3(p):
     '''
     np_array_access3 : epsilon
     '''
-    group_size = function_directory.get_group_size(
-        current_general_scope, current_group_internal_scope, current_var_name)
-    index = operand_stack[-1]
+    dim_size = function_directory.get_dim_size(
+        current_general_scope, dim_stack[-1][2], dim_stack[-1][3], dim_stack[-1][1])
+    index = operand_stack[-1][0]
 
-    quads.generate_quad('VERIFY', group_size, index, None)
+    # TODO : Guardar el dim size en una constante o tener la consideracion que el verifica guarda un entero
+    quads.generate_quad('VERIFY', dim_size, index, None)
+    # TODO: Checar con mariana, este group dim no es necesario ya que esto se hace para 1 y 2 dimensiones
+    #group_dim = function_directory.get_group_dimensions(current_general_scope, current_group_internal_scope, current_var_name)
+    # TODO: Checar con mariana esto en la ppt pues no se estaba haciendo
+    aux_address, aux_type = operand_stack.pop()
+    if aux_type != 'int':
+        raise Exception('Can not index variable ' +
+                        dim_stack[-1][3] + ' with type ' + aux_type)
+    mdim = function_directory.get_m_dim(
+        current_general_scope, dim_stack[-1][2], dim_stack[-1][3], dim_stack[-1][1])
+    new_address = constants.get_constant_address('int', str(int(mdim)))
+    temp_address = avail.get_new_address('int', 'temps')
+    quads.generate_quad('*', aux_address, new_address, temp_address)
+    operand_stack.append((temp_address, 'int'))
 
-    group_dim = function_directory.get_group_dimensions(
-        current_general_scope, current_group_internal_scope, current_var_name)
-
-    if group_dim > current_dim:
-        aux_address, aux_type = operand_stack.pop()
-        if aux_type != 'int':
-            raise Exception('Can not index variable ' +
-                            current_var_name + ' with type ' + aux_type)
-        mdim = function_directory.get_m_dim(
-            current_general_scope, current_group_internal_scope, current_var_name, current_dim)
-        new_address = constants.get_constant_address('int', str(int(mdim)))
-        temp_address = avail.get_new_address('int', 'temps')
-        quads.generate_quad('*', aux_address, new_address, temp_address)
-        operand_stack.append((temp_address, 'int'))
-
-    if current_dim > 1:
+    if dim_stack[-1][1] > 1:
         aux2_address, _ = operand_stack.pop()
         aux1_address, _ = operand_stack.pop()
         temp_address = avail.get_new_address('int', 'temps')
@@ -285,10 +280,9 @@ def p_np_array_access4(p):
     '''
     np_array_access4 : epsilon
     '''
-    global current_dim, dim_stack
+    global dim_stack
 
-    current_dim += 1
-    dim_stack[-1][1] = current_dim
+    dim_stack[-1][1] += 1
 
 
 def p_np_array_access5(p):
@@ -297,7 +291,8 @@ def p_np_array_access5(p):
     '''
     aux1_address, _ = operand_stack.pop()
     group_virtual_address = function_directory.get_variable_virtual_address(
-        current_general_scope, current_group_internal_scope, current_var_name)
+        current_general_scope, dim_stack[-1][2], dim_stack[-1][3])
+    new_address = None
     if not constants.has_constant('int', str(group_virtual_address)):
         new_address = avail.get_new_address('int', 'constants')
         constants.add_constant('int', new_address, str(group_virtual_address))
