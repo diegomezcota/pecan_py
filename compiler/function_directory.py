@@ -127,7 +127,8 @@ class FunctionDirectory:
             if var_dict['var_type'] != 'group':
                 variable_workspace[var_dict['var_data_type']] += 1
             else:
-                variable_workspace[var_dict['var_data_type']] += var_dict['group_size']
+                variable_workspace[var_dict['var_data_type']
+                                   ] += var_dict['group_size']
         self.table[general_name][internal_name]['workspace']['variables_workspace'] = variable_workspace
 
     def generate_dim_ms(self, general_name, internal_name, var_name):
