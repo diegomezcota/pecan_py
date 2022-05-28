@@ -12,7 +12,7 @@ function fib(int n) returns int {
 
 main() {
     var int i;
-    for i = 0 to 20 {
+    for i = 0 to 10 {
         write(fib(i));
     }
 }
