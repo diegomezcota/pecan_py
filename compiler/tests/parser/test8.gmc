@@ -4,17 +4,6 @@ var int i;
 var int j;
 
 main() {
-    group mat = int[1][2000];
-    //group arr = int[9];
-    mat[0][0] = 14;
-    i = 0;
-   // while (i < 2) {
-   //     j = 0;
-   //     while (j < 2) {
-   //         write(mat[i][j]);
-   //         j = j + 1;
-   //     }
-   //     i = i + 1;
-   // }
-    //hola = arr[3] + arr[4];
+    i = i--i;
+    write(i);
 }
