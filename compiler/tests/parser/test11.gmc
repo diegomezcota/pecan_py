@@ -1,28 +1,18 @@
-program fib;
+program a;
 
 function fib(int n) returns int {
     var int ans;
     if (n < 2) {
         ans = n;
     } else {
-        ans = fib(n - 1) + (fib(n - 2));
+        ans = fib(n - 1) + fib(n - 2);
     }
-    return ans;
-    //return fib(n - 1) + (fib(n - 2));
-}
-
-function numero(int i) returns int {
-    var int ans;
-    if (i == 1) {
-        ans = 1;
-    } else {
-        ans = numero(i-1) + numero(1);
-    }
-
     return ans;
 }
 
 main() {
-    write(fib(2));
-    //write(numero(3));
+    var int i;
+    for i = 0 to 20 {
+        write(fib(i));
+    }
 }

@@ -1079,7 +1079,7 @@ def p_hyper_exp_loop1(p):
 
 def p_function_call(p):
     '''
-    function_call : ID function_call1 OPEN_PARENTHESIS np_start_function_param_counter function_call2 CLOSE_PARENTHESIS
+    function_call : ID function_call1 OPEN_PARENTHESIS np_start_function_param_counter np_add_open_parenthesis function_call2 np_remove_open_parenthesis CLOSE_PARENTHESIS
     '''
     param_signature_length = function_directory.get_param_signature_length(
         '#global', current_function_call_name_stack[-1])
@@ -1135,7 +1135,6 @@ def p_np_start_function_param_counter(p):
     '''
     np_start_function_param_counter : epsilon
     '''
-    global function_param_counter
     function_param_counter = 0
     function_param_counter_stack.append(function_param_counter)
 
