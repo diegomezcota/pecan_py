@@ -1,0 +1,37 @@
+program bubble_sort;
+
+main() {
+    // variable declaration
+    group arr = int[15];
+    var int i;
+    var int j;
+    var int n;
+    var int aux;
+    // length of array
+    n = 15;
+    // set values from n to 1
+    for i = 0 to n {
+        arr[i] = n - i;
+    }
+    // print starting values
+    write("STARTING VALUES");
+    for i = 0 to n {
+        write(arr[i]);
+    }
+    // bubble sort
+    for i = 0 to n - 1 {
+        for j = 0 to n - i - 1 {
+            if (arr[j] > arr[j + 1]) {
+                // swap values
+                aux = arr[j];
+                arr[j] = arr[j + 1];
+                arr[j+1] = aux;
+            }
+        }
+    }
+    // print final values
+    write("FINAL VALUES");
+    for i = 0 to n {
+        write(arr[i]);
+    }
+}

@@ -16,10 +16,10 @@ if test_no:
         print('test no.', test_no, ': apropiado')
     except Exception as e:
         error_msg = "test " + str(test_no) + " : " + str(e)
-        raise e
         # Save ovejota as error
         with open('ovejota.json', "w") as output_file:
             json.dump({'error': error_msg}, output_file, indent=2)
+        raise e
 else:
     for i, test in enumerate(test_files):
         try:
