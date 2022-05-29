@@ -303,6 +303,7 @@ def p_np_array_access5(p):
     aux1_address, _ = operand_stack.pop()
     group_virtual_address = function_directory.get_variable_virtual_address(
         current_general_scope, dim_stack[-1][2], dim_stack[-1][3])
+    group_type = function_directory.get_variable_data_type(current_general_scope, dim_stack[-1][2], dim_stack[-1][3])
     new_address = None
     if not constants.has_constant('int', str(group_virtual_address)):
         new_address = avail.get_new_address('int', 'constants')
@@ -315,7 +316,7 @@ def p_np_array_access5(p):
     pointer_address = '&' + str(new_temp_address)
     dim_stack.pop()
     operator_stack.pop()
-    p[0] = (pointer_address, 'int')
+    p[0] = (pointer_address, group_type)
 
 
 def p_class_declaration(p):
@@ -532,7 +533,7 @@ def p_statement(p):
                 | function_call SEMICOLON
     '''
     p[0] = p[1]
-    pass
+    pass  
 
 
 def p_assignment(p):
