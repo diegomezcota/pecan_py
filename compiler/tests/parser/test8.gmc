@@ -1,9 +1,21 @@
 program a;
 
-var int i;
-var int j;
+class Animal {
+    var string nombre;
+    var int edad;
+    var string tipo;
+    function estudiar() returns void;
+};
+
+constructor Animal(int edad, int hola) {
+    var int ola;
+    hola = 2 + 3;
+    write("tripsi");
+}
+
 
 main() {
-    i = i--i;
+    var int i;
+    obj shori = Animal();
     write(i);
 }

@@ -29,6 +29,16 @@ class FunctionDirectory:
                 "workspace": {}
             }
 
+    def add_class_attribute(self, general_name, var_name, var_data_type):
+        vars_map = self.table[general_name]['#global']['vars_table']
+        index = 0
+        for _, var_map in vars_map.items():
+            if var_map['data_type'] == var_data_type:
+                index += 1
+
+        self.table[general_name]['#global']['vars_table'][var_name] = {
+            'data_type': var_data_type, 'index': index}
+
     def get_nth_param_type(self, general_name, internal_name, n):
         # Raise error if n is bigger than array size
         param_signature_arr = self.table[general_name][internal_name]['param_signature']

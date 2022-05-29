@@ -6,7 +6,7 @@
         "param_signature": [],
         "workspace": {
           "variables_workspace": {
-            "int": 1,
+            "int": 0,
             "float": 0,
             "string": 0,
             "bool": 0
@@ -14,11 +14,9 @@
         },
         "function_type": "void"
       },
-      "fib": {
+      "main": {
         "vars_table": {},
-        "param_signature": [
-          "int"
-        ],
+        "param_signature": [],
         "workspace": {
           "variables_workspace": {
             "int": 2,
@@ -27,34 +25,49 @@
             "bool": 0
           },
           "temps_workspace": {
-            "int": 5,
+            "int": 0,
             "float": 0,
-            "bool": 1,
-            "string": 0
-          }
-        },
-        "function_type": "int",
-        "start_quad": 1
-      },
-      "main": {
-        "vars_table": {},
-        "param_signature": [],
-        "workspace": {
-          "variables_workspace": {
-            "int": 1,
-            "float": 0,
-            "string": 0,
-            "bool": 0
-          },
-          "temps_workspace": {
-            "int": 3,
-            "float": 0,
-            "bool": 1,
+            "bool": 0,
             "string": 0
           }
         },
         "function_type": "void",
-        "start_quad": 19
+        "start_quad": 5
+      }
+    },
+    "Animal": {
+      "#global": {
+        "vars_table": {
+          "nombre": {
+            "data_type": "string",
+            "index": 0
+          },
+          "edad": {
+            "data_type": "int",
+            "index": 0
+          },
+          "tipo": {
+            "data_type": "string",
+            "index": 1
+          }
+        },
+        "param_signature": [],
+        "workspace": {}
+      },
+      "constructor": {
+        "vars_table": {},
+        "param_signature": [
+          "int",
+          "int"
+        ],
+        "workspace": {
+          "temps_workspace": {
+            "int": 1,
+            "float": 0,
+            "bool": 0,
+            "string": 0
+          }
+        }
       }
     }
   },
@@ -63,109 +76,25 @@
       "GOTOMAIN",
       null,
       null,
-      19
-    ],
-    [
-      "<",
-      8000,
-      24001,
-      20000
-    ],
-    [
-      "GOTOF",
-      20000,
-      null,
       5
     ],
     [
-      "=",
-      8000,
-      null,
-      8001
-    ],
-    [
-      "GOTO",
-      null,
-      null,
-      17
-    ],
-    [
-      "ERA",
-      null,
-      null,
-      "fib"
-    ],
-    [
-      "-",
-      8000,
-      24000,
+      "+",
+      24001,
+      24002,
       16000
     ],
     [
-      "PARAM",
+      "=",
       16000,
-      null,
-      0
-    ],
-    [
-      "GOSUB",
-      "fib",
-      null,
-      1
-    ],
-    [
-      "=",
-      0,
-      null,
-      16001
-    ],
-    [
-      "ERA",
-      null,
-      null,
-      "fib"
-    ],
-    [
-      "-",
-      8000,
-      24001,
-      16002
-    ],
-    [
-      "PARAM",
-      16002,
-      null,
-      0
-    ],
-    [
-      "GOSUB",
-      "fib",
-      null,
-      1
-    ],
-    [
-      "=",
-      0,
-      null,
-      16003
-    ],
-    [
-      "+",
-      16001,
-      16003,
-      16004
-    ],
-    [
-      "=",
-      16004,
       null,
       8001
     ],
     [
-      "=",
-      8001,
+      "WRITE",
       null,
-      0
+      null,
+      30000
     ],
     [
       "ENDFUNC",
@@ -174,99 +103,28 @@
       null
     ],
     [
-      "=",
-      24002,
-      null,
-      8000
-    ],
-    [
-      "=",
-      24003,
-      null,
-      16000
-    ],
-    [
-      "<",
-      8000,
-      16000,
-      20000
-    ],
-    [
-      "GOTOF",
-      20000,
-      null,
-      32
-    ],
-    [
-      "ERA",
-      null,
-      null,
-      "fib"
-    ],
-    [
-      "PARAM",
-      8000,
-      null,
-      0
-    ],
-    [
-      "GOSUB",
-      "fib",
-      null,
-      1
-    ],
-    [
-      "=",
-      0,
-      null,
-      16001
-    ],
-    [
       "WRITE",
       null,
       null,
-      16001
-    ],
-    [
-      "+",
-      8000,
-      24000,
-      16002
-    ],
-    [
-      "=",
-      16002,
-      null,
       8000
-    ],
-    [
-      "=",
-      16002,
-      null,
-      8000
-    ],
-    [
-      "GOTO",
-      null,
-      null,
-      21
     ]
   ],
   "constants_summary": {
-    "int": 4,
+    "int": 3,
     "float": 0,
     "bool": 0,
-    "string": 0
+    "string": 1
   },
   "constants_table": {
     "int": {
       "1": 24000,
       "2": 24001,
-      "0": 24002,
-      "10": 24003
+      "3": 24002
     },
     "float": {},
     "bool": {},
-    "string": {}
+    "string": {
+      "tripsi": 30000
+    }
   }
 }
