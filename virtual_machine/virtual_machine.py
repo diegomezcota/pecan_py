@@ -71,6 +71,9 @@ def set_value_in_memory(address, local_memory, value):
 def clean_quad_addresses(current_quad, memory):
     for i, element in enumerate(current_quad):
         if element is not None and str(element)[0] == '&':
+            # make the check for && operand
+            if len(str(element)) > 1 and str(element)[1] == '&':
+                continue
             element = element[1:]
             element = int(element)
             _, new_address = get_type_and_value(memory, element)
