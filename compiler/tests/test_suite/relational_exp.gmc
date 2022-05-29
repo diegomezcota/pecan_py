@@ -1,0 +1,21 @@
+program relational;
+
+function relationalExp() returns void {
+    if (1 > 0) {
+        write("greater than");
+    }
+    if (10 < 100) {
+        write("less than");
+    }
+    if (3 * 10 == 30) {
+        write("equal");
+    }
+    if (10 / 3 != 3) {
+        write("not equal");
+    }
+    return;
+}
+
+main() {
+    relationalExp();
+}
