@@ -1253,11 +1253,13 @@ def p_np_set_function_return_type(p):
     '''
     np_set_function_return_type : epsilon
     '''
+    function_type = p[-1]
     function_directory.set_function_type(
-        current_general_scope, current_internal_scope, p[-1])
-    new_address = avail.get_new_address(p[-1], 'globals')
-    function_directory.add_variable(
-        '#global', '#global', current_internal_scope, 'var', p[-1], new_address)
+        current_general_scope, current_internal_scope, function_type)
+    if function_type != 'void':
+        new_address = avail.get_new_address(function_type, 'globals')
+        function_directory.add_variable(
+            '#global', '#global', current_internal_scope, 'var', function_type, new_address)
 
 
 def p_function_return(p):
