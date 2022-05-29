@@ -2,6 +2,7 @@ program lect_escr;
 
 main() {
     var int i;
+    write("Ingrese un valor entero:");
     read(i); // lee del usuario
     write("El valor ingresado fue de:", i); // escribe el valor ingresado por el usuario
 }

@@ -6,34 +6,34 @@
         "param_signature": [],
         "workspace": {
           "variables_workspace": {
-            "int": 1,
-            "float": 0,
+            "int": 0,
+            "float": 3,
             "string": 0,
             "bool": 0
           }
         },
         "function_type": "void"
       },
-      "fact": {
+      "find": {
         "vars_table": {},
         "param_signature": [
-          "int"
+          "float"
         ],
         "workspace": {
           "variables_workspace": {
-            "int": 2,
-            "float": 0,
+            "int": 1,
+            "float": 1,
             "string": 0,
-            "bool": 0
+            "bool": 1
           },
           "temps_workspace": {
-            "int": 3,
+            "int": 4,
             "float": 0,
-            "bool": 1,
+            "bool": 3,
             "string": 0
           }
         },
-        "function_type": "int",
+        "function_type": "void",
         "start_quad": 1
       },
       "main": {
@@ -41,20 +41,20 @@
         "param_signature": [],
         "workspace": {
           "variables_workspace": {
-            "int": 2,
-            "float": 0,
+            "int": 1,
+            "float": 2,
             "string": 0,
             "bool": 0
           },
           "temps_workspace": {
-            "int": 1,
+            "int": 4,
             "float": 0,
-            "bool": 0,
+            "bool": 1,
             "string": 0
           }
         },
         "function_type": "void",
-        "start_quad": 14
+        "start_quad": 23
       }
     }
   },
@@ -63,79 +63,133 @@
       "GOTOMAIN",
       null,
       null,
-      14
+      23
+    ],
+    [
+      "=",
+      28000,
+      null,
+      12000
+    ],
+    [
+      "=",
+      24002,
+      null,
+      8000
+    ],
+    [
+      "=",
+      24001,
+      null,
+      16000
     ],
     [
       "<",
       8000,
-      24000,
+      16000,
       20000
     ],
     [
       "GOTOF",
       20000,
       null,
-      5
+      19
+    ],
+    [
+      "VERIFY",
+      3,
+      8000,
+      null
+    ],
+    [
+      "*",
+      8000,
+      24000,
+      16001
+    ],
+    [
+      "+",
+      16001,
+      24003,
+      16002
+    ],
+    [
+      "==",
+      "&16002",
+      10000,
+      20001
+    ],
+    [
+      "GOTOF",
+      20001,
+      null,
+      15
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      30000
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      30001
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      8000
     ],
     [
       "=",
-      24000,
+      28001,
       null,
-      8001
+      12000
+    ],
+    [
+      "+",
+      8000,
+      24000,
+      16003
+    ],
+    [
+      "=",
+      16003,
+      null,
+      8000
+    ],
+    [
+      "=",
+      16003,
+      null,
+      8000
     ],
     [
       "GOTO",
       null,
       null,
-      12
+      4
     ],
     [
-      "ERA",
+      "==",
+      12000,
+      28000,
+      20002
+    ],
+    [
+      "GOTOF",
+      20002,
+      null,
+      22
+    ],
+    [
+      "WRITE",
       null,
       null,
-      "fact"
-    ],
-    [
-      "-",
-      8000,
-      24000,
-      16000
-    ],
-    [
-      "PARAM",
-      16000,
-      null,
-      0
-    ],
-    [
-      "GOSUB",
-      "fact",
-      null,
-      1
-    ],
-    [
-      "=",
-      0,
-      null,
-      16001
-    ],
-    [
-      "*",
-      8000,
-      16001,
-      16002
-    ],
-    [
-      "=",
-      16002,
-      null,
-      8001
-    ],
-    [
-      "=",
-      8001,
-      null,
-      0
+      30002
     ],
     [
       "ENDFUNC",
@@ -147,66 +201,154 @@
       "WRITE",
       null,
       null,
-      30000
+      30003
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      24001
+    ],
+    [
+      "=",
+      24002,
+      null,
+      8000
+    ],
+    [
+      "=",
+      24001,
+      null,
+      16000
+    ],
+    [
+      "<",
+      8000,
+      16000,
+      20000
+    ],
+    [
+      "GOTOF",
+      20000,
+      null,
+      39
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      30004
     ],
     [
       "READ",
       null,
       null,
-      8001
+      10000
+    ],
+    [
+      "VERIFY",
+      3,
+      8000,
+      null
+    ],
+    [
+      "*",
+      8000,
+      24000,
+      16001
+    ],
+    [
+      "+",
+      16001,
+      24003,
+      16002
+    ],
+    [
+      "=",
+      10000,
+      null,
+      "&16002"
+    ],
+    [
+      "+",
+      8000,
+      24000,
+      16003
+    ],
+    [
+      "=",
+      16003,
+      null,
+      8000
+    ],
+    [
+      "=",
+      16003,
+      null,
+      8000
+    ],
+    [
+      "GOTO",
+      null,
+      null,
+      27
     ],
     [
       "WRITE",
       null,
       null,
-      30001
+      30005
+    ],
+    [
+      "READ",
+      null,
+      null,
+      10001
     ],
     [
       "ERA",
       null,
       null,
-      "fact"
+      "find"
     ],
     [
       "PARAM",
-      8001,
+      10001,
       null,
       0
     ],
     [
       "GOSUB",
-      "fact",
+      "find",
       null,
       1
-    ],
-    [
-      "=",
-      0,
-      null,
-      16000
-    ],
-    [
-      "WRITE",
-      null,
-      null,
-      16000
     ]
   ],
   "constants_summary": {
-    "int": 1,
+    "int": 4,
     "float": 0,
-    "bool": 0,
-    "string": 2
+    "bool": 2,
+    "string": 6
   },
   "constants_table": {
     "int": {
-      "1": 24000
+      "1": 24000,
+      "3": 24001,
+      "0": 24002,
+      "2000": 24003
     },
     "float": {},
-    "bool": {},
+    "bool": {
+      "false": 28000,
+      "true": 28001
+    },
     "string": {
-      "Ingresa el numero de factorial a calcular": 30000,
-      "El resultado del factorial es:": 30001
+      "Elemento encontrado!": 30000,
+      "El indice donde se encuentra es en:": 30001,
+      "No se encontro el elemento :(": 30002,
+      "Elementos a ingresar:": 30003,
+      "Ingrese el elemento del arreglo:": 30004,
+      "Ingrese el elemento a buscar:": 30005
     }
   }
 }

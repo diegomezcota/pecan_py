@@ -3,5 +3,5 @@ program structured_elem;
 main() {
     group arr = int[5];
     group mat = float[3][3];
-    
+    write("hola");
 }

@@ -15,6 +15,10 @@ main() {
     var int n;
     write("Ingresa el numero de factorial a calcular");
     read(n);
-    write("El resultado del factorial es:");
-    write(fact(n));
+    if (n < 0) {
+        write("Solo se aceptan numeros positivos");
+    } else {
+        write("El resultado del factorial es:");
+        write(fact(n));
+    }
 }
