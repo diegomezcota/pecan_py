@@ -14,7 +14,7 @@
         },
         "function_type": "void"
       },
-      "fib": {
+      "fact": {
         "vars_table": {},
         "param_signature": [
           "int"
@@ -27,7 +27,7 @@
             "bool": 0
           },
           "temps_workspace": {
-            "int": 5,
+            "int": 3,
             "float": 0,
             "bool": 1,
             "string": 0
@@ -41,20 +41,20 @@
         "param_signature": [],
         "workspace": {
           "variables_workspace": {
-            "int": 1,
+            "int": 2,
             "float": 0,
             "string": 0,
             "bool": 0
           },
           "temps_workspace": {
-            "int": 3,
+            "int": 1,
             "float": 0,
-            "bool": 1,
+            "bool": 0,
             "string": 0
           }
         },
         "function_type": "void",
-        "start_quad": 19
+        "start_quad": 14
       }
     }
   },
@@ -63,12 +63,12 @@
       "GOTOMAIN",
       null,
       null,
-      19
+      14
     ],
     [
       "<",
       8000,
-      24001,
+      24000,
       20000
     ],
     [
@@ -79,7 +79,7 @@
     ],
     [
       "=",
-      8000,
+      24000,
       null,
       8001
     ],
@@ -87,13 +87,13 @@
       "GOTO",
       null,
       null,
-      17
+      12
     ],
     [
       "ERA",
       null,
       null,
-      "fib"
+      "fact"
     ],
     [
       "-",
@@ -109,7 +109,7 @@
     ],
     [
       "GOSUB",
-      "fib",
+      "fact",
       null,
       1
     ],
@@ -120,44 +120,14 @@
       16001
     ],
     [
-      "ERA",
-      null,
-      null,
-      "fib"
-    ],
-    [
-      "-",
+      "*",
       8000,
-      24001,
+      16001,
       16002
     ],
     [
-      "PARAM",
+      "=",
       16002,
-      null,
-      0
-    ],
-    [
-      "GOSUB",
-      "fib",
-      null,
-      1
-    ],
-    [
-      "=",
-      0,
-      null,
-      16003
-    ],
-    [
-      "+",
-      16001,
-      16003,
-      16004
-    ],
-    [
-      "=",
-      16004,
       null,
       8001
     ],
@@ -174,44 +144,38 @@
       null
     ],
     [
-      "=",
-      24002,
+      "WRITE",
       null,
-      8000
+      null,
+      30000
     ],
     [
-      "=",
-      24003,
+      "READ",
       null,
-      16000
+      null,
+      8001
     ],
     [
-      "<",
-      8000,
-      16000,
-      20000
-    ],
-    [
-      "GOTOF",
-      20000,
+      "WRITE",
       null,
-      32
+      null,
+      30001
     ],
     [
       "ERA",
       null,
       null,
-      "fib"
+      "fact"
     ],
     [
       "PARAM",
-      8000,
+      8001,
       null,
       0
     ],
     [
       "GOSUB",
-      "fib",
+      "fact",
       null,
       1
     ],
@@ -219,54 +183,30 @@
       "=",
       0,
       null,
-      16001
+      16000
     ],
     [
       "WRITE",
       null,
       null,
-      16001
-    ],
-    [
-      "+",
-      8000,
-      24000,
-      16002
-    ],
-    [
-      "=",
-      16002,
-      null,
-      8000
-    ],
-    [
-      "=",
-      16002,
-      null,
-      8000
-    ],
-    [
-      "GOTO",
-      null,
-      null,
-      21
+      16000
     ]
   ],
   "constants_summary": {
-    "int": 4,
+    "int": 1,
     "float": 0,
     "bool": 0,
-    "string": 0
+    "string": 2
   },
   "constants_table": {
     "int": {
-      "1": 24000,
-      "2": 24001,
-      "0": 24002,
-      "10": 24003
+      "1": 24000
     },
     "float": {},
     "bool": {},
-    "string": {}
+    "string": {
+      "Ingresa el numero de factorial a calcular": 30000,
+      "El resultado del factorial es:": 30001
+    }
   }
 }

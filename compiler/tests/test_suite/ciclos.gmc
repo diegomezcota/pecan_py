@@ -1,0 +1,24 @@
+program ciclos;
+
+main() {
+    var int i;
+    // imprimir del 1 al 3 con FOR
+    write("FOR");
+    for i = 1 to 4 {
+        write(i);
+    }
+    // imprimir del 1 al 3 con WHILE
+    write("WHILE");
+    i = 1;
+    while (i < 4) {
+        write(i);
+        i = i + 1;
+    }
+    // imprimir del 1 al 3 con DO WHILE
+    write("DO WHILE");
+    i = 1;
+    do {
+        write(i);
+        i = i + 1;
+    } while (i < 4);
+}

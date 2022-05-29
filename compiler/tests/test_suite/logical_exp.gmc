@@ -1,0 +1,17 @@
+program logical_exp;
+
+main() {
+    var bool isGreater;
+    var bool isSmaller;
+    isGreater = 10 > 4;
+    isSmaller = 10 < 4;
+    if (isGreater && isSmaller) {
+        write("Both greater and smaller");
+    } else {
+        if (isGreater || isSmaller) {
+            write("Only greater or smaller");
+        } else {
+            write("Numbers are equal");
+        }
+    }
+}

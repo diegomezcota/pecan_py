@@ -1,0 +1,26 @@
+program fibonacci;
+
+function fib(int n) returns int {
+    var int ans;
+    if (n < 2) {
+        ans = n;
+    } else {
+        ans = fib(n - 1) + fib(n - 2);
+    }
+    return ans;
+}
+
+main() {
+    var int i;
+    var int lim;
+    write("Ingresa cuantos elementos de la serie de fibonacci quieres:");
+    read(lim);
+    if (lim < 0) {
+        write("Solo se aceptan numeros positivos");
+    } else {
+        write("Serie fibonacci:");
+        for i = 0 to lim {
+            write(fib(i));
+        }
+    }
+}
