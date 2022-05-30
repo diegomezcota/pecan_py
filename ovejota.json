@@ -32,7 +32,7 @@
           }
         },
         "function_type": "int",
-        "start_quad": 5
+        "start_quad": 6
       },
       "main": {
         "vars_table": {},
@@ -52,7 +52,7 @@
           }
         },
         "function_type": "void",
-        "start_quad": 8
+        "start_quad": 9
       }
     },
     "Animal": {
@@ -82,12 +82,12 @@
       "constructor": {
         "vars_table": {},
         "param_signature": [
-          "int",
+          "string",
           "int"
         ],
         "workspace": {
           "temps_workspace": {
-            "int": 1,
+            "int": 0,
             "float": 0,
             "bool": 0,
             "string": 0
@@ -101,25 +101,40 @@
       "GOTOMAIN",
       null,
       null,
-      8
-    ],
-    [
-      "+",
-      24001,
-      24002,
-      16000
+      9
     ],
     [
       "=",
-      16000,
+      14000,
       null,
-      8001
+      [
+        0,
+        "string"
+      ]
+    ],
+    [
+      "=",
+      8000,
+      null,
+      [
+        0,
+        "int"
+      ]
+    ],
+    [
+      "=",
+      30000,
+      null,
+      [
+        1,
+        "string"
+      ]
     ],
     [
       "WRITE",
       null,
       null,
-      30000
+      30001
     ],
     [
       "ENDFUNC",
@@ -129,7 +144,7 @@
     ],
     [
       "=",
-      30001,
+      30002,
       null,
       6000
     ],
@@ -161,7 +176,7 @@
       "GOSUB",
       "c",
       null,
-      5
+      6
     ],
     [
       "=",
@@ -171,7 +186,7 @@
     ],
     [
       "=",
-      30002,
+      30003,
       null,
       6002
     ],
@@ -189,23 +204,23 @@
     ]
   ],
   "constants_summary": {
-    "int": 3,
+    "int": 2,
     "float": 0,
     "bool": 0,
-    "string": 3
+    "string": 4
   },
   "constants_table": {
     "int": {
       "1": 24000,
-      "2": 24001,
-      "3": 24002
+      "2": 24001
     },
     "float": {},
     "bool": {},
     "string": {
-      "tripsi": 30000,
-      "shori test": 30001,
-      "blu fukutake": 30002
+      "trips": 30000,
+      "tripsi": 30001,
+      "shori test": 30002,
+      "blu fukutake": 30003
     }
   }
 }

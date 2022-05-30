@@ -38,8 +38,8 @@ def p_program(p):
     '''
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
-    #print(*quads.list, sep='\n')
-    print(json.dumps(function_directory.table, indent=2))
+    print(*quads.list, sep='\n')
+    #print(json.dumps(function_directory.table, indent=2))
 
     function_directory.generate_variable_workspace('#global', '#global')
 
@@ -171,12 +171,17 @@ def p_declaration(p):
 def p_variable(p):
     '''
     variable    : ID variable1
-                | DOLLAR_SIGN np_check_class_scope ID variable1
+                | DOLLAR_SIGN np_check_class_scope ID
     '''
     if len(p) == 3:
         p[0] = p[2]
     else:
-        p[0] = p[4]
+        if function_directory.class_has_attribute(current_general_scope, p[3]):
+            attribute_type, attribute_index = function_directory.get_class_attribute_type_and_index(
+                current_general_scope, p[3])
+            p[0] = ((attribute_index, attribute_type), attribute_type)
+        else:
+            raise Exception('Attribute' + p[3] + ' not in scope')
 
 
 def p_np_check_class_scope(p):

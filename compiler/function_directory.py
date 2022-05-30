@@ -94,6 +94,13 @@ class FunctionDirectory:
             'vars_table'][var_name]['attributes'][attribute_name]['address']
         return (attribute_address, attribute_type)
 
+    def get_class_attribute_type_and_index(self, general_name, attribute_name):
+        attribute_type = self.table[general_name]['#global'][
+            'vars_table'][attribute_name]['data_type']
+        attribute_index = self.table[general_name]['#global'][
+            'vars_table'][attribute_name]['index']
+        return (attribute_type, attribute_index)
+
     def set_temps_workspace(self, general_name, internal_name, temps_workspace):
         self.table[general_name][internal_name]['workspace']['temps_workspace'] = temps_workspace
 
@@ -168,6 +175,9 @@ class FunctionDirectory:
 
     def variable_has_attribute(self, general_name, internal_name, var_name, attribute_name):
         return (attribute_name in self.table[general_name][internal_name]['vars_table'][var_name]['attributes'].keys())
+
+    def class_has_attribute(self, general_name, attribute_name):
+        return (attribute_name in self.table[general_name]['#global']['vars_table'].keys())
 
     def generate_variable_workspace(self, general_name, internal_name):
         variable_workspace = {"int": 0, "float": 0, "string": 0, "bool": 0}
