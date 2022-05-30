@@ -38,8 +38,8 @@ def p_program(p):
     '''
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
-    print(*quads.list, sep='\n')
-    #print(json.dumps(function_directory.table, indent=2))
+    #print(*quads.list, sep='\n')
+    print(json.dumps(function_directory.table, indent=2))
 
     function_directory.generate_variable_workspace('#global', '#global')
 
@@ -407,7 +407,7 @@ def p_class_body1(p):
 
 def p_constructor(p):
     '''
-    constructor : CONSTRUCTOR np_add_function_internal_scope ID np_validate_constructor_id OPEN_PARENTHESIS parameter np_add_parameters_to_var_table CLOSE_PARENTHESIS OPEN_KEY variable_declaration_loop statement_loop CLOSE_KEY np_end_function
+    constructor : CONSTRUCTOR np_add_function_internal_scope ID np_validate_constructor_id OPEN_PARENTHESIS parameter np_add_parameters_to_var_table CLOSE_PARENTHESIS OPEN_KEY variable_declaration_loop np_add_function_start_quad statement_loop CLOSE_KEY np_end_function
     '''
     global current_internal_scope
     current_internal_scope = '#global'
@@ -1276,10 +1276,18 @@ def p_np_check_param_match(p):
 
 def p_class_function(p):
     '''
-    class_function : AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+    class_function : AT_CLASS ID np_validate_class_method FUNCTION ID np_add_function_internal_scope OPEN_PARENTHESIS parameter np_add_parameters_to_var_table CLOSE_PARENTHESIS RETURNS return_arg np_set_function_return_type_objects OPEN_KEY variable_declaration_loop np_generate_variable_workspace np_add_function_start_quad function_statement_loop function_return CLOSE_KEY np_end_function
 
     '''
     pass
+
+
+def p_np_validate_class_method(p):
+    '''
+    np_validate_class_method : epsilon
+    '''
+    if current_general_scope != p[-1]:
+        raise Exception('Class scope and function declaration mismatch')
 
 
 def p_function_declaration(p):
@@ -1351,6 +1359,20 @@ def p_np_set_function_return_type(p):
         new_address = avail.get_new_address(function_type, 'globals')
         function_directory.add_variable(
             '#global', '#global', current_internal_scope, 'var', function_type, new_address)
+
+
+def p_np_set_function_return_type_objects(p):
+    '''
+    np_set_function_return_type_objects : epsilon
+    '''
+    function_type = p[-1]
+    function_directory.set_function_type(
+        current_general_scope, current_internal_scope, function_type)
+    if function_type != 'void':
+        new_address = avail.get_new_address(function_type, 'globals')
+        function_name = current_general_scope + '#' + current_internal_scope
+        function_directory.add_variable(
+            '#global', '#global', function_name, 'var', function_type, new_address)
 
 
 def p_function_return(p):

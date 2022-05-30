@@ -19,7 +19,7 @@
         "param_signature": [],
         "workspace": {
           "variables_workspace": {
-            "int": 0,
+            "int": 1,
             "float": 0,
             "string": 0,
             "bool": 0
@@ -32,7 +32,7 @@
           }
         },
         "function_type": "int",
-        "start_quad": 6
+        "start_quad": 8
       },
       "main": {
         "vars_table": {},
@@ -52,7 +52,7 @@
           }
         },
         "function_type": "void",
-        "start_quad": 9
+        "start_quad": 11
       }
     },
     "Animal": {
@@ -92,7 +92,30 @@
             "bool": 0,
             "string": 0
           }
-        }
+        },
+        "start_quad": 1
+      },
+      "comer": {
+        "vars_table": {},
+        "param_signature": [
+          "int"
+        ],
+        "workspace": {
+          "variables_workspace": {
+            "int": 1,
+            "float": 0,
+            "string": 0,
+            "bool": 0
+          },
+          "temps_workspace": {
+            "int": 0,
+            "float": 0,
+            "bool": 0,
+            "string": 0
+          }
+        },
+        "function_type": "void",
+        "start_quad": 6
       }
     }
   },
@@ -101,7 +124,7 @@
       "GOTOMAIN",
       null,
       null,
-      9
+      11
     ],
     [
       "=",
@@ -143,8 +166,20 @@
       null
     ],
     [
+      "WRITE",
+      null,
+      null,
+      30002
+    ],
+    [
+      "ENDFUNC",
+      null,
+      null,
+      null
+    ],
+    [
       "=",
-      30002,
+      30003,
       null,
       6000
     ],
@@ -176,7 +211,7 @@
       "GOSUB",
       "c",
       null,
-      6
+      8
     ],
     [
       "=",
@@ -186,7 +221,7 @@
     ],
     [
       "=",
-      30003,
+      30004,
       null,
       6002
     ],
@@ -207,7 +242,7 @@
     "int": 2,
     "float": 0,
     "bool": 0,
-    "string": 4
+    "string": 5
   },
   "constants_table": {
     "int": {
@@ -219,8 +254,9 @@
     "string": {
       "trips": 30000,
       "tripsi": 30001,
-      "shori test": 30002,
-      "blu fukutake": 30003
+      "yuuum": 30002,
+      "shori test": 30003,
+      "blu fukutake": 30004
     }
   }
 }

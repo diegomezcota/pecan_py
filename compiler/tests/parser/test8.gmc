@@ -13,15 +13,16 @@ constructor Animal(string nombre, int edad) {
     write("tripsi");
 }
 
-//@class Animal function comer(int aucsilio) returns void {
-//    write("yuuum");
-//    return;
-//}
+@class Animal function comer(int aucsilio) returns void {
+    write("yuuum");
+    return;
+}
 
 obj shori = Animal();
 obj blu = Animal();
 
 function c() returns int {
+    var int hola;
     shori.nombre = "shori test";
     return 2;
 }
