@@ -1,0 +1,8 @@
+program aritmetica;
+
+main() {
+    write(10 + 15);
+    write(3 - 4.15);
+    write(8 * 4);
+    write(10 / 2);
+}

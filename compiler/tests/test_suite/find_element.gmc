@@ -1,0 +1,37 @@
+program find;
+
+group vect = float[3];
+
+function find(float element) returns void {
+    var int i;
+    var bool bFound;
+    bFound = false;
+    for i = 0 to 3 {
+        if (vect[i] == element) {
+            write("Elemento encontrado!", "El indice donde se encuentra es en:", i);
+            bFound = true;
+        }
+    }
+    if (bFound == false) {
+        write("No se encontro el elemento :(");
+    }
+    return;
+}
+
+main() {
+    var int i;
+    var float x;
+    var float which;
+    // ingresar elementos
+    write("Elementos a ingresar:", 3);
+    for i = 0 to 3 {
+        write("Ingrese el elemento del arreglo:");
+        read(x);
+        vect[i] = x;
+    }
+    // ingresar elemento a buscar
+    write("Ingrese el elemento a buscar:");
+    read(which);
+    // hacer el find
+    find(which);
+}

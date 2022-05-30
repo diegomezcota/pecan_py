@@ -1,0 +1,44 @@
+program matrix_multiplication;
+
+// NOTA: Las matrices tienen valor 0 por default, para fines de este test
+// no agregamos valores, solo buscamos mostrar el soporte de matrices
+
+// declaracion de variables globales
+var int rowsA;
+var int colsA;
+var int rowsB;
+var int colsB;
+group matA = int[2][3];
+group matB = int[3][4];
+group matC = int[2][4];
+
+function multiplicaMatrices() returns void {
+    var int i;
+    var int j;
+    var int k;
+    var int suma;
+    // asignar dimensiones
+    rowsA = 2; colsA = 3;
+    rowsB = 3; colsB = 4;
+    // hacer multiplicacion
+    if (colsA != rowsB) {
+        write("impossible matrix multiplication");
+    } else {
+        for i = 0 to colsB {
+            for j = 0 to rowsA {
+                suma = 0;
+                for k = 0 to colsA {
+                    suma = suma + matA[j][k] * matB[k][i];
+                }
+                matC[j][i] = suma;
+            }
+        }
+    }
+    return;
+}
+
+main() {
+    // multiplicar matrices
+    multiplicaMatrices();
+    write("multiplicacion completada");
+}

@@ -1,0 +1,23 @@
+program factorial_it;
+
+// factorial iterativo
+function factorial_iterativo(int n) returns int {
+    var int ans;
+    var int i;
+    ans = 1;
+    for i = 2 to n + 1 {
+        ans = ans * i;
+    }
+    return ans;
+}
+
+main() {
+    var int n;
+    write("Ingresa el numero de factorial a calcular");
+    read(n);
+    if (n < 0) {
+        write("Solo se aceptan numeros positivos");
+    } else {
+        write("El resultado de factorial es:", factorial_iterativo(n));
+    }
+}

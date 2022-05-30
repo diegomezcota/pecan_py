@@ -1,0 +1,11 @@
+program condiciones;
+
+main() {
+    var int iNum;
+    iNum = 11;
+    if (10 > iNum) {
+        write("number is too low");
+    } else {
+        write("number is too big");
+    }
+}

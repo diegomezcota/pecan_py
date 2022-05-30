@@ -34,12 +34,52 @@
         "function_type": "int",
         "start_quad": 5
       },
+      "multiplicaMatrices": {
+        "vars_table": {},
+        "param_signature": [],
+        "workspace": {
+          "variables_workspace": {
+            "int": 4,
+            "float": 0,
+            "string": 0,
+            "bool": 0
+          },
+          "temps_workspace": {
+            "int": 20,
+            "float": 0,
+            "bool": 4,
+            "string": 0
+          }
+        },
+        "function_type": "void",
+        "start_quad": 57
+      },
+      "imprimeMatrizResultante": {
+        "vars_table": {},
+        "param_signature": [],
+        "workspace": {
+          "variables_workspace": {
+            "int": 2,
+            "float": 0,
+            "string": 0,
+            "bool": 0
+          },
+          "temps_workspace": {
+            "int": 8,
+            "float": 0,
+            "bool": 2,
+            "string": 0
+          }
+        },
+        "function_type": "void",
+        "start_quad": 109
+      },
       "main": {
         "vars_table": {},
         "param_signature": [],
         "workspace": {
           "variables_workspace": {
-            "int": 1,
+            "int": 0,
             "float": 0,
             "string": 0,
             "bool": 0
@@ -140,10 +180,10 @@
       2
     ],
     [
-      "ENDFUNC",
+      "GOTO",
       null,
       null,
-      null
+      7
     ],
     [
       "WRITE",
@@ -152,8 +192,26 @@
       8000
     ],
     [
-      "ERA",
+      "=",
+      24004,
       null,
+      8001
+    ],
+    [
+      "=",
+      3,
+      null,
+      16011
+    ],
+    [
+      "<",
+      8001,
+      16011,
+      20003
+    ],
+    [
+      "GOTOF",
+      20003,
       null,
       "c"
     ],

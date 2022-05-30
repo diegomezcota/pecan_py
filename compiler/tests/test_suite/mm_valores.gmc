@@ -1,0 +1,71 @@
+program matrix_multiplication;
+
+// declaracion de variables globales
+var int rowsA;
+var int colsA;
+var int rowsB;
+var int colsB;
+group matA = int[2][3];
+group matB = int[3][4];
+group matC = int[2][4];
+
+function inicializaMatrices() returns void {
+    var int i;
+    var int j;
+    // asignar dimensiones
+    rowsA = 2; colsA = 3;
+    rowsB = 3; colsB = 4;
+    // inicializar matriz A
+    for i = 0 to rowsA {
+        for j = 0 to colsA {
+            matA[i][j] = i * colsA + j;
+        }
+    }
+    // inicializar matriz B
+    for i = 0 to rowsB {
+        for j = 0 to colsB {
+            matB[i][j] = (i * colsB + j) * 2;
+        }
+    }
+    return;
+}
+
+function multiplicaMatrices() returns void {
+    var int i;
+    var int j;
+    var int k;
+    var int suma;
+    // hacer multiplicacion
+    if (colsA != rowsB) {
+        write("impossible matrix multiplication");
+    } else {
+        for i = 0 to colsB {
+            for j = 0 to rowsA {
+                suma = 0;
+                for k = 0 to colsA {
+                    suma = suma + matA[j][k] * matB[k][i];
+                }
+                matC[j][i] = suma;
+            }
+        }
+    }
+    return;
+}
+
+function imprimeMatrizResultante() returns void {
+    var int i;
+    var int j;
+    write("Valores de la matriz resultante:");
+    for i = 0 to rowsA {
+        for j = 0 to colsB {
+            write(matC[i][j]);
+        }
+    }
+    return;
+}
+
+main() {
+    inicializaMatrices();
+    multiplicaMatrices();
+    imprimeMatrizResultante();
+}

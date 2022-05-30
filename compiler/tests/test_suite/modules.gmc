@@ -1,0 +1,20 @@
+program modules;
+
+var int k;
+
+function modificarK(int c) returns void {
+    k = k + c;
+    return;
+}
+
+function saludar(string sNombre) returns void {
+    write("Saludos para:", sNombre);
+    return;
+}
+
+main() {
+    k = 10;
+    modificarK(5);
+    write(k);
+    saludar("Kenzo");
+}

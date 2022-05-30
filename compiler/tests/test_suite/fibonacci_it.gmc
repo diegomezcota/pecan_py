@@ -1,0 +1,37 @@
+program fibonacci_iterativo;
+
+function fibonacci_iterativo(int n) returns int {
+    var int second_last_element;
+    var int last_element;
+    var int ans;
+    var int aux;
+    var int i;
+    if (n < 2) {
+        ans = n;
+    } else {
+        second_last_element = 0;
+        last_element = 1;
+        for i = 2 to n + 1 {
+            ans = second_last_element + last_element;
+            aux = last_element;
+            last_element = ans;
+            second_last_element = aux;
+        }
+    }
+    return ans;
+}
+
+main() {
+    var int i;
+    var int lim;
+    write("Ingresa cuantos elementos de la serie de fibonacci quieres:");
+    read(lim);
+    if (lim < 0) {
+        write("Solo se aceptan numeros positivos");
+    } else {
+        write("Serie fibonacci:");
+        for i = 0 to lim {
+            write(fibonacci_iterativo(i));
+        }
+    }
+}

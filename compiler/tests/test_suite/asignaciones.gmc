@@ -1,0 +1,17 @@
+program asignaciones;
+
+main() {
+    // declaraciones
+    var int iNum;
+    var float fNum;
+    var string sWord;
+    var bool bFlag;
+    // asignaciones
+    iNum = 10;
+    fNum = 8.15;
+    sWord = "Este es el test de estatutos";
+    bFlag = true;
+    // escribir valores
+    write(iNum, fNum, sWord, bFlag);
+}
+
