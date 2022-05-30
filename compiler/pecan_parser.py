@@ -37,8 +37,8 @@ def p_program(p):
     '''
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
-    print(*quads.list, sep='\n')
-    #print(json.dumps(function_directory.table, indent=2))
+    #print(*quads.list, sep='\n')
+    print(json.dumps(function_directory.table, indent=2))
 
     function_directory.generate_variable_workspace('#global', '#global')
 
@@ -335,6 +335,10 @@ def p_class_declaration(p):
     class_declaration   : CLASS ID np_create_class_scope class_declaration1 OPEN_KEY class_body CLOSE_KEY SEMICOLON constructor class_declaration2
     '''
     global current_general_scope, current_internal_scope
+
+    function_directory.set_object_summary(
+        current_general_scope, '#global')
+
     current_general_scope = '#global'
     current_internal_scope = '#global'
 
@@ -441,8 +445,15 @@ def p_variable_declaration(p):
     '''
     variable_declaration    : VAR np_set_current_var_type data_type np_set_current_var_data_type ID np_set_current_var_name SEMICOLON np_add_variable
                             | GROUP np_set_current_var_type ID np_set_current_var_name ASSIGN data_type np_set_current_var_data_type np_add_variable OPEN_BRACKET np_add_dim1_list INT_VALUE np_add_dim1 CLOSE_BRACKET group1 SEMICOLON
-                            | OBJ np_set_current_var_type ID np_set_current_var_name ASSIGN ID np_check_class_existence OPEN_PARENTHESIS variable_declaration1 CLOSE_PARENTHESIS SEMICOLON np_add_variable
+                            | OBJ np_set_current_var_type ID np_set_current_var_name ASSIGN ID np_check_class_existence OPEN_PARENTHESIS np_start_function_param_counter np_add_open_parenthesis variable_declaration1 np_remove_open_parenthesis CLOSE_PARENTHESIS SEMICOLON np_create_object
 
+    '''
+    pass
+
+
+def p_np_create_object(p):
+    '''
+    np_create_object : epsilon
     '''
     pass
 

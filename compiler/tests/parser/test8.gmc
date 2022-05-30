@@ -13,6 +13,10 @@ constructor Animal(int edad, int hola) {
     write("tripsi");
 }
 
+function c() returns int {
+    return 2;
+}
+
 
 main() {
     var int i;

@@ -6,7 +6,7 @@
         "param_signature": [],
         "workspace": {
           "variables_workspace": {
-            "int": 0,
+            "int": 1,
             "float": 0,
             "string": 0,
             "bool": 0
@@ -14,12 +14,32 @@
         },
         "function_type": "void"
       },
+      "c": {
+        "vars_table": {},
+        "param_signature": [],
+        "workspace": {
+          "variables_workspace": {
+            "int": 0,
+            "float": 0,
+            "string": 0,
+            "bool": 0
+          },
+          "temps_workspace": {
+            "int": 0,
+            "float": 0,
+            "bool": 0,
+            "string": 0
+          }
+        },
+        "function_type": "int",
+        "start_quad": 5
+      },
       "main": {
         "vars_table": {},
         "param_signature": [],
         "workspace": {
           "variables_workspace": {
-            "int": 2,
+            "int": 1,
             "float": 0,
             "string": 0,
             "bool": 0
@@ -32,7 +52,7 @@
           }
         },
         "function_type": "void",
-        "start_quad": 5
+        "start_quad": 7
       }
     },
     "Animal": {
@@ -52,7 +72,12 @@
           }
         },
         "param_signature": [],
-        "workspace": {}
+        "workspace": {
+          "int": 1,
+          "float": 0,
+          "bool": 0,
+          "string": 2
+        }
       },
       "constructor": {
         "vars_table": {},
@@ -76,7 +101,7 @@
       "GOTOMAIN",
       null,
       null,
-      5
+      7
     ],
     [
       "+",
@@ -95,6 +120,18 @@
       null,
       null,
       30000
+    ],
+    [
+      "ENDFUNC",
+      null,
+      null,
+      null
+    ],
+    [
+      "=",
+      24001,
+      null,
+      0
     ],
     [
       "ENDFUNC",

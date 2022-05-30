@@ -91,6 +91,14 @@ class FunctionDirectory:
     def set_start_quad(self, general_name, internal_name, quad_id):
         self.table[general_name][internal_name]['start_quad'] = quad_id
 
+    def set_object_summary(self, general_name, internal_name):
+        class_workspace = {'int': 0, 'float': 0, 'bool': 0, 'string': 0}
+
+        for _, attribute_map in self.table[general_name][internal_name]['vars_table'].items():
+            class_workspace[attribute_map['data_type']] += 1
+
+        self.table[general_name][internal_name]['workspace'] = class_workspace
+
     def add_variable(self, general_name, internal_name, var_name, var_type, var_data_type, var_virtual_address):
         if var_name in self.table[general_name][internal_name]['vars_table'].keys():
             raise VariableAlreadyDeclared(
