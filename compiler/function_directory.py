@@ -1,4 +1,3 @@
-
 class FunctionDirectory:
     def __init__(self):
         self.table = {}
@@ -28,6 +27,16 @@ class FunctionDirectory:
                 "param_signature": [],
                 "workspace": {}
             }
+
+    def add_class_attribute(self, general_name, var_name, var_data_type):
+        vars_map = self.table[general_name]['#global']['vars_table']
+        index = 0
+        for _, var_map in vars_map.items():
+            if var_map['data_type'] == var_data_type:
+                index += 1
+
+        self.table[general_name]['#global']['vars_table'][var_name] = {
+            'data_type': var_data_type, 'index': index}
 
     def get_nth_param_type(self, general_name, internal_name, n):
         # Raise error if n is bigger than array size
@@ -72,6 +81,19 @@ class FunctionDirectory:
     def get_m_dim(self, general_name, internal_name, var_name, dim):
         return self.table[general_name][internal_name]['vars_table'][var_name]['dim_list'][dim-1]['m']
 
+    def get_object_workspace(self, general_name, internal_name):
+        return self.table[general_name][internal_name]['workspace']
+
+    def get_class_vars_table(self, general_name, internal_name):
+        return self.table[general_name][internal_name]['vars_table']
+
+    def get_attribute_type_and_address(self, general_name, internal_name, var_name, attribute_name):
+        attribute_type = self.table[general_name][internal_name][
+            'vars_table'][var_name]['attributes'][attribute_name]['data_type']
+        attribute_address = self.table[general_name][internal_name][
+            'vars_table'][var_name]['attributes'][attribute_name]['address']
+        return (attribute_address, attribute_type)
+
     def set_temps_workspace(self, general_name, internal_name, temps_workspace):
         self.table[general_name][internal_name]['workspace']['temps_workspace'] = temps_workspace
 
@@ -80,6 +102,14 @@ class FunctionDirectory:
 
     def set_start_quad(self, general_name, internal_name, quad_id):
         self.table[general_name][internal_name]['start_quad'] = quad_id
+
+    def set_object_summary(self, general_name, internal_name):
+        class_workspace = {'int': 0, 'float': 0, 'bool': 0, 'string': 0}
+
+        for _, attribute_map in self.table[general_name][internal_name]['vars_table'].items():
+            class_workspace[attribute_map['data_type']] += 1
+
+        self.table[general_name][internal_name]['workspace'] = class_workspace
 
     def add_variable(self, general_name, internal_name, var_name, var_type, var_data_type, var_virtual_address):
         if var_name in self.table[general_name][internal_name]['vars_table'].keys():
@@ -91,6 +121,23 @@ class FunctionDirectory:
                 'var_data_type': var_data_type,
                 'var_virtual_address': var_virtual_address
             }
+
+    def add_obj_variable(self, general_name, internal_name, class_name, var_name):
+        if var_name in self.table[general_name][internal_name]['vars_table'].keys():
+            raise VariableAlreadyDeclared(
+                "Variable named " + var_name + " has already been declared in the same scope.")
+        else:
+            self.table[general_name][internal_name]['vars_table'][var_name] = {
+                'var_type': 'obj',
+                'var_data_type': class_name,
+                'attributes': {}
+            }
+
+    def add_obj_attribute_data(self, general_name, internal_name, var_name, attriibute_name, attriibute_data_type, attribute_address):
+        self.table[general_name][internal_name]['vars_table'][var_name]['attributes'][attriibute_name] = {
+            'data_type': attriibute_data_type,
+            'address': attribute_address
+        }
 
     def add_to_param_signature(self, general_name, internal_name, parameter_type):
         self.table[general_name][internal_name]['param_signature'].append(
@@ -119,12 +166,21 @@ class FunctionDirectory:
     def has_variable(self, general_name, internal_name, var_name):
         return (var_name in self.table[general_name][internal_name]['vars_table'].keys())
 
+    def variable_has_attribute(self, general_name, internal_name, var_name, attribute_name):
+        return (attribute_name in self.table[general_name][internal_name]['vars_table'][var_name]['attributes'].keys())
+
     def generate_variable_workspace(self, general_name, internal_name):
         variable_workspace = {"int": 0, "float": 0, "string": 0, "bool": 0}
         # ir por todo el var table y sumar cada tipo
         vars_table = self.table[general_name][internal_name]['vars_table']
-        for _, var_dict in vars_table.items():
-            if var_dict['var_type'] != 'group':
+        for var_name, var_dict in vars_table.items():
+            if var_dict['var_type'] == 'obj':
+                class_name = var_dict['var_data_type']
+                class_workspace = self.get_object_workspace(
+                    class_name, '#global')
+                for data_type, frequency in class_workspace.items():
+                    variable_workspace[data_type] += frequency
+            elif var_dict['var_type'] != 'group':
                 variable_workspace[var_dict['var_data_type']] += 1
             else:
                 variable_workspace[var_dict['var_data_type']

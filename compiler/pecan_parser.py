@@ -25,6 +25,7 @@ current_var_name = None
 current_var_type = None
 current_var_data_type = None
 current_group_internal_scope = None
+current_class_object_to_declare = None
 
 # For function calls
 function_param_counter = None
@@ -37,8 +38,8 @@ def p_program(p):
     '''
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
-    print(*quads.list, sep='\n')
-    #print(json.dumps(function_directory.table, indent=2))
+    #print(*quads.list, sep='\n')
+    print(json.dumps(function_directory.table, indent=2))
 
     function_directory.generate_variable_workspace('#global', '#global')
 
@@ -81,7 +82,8 @@ def p_np_start_state(p):
     np_start_state : epsilon
     '''
     global function_directory, avail, quads, semantic_cube, operand_stack, operator_stack, jump_stack, control_variable_stack
-    global current_general_scope, current_internal_scope, current_var_name, current_var_type, current_var_data_type, constants, dim_stack, current_group_internal_scope, current_function_call_name_stack, function_param_counter_stack
+    global current_general_scope, current_internal_scope, current_var_name, current_var_type, current_var_data_type, constants, dim_stack
+    global current_group_internal_scope, current_function_call_name_stack, function_param_counter_stack, current_class_object_to_declare
     function_directory = FunctionDirectory()
     avail = Avail()
     quads = Quadruples()
@@ -111,6 +113,9 @@ def p_np_start_state(p):
     # Funciones
     current_function_call_name_stack = []
     function_param_counter_stack = []
+
+    # Objetos
+    current_class_object_to_declare = None
 
 
 def p_np_start_func_dir(p):
@@ -166,8 +171,20 @@ def p_declaration(p):
 def p_variable(p):
     '''
     variable    : ID variable1
+                | DOLLAR_SIGN np_check_class_scope ID variable1
     '''
-    p[0] = p[2]
+    if len(p) == 3:
+        p[0] = p[2]
+    else:
+        p[0] = p[4]
+
+
+def p_np_check_class_scope(p):
+    '''
+    np_check_class_scope : epsilon
+    '''
+    if current_general_scope == '#global':
+        raise Exception('Invalid variable access.')
 
 
 def p_variable1(p):
@@ -194,6 +211,26 @@ def p_variable1(p):
                 "Variable " + p[-1] + " not defined in line " + str(p.lineno(1)))
     elif len(p) == 8:
         p[0] = p[7]
+    elif len(p) == 3:
+        var_name = p[-1]
+        var_attribute_name = p[2]
+        if (function_directory.has_variable(current_general_scope, current_internal_scope, var_name)):
+            if (function_directory.variable_has_attribute(current_general_scope, current_internal_scope, var_name, var_attribute_name)):
+                p[0] = function_directory.get_attribute_type_and_address(
+                    current_general_scope, current_internal_scope, var_name, var_attribute_name)
+            else:
+                raise Exception(
+                    'Object has no attribute named: ' + var_attribute_name)
+        elif (function_directory.has_variable(current_general_scope, '#global', p[-1])):
+            if (function_directory.variable_has_attribute(current_general_scope, '#global', var_name, var_attribute_name)):
+                p[0] = function_directory.get_attribute_type_and_address(
+                    current_general_scope, '#global', var_name, var_attribute_name)
+            else:
+                raise Exception(
+                    'Object has no attribute named: ' + var_attribute_name)
+        else:
+            raise VariableNotDefined(
+                "Variable " + p[-1] + " not defined in line " + str(p.lineno(1)))
 
 
 def p_group_access(p):
@@ -321,9 +358,15 @@ def p_np_array_access5(p):
 
 def p_class_declaration(p):
     '''
-    class_declaration   : CLASS ID class_declaration1 OPEN_KEY class_body CLOSE_KEY SEMICOLON constructor class_declaration2
+    class_declaration   : CLASS ID np_create_class_scope class_declaration1 OPEN_KEY class_body CLOSE_KEY SEMICOLON constructor class_declaration2
     '''
-    pass
+    global current_general_scope, current_internal_scope
+
+    function_directory.set_object_summary(
+        current_general_scope, '#global')
+
+    current_general_scope = '#global'
+    current_internal_scope = '#global'
 
 
 def p_class_declaration1(p):
@@ -351,15 +394,7 @@ def p_class_body(p):
 
 def p_class_body1(p):
     '''
-    class_body1 : variable_declaration class_body2
-    '''
-    pass
-
-
-def p_class_body2(p):
-    '''
-    class_body2 : variable_declaration class_body2
-                | epsilon
+    class_body1 : attribute_declaration_loop
     '''
     pass
 
@@ -382,9 +417,46 @@ def p_class_body4(p):
 
 def p_constructor(p):
     '''
-    constructor : CONSTRUCTOR ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS OPEN_KEY statement_loop CLOSE_KEY
+    constructor : CONSTRUCTOR np_add_function_internal_scope ID np_validate_constructor_id OPEN_PARENTHESIS parameter np_add_parameters_to_var_table CLOSE_PARENTHESIS OPEN_KEY variable_declaration_loop statement_loop CLOSE_KEY np_end_function
     '''
-    pass
+    global current_internal_scope
+    current_internal_scope = '#global'
+    avail.reset_local_counters()
+
+
+def p_np_validate_constructor_id(p):
+    '''
+    np_validate_constructor_id : epsilon
+    '''
+    if current_general_scope != p[-1]:
+        raise Exception('Class name and constructor name do not match')
+
+
+def p_np_create_class_scope(p):
+    '''
+    np_create_class_scope : epsilon
+    '''
+    global current_general_scope, current_internal_scope
+    current_general_scope = p[-1]
+    current_internal_scope = '#global'
+    function_directory.add_general_scope(current_general_scope)
+    function_directory.add_internal_scope(
+        current_general_scope, current_internal_scope)
+
+
+def p_attribute_declaration_loop(p):
+    '''
+    attribute_declaration_loop : attribute_declaration attribute_declaration_loop
+                                | epsilon
+    '''
+
+
+def p_attribute_declaration(p):
+    '''
+    attribute_declaration : VAR data_type np_set_current_var_data_type ID np_set_current_var_name SEMICOLON
+    '''
+    function_directory.add_class_attribute(
+        current_general_scope, current_var_name, current_var_data_type)
 
 
 def p_variable_declaration_loop(p):
@@ -399,10 +471,45 @@ def p_variable_declaration(p):
     '''
     variable_declaration    : VAR np_set_current_var_type data_type np_set_current_var_data_type ID np_set_current_var_name SEMICOLON np_add_variable
                             | GROUP np_set_current_var_type ID np_set_current_var_name ASSIGN data_type np_set_current_var_data_type np_add_variable OPEN_BRACKET np_add_dim1_list INT_VALUE np_add_dim1 CLOSE_BRACKET group1 SEMICOLON
-                            | OBJ np_set_current_var_type ID np_set_current_var_name ASSIGN ID OPEN_PARENTHESIS variable_declaration1 CLOSE_PARENTHESIS SEMICOLON np_add_variable
+                            | OBJ np_set_current_var_type ID np_set_current_var_name ASSIGN ID np_check_class_existence OPEN_PARENTHESIS np_start_function_param_counter np_add_open_parenthesis variable_declaration1 np_remove_open_parenthesis CLOSE_PARENTHESIS SEMICOLON np_create_object
 
     '''
     pass
+
+
+def p_np_create_object(p):
+    '''
+    np_create_object : epsilon
+    '''
+    class_vars_table = function_directory.get_class_vars_table(
+        current_class_object_to_declare, '#global')
+
+    function_directory.add_obj_variable(
+        current_general_scope, current_internal_scope, current_class_object_to_declare, current_var_name)
+
+    avail_block = None
+    if current_internal_scope == '#global':
+        avail_block = 'globals'
+    else:
+        avail_block = 'locals'
+
+    for attriibute_name, attribute_map in class_vars_table.items():
+        new_address = avail.get_new_address(
+            attribute_map['data_type'], avail_block)
+        function_directory.add_obj_attribute_data(
+            current_general_scope, current_internal_scope, current_var_name, attriibute_name, attribute_map['data_type'], new_address)
+
+
+def p_np_check_class_existence(p):
+    '''
+    np_check_class_existence : epsilon
+    '''
+    global current_class_object_to_declare
+    class_to_instance = p[-1]
+    if not function_directory.has_general_scope(class_to_instance):
+        raise Exception("Class " + class_to_instance + " does not exist")
+    else:
+        current_class_object_to_declare = p[-1]
 
 
 def p_np_set_current_var_type(p):
@@ -434,13 +541,13 @@ def p_np_add_variable(p):
     np_add_variable : epsilon
     '''
     new_variable_address = None
-    if (current_general_scope == '#global'):
-        if (current_internal_scope == '#global'):
-            new_variable_address = avail.get_new_address(
-                current_var_data_type, 'globals')
-        else:
-            new_variable_address = avail.get_new_address(
-                current_var_data_type, 'locals')
+
+    if (current_internal_scope == '#global'):
+        new_variable_address = avail.get_new_address(
+            current_var_data_type, 'globals')
+    else:
+        new_variable_address = avail.get_new_address(
+            current_var_data_type, 'locals')
 
     function_directory.add_variable(current_general_scope, current_internal_scope,
                                     current_var_name, current_var_type, current_var_data_type, new_variable_address)

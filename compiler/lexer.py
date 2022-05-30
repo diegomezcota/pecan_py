@@ -33,7 +33,8 @@ tokens = [
     'STRING_VALUE',
     'BOOL_VALUE',
     'DOT',
-    'AT_CLASS'
+    'AT_CLASS',
+    'DOLLAR_SIGN'
 ]
 
 # Regular expression rules for simple tokens
@@ -58,6 +59,7 @@ t_EQUAL_TO = r'=='
 t_NOT_EQUAL_TO = r'!='
 t_DOT = r'\.'
 t_AT_CLASS = r'@class'
+t_DOLLAR_SIGN = r'\$'
 
 # Reserved words
 reserved = {
