@@ -87,6 +87,13 @@ class FunctionDirectory:
     def get_class_vars_table(self, general_name, internal_name):
         return self.table[general_name][internal_name]['vars_table']
 
+    def get_attribute_type_and_address(self, general_name, internal_name, var_name, attribute_name):
+        attribute_type = self.table[general_name][internal_name][
+            'vars_table'][var_name]['attributes'][attribute_name]['data_type']
+        attribute_address = self.table[general_name][internal_name][
+            'vars_table'][var_name]['attributes'][attribute_name]['address']
+        return (attribute_address, attribute_type)
+
     def set_temps_workspace(self, general_name, internal_name, temps_workspace):
         self.table[general_name][internal_name]['workspace']['temps_workspace'] = temps_workspace
 
@@ -159,6 +166,9 @@ class FunctionDirectory:
     def has_variable(self, general_name, internal_name, var_name):
         return (var_name in self.table[general_name][internal_name]['vars_table'].keys())
 
+    def variable_has_attribute(self, general_name, internal_name, var_name, attribute_name):
+        return (attribute_name in self.table[general_name][internal_name]['vars_table'][var_name]['attributes'].keys())
+
     def generate_variable_workspace(self, general_name, internal_name):
         variable_workspace = {"int": 0, "float": 0, "string": 0, "bool": 0}
         # ir por todo el var table y sumar cada tipo
@@ -189,8 +199,7 @@ class FunctionDirectory:
         self.table[general_name][internal_name]['vars_table'][var_name]['group_size'] = size
 
     def delete_vars_table(self, general_name, internal_name):
-        # self.table[general_name][internal_name]['vars_table'] = {}
-        pass
+        self.table[general_name][internal_name]['vars_table'] = {}
 
 
 class GeneralScopeAlreadyDeclared(Exception):

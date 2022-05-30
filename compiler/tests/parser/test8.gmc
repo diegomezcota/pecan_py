@@ -13,13 +13,20 @@ constructor Animal(int edad, int hola) {
     write("tripsi");
 }
 
+obj shori = Animal();
+obj blu = Animal();
+
 function c() returns int {
+    shori.nombre = "shori test";
     return 2;
 }
 
 
 main() {
     var int i;
-    obj shori = Animal();
     write(i);
+    c();
+    blu.nombre = "blu fukutake";
+    write(shori.nombre);
+    write(blu.nombre);
 }

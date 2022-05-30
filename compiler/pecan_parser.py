@@ -211,6 +211,26 @@ def p_variable1(p):
                 "Variable " + p[-1] + " not defined in line " + str(p.lineno(1)))
     elif len(p) == 8:
         p[0] = p[7]
+    elif len(p) == 3:
+        var_name = p[-1]
+        var_attribute_name = p[2]
+        if (function_directory.has_variable(current_general_scope, current_internal_scope, var_name)):
+            if (function_directory.variable_has_attribute(current_general_scope, current_internal_scope, var_name, var_attribute_name)):
+                p[0] = function_directory.get_attribute_type_and_address(
+                    current_general_scope, current_internal_scope, var_name, var_attribute_name)
+            else:
+                raise Exception(
+                    'Object has no attribute named: ' + var_attribute_name)
+        elif (function_directory.has_variable(current_general_scope, '#global', p[-1])):
+            if (function_directory.variable_has_attribute(current_general_scope, '#global', var_name, var_attribute_name)):
+                p[0] = function_directory.get_attribute_type_and_address(
+                    current_general_scope, '#global', var_name, var_attribute_name)
+            else:
+                raise Exception(
+                    'Object has no attribute named: ' + var_attribute_name)
+        else:
+            raise VariableNotDefined(
+                "Variable " + p[-1] + " not defined in line " + str(p.lineno(1)))
 
 
 def p_group_access(p):
