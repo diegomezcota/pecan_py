@@ -39,9 +39,9 @@
         "param_signature": [],
         "workspace": {
           "variables_workspace": {
-            "int": 1,
+            "int": 2,
             "float": 0,
-            "string": 0,
+            "string": 2,
             "bool": 0
           },
           "temps_workspace": {
@@ -52,7 +52,7 @@
           }
         },
         "function_type": "void",
-        "start_quad": 11
+        "start_quad": 14
       }
     },
     "Animal": {
@@ -124,7 +124,7 @@
       "GOTOMAIN",
       null,
       null,
-      11
+      14
     ],
     [
       "=",
@@ -184,6 +184,24 @@
       6000
     ],
     [
+      "ERA_OBJ_MET",
+      "#global",
+      "shori",
+      "Animal#comer"
+    ],
+    [
+      "PARAM",
+      24001,
+      null,
+      0
+    ],
+    [
+      "GOSUB",
+      "comer",
+      "shori",
+      6
+    ],
+    [
       "=",
       24001,
       null,
@@ -229,17 +247,35 @@
       "WRITE",
       null,
       null,
-      6000
+      14000
     ],
     [
       "WRITE",
       null,
       null,
       6002
+    ],
+    [
+      "ERA_OBJ_MET",
+      "main",
+      "shori",
+      "Animal#comer"
+    ],
+    [
+      "PARAM",
+      24002,
+      null,
+      0
+    ],
+    [
+      "GOSUB",
+      "comer",
+      "shori",
+      6
     ]
   ],
   "constants_summary": {
-    "int": 2,
+    "int": 3,
     "float": 0,
     "bool": 0,
     "string": 5
@@ -247,7 +283,8 @@
   "constants_table": {
     "int": {
       "1": 24000,
-      "2": 24001
+      "2": 24001,
+      "5": 24002
     },
     "float": {},
     "bool": {},

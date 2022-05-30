@@ -38,8 +38,8 @@ def p_program(p):
     '''
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
-    #print(*quads.list, sep='\n')
-    print(json.dumps(function_directory.table, indent=2))
+    print(*quads.list, sep='\n')
+    # print(json.dumps(function_directory.table, indent=2))
 
     function_directory.generate_variable_workspace('#global', '#global')
 
@@ -784,7 +784,6 @@ def p_factor(p):
             | variable
             | OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
     '''
-    #print('soy factor')
     if len(p) == 2:
         temp_tuple = p[1]
         operand_stack.append(temp_tuple)
@@ -1172,8 +1171,20 @@ def p_function_call(p):
     '''
     function_call : ID function_call1 OPEN_PARENTHESIS np_start_function_param_counter np_add_open_parenthesis function_call2 np_remove_open_parenthesis CLOSE_PARENTHESIS
     '''
+
+    general_name = None
+    internal_name = None
+    object_name = None
+    if '#' in current_function_call_name_stack[-1]:
+        general_name = current_function_call_name_stack[-1].split('#')[0]
+        internal_name = current_function_call_name_stack[-1].split('#')[1]
+        object_name = p[1]
+    else:
+        general_name = '#global'
+        internal_name = current_function_call_name_stack[-1]
+
     param_signature_length = function_directory.get_param_signature_length(
-        '#global', current_function_call_name_stack[-1])
+        general_name, internal_name)
     if param_signature_length != function_param_counter_stack[-1]:
         error_msg = "'" + current_function_call_name_stack[-1] + "'" + " function call expected " + \
             str(param_signature_length) + " params but received " + \
@@ -1181,11 +1192,11 @@ def p_function_call(p):
         raise ParamLengthMismatch(error_msg + " in line " + str(p.lineno(6)))
     else:
         function_start_quad = function_directory.get_function_start_quad(
-            '#global', current_function_call_name_stack[-1])
+            general_name, internal_name)
         quads.generate_quad(
-            'GOSUB', current_function_call_name_stack[-1], None, function_start_quad)
+            'GOSUB', internal_name, object_name, function_start_quad)
         function_return_type = function_directory.get_function_type(
-            '#global', current_function_call_name_stack[-1])
+            general_name, internal_name)
         if function_return_type != 'void':
             function_var_address = function_directory.get_function_virtual_address(
                 '#global', '#global', current_function_call_name_stack[-1])
@@ -1202,7 +1213,32 @@ def p_function_call1(p):
     function_call1 : DOT ID
                     | np_validate_function_existance_and_era
     '''
-    ...
+    global current_function_call_name
+    if len(p) == 3:
+        function_object = p[-1]
+        function_name = p[2]
+        function_class = None
+        object_scope = None
+        if (function_directory.has_variable(current_general_scope, current_internal_scope, function_object)):
+            function_class = function_directory.get_object_class_name(
+                current_general_scope, current_internal_scope, function_object)
+            object_scope = current_internal_scope
+        elif function_directory.has_variable(current_general_scope, '#global', function_object):
+            function_class = function_directory.get_object_class_name(
+                current_general_scope, '#global', function_object)
+            object_scope = '#global'
+        else:
+            raise Exception(
+                function_object + ' object has not been declared so method can not be run.')
+
+        if (function_directory.class_has_function(function_class, function_name)):
+            current_function_call_name = function_class + '#' + function_name
+            current_function_call_name_stack.append(current_function_call_name)
+            quads.generate_quad('ERA_OBJ_MET', object_scope, function_object,
+                                current_function_call_name_stack[-1])
+        else:
+            raise Exception('Function ' + function_name +
+                            ' does not exist in ' + function_class)
 
 
 def p_np_validate_function_existence_and_era(p):
@@ -1259,9 +1295,19 @@ def p_np_check_param_match(p):
     np_check_param_match : epsilon
     '''
     global function_param_counter_stack
+
+    general_name = None
+    internal_name = None
+    if '#' in current_function_call_name_stack[-1]:
+        general_name = current_function_call_name_stack[-1].split('#')[0]
+        internal_name = current_function_call_name_stack[-1].split('#')[1]
+    else:
+        general_name = '#global'
+        internal_name = current_function_call_name_stack[-1]
+
     param_address, param_type = operand_stack.pop()
     nth_signature_type = function_directory.get_nth_param_type(
-        '#global', current_function_call_name_stack[-1], function_param_counter_stack[-1])
+        general_name, internal_name, function_param_counter_stack[-1])
     if nth_signature_type != param_type:
         error_msg = "Expected " + nth_signature_type + " type for " + \
             str(function_param_counter_stack[-1] + 1) + "th param "
@@ -1392,7 +1438,7 @@ def p_function_return(p):
         else:
             # TODO: Para apoyar a la recursion, pedir la direccion de esta funcion al inicio de la declaracion,
             # creo que no cambia nada el pedirla aqui, solo habria que hacer la query por la function address en este punto
-            #function_address = avail.get_new_global(function_return_type)
+            # function_address = avail.get_new_global(function_return_type)
             # function_directory.add_variable(
             #    '#global', '#global', current_internal_scope, 'var', function_return_type, function_address)
             function_address = function_directory.get_function_virtual_address(
