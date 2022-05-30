@@ -1,6 +1,6 @@
 # Mariana Martinez Celis Gonzalez
 # Diego Gomez Cota
-# Avail
+# avail.py
 # Estructura parar manejar las direcciones virtuales de memoria en compilacion
 class Avail:
     def __init__(self):
