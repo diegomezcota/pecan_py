@@ -1,10 +1,7 @@
 // test1: Hello world
 program hello_pecan_py;
 main() {
-    write("Hello, Pecan Py!");
-    hola = 10 + a * b / c;
-    a = a + a + b + c;
-    b = c || b > a > d && b && c;
-    a = a + 3.14;
-    z = a + b && c / 5;
+    var float i;
+    i = i - 1;
+    write(i);
 }

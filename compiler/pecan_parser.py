@@ -680,14 +680,13 @@ def add_exp_quad(operator_list, program_line_no='indefinite_line'):
 def p_factor(p):
     '''
     factor  : function_call
-            | FLOAT_VALUE np_add_constant_virtual_address
-            | INT_VALUE np_add_constant_virtual_address
+            | float_value np_add_constant_virtual_address
+            | int_value np_add_constant_virtual_address
             | BOOL_VALUE np_add_constant_virtual_address
             | STRING_VALUE np_add_constant_virtual_address
             | variable
             | OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
     '''
-    #print('soy factor')
     if len(p) == 2:
         temp_tuple = p[1]
         operand_stack.append(temp_tuple)
@@ -696,6 +695,25 @@ def p_factor(p):
         temp_tuple = (p[2], const_type)
         operand_stack.append(temp_tuple)
 
+def p_float_value(p):
+    '''
+    float_value : FLOAT_VALUE
+                | MINUS FLOAT_VALUE
+    '''
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = ('-' + p[2][0], p[2][1])
+
+def p_int_value(p):
+    '''
+    int_value   : INT_VALUE
+                | MINUS INT_VALUE
+    '''
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = ('-' + p[2][0], p[2][1])
 
 def p_np_add_constant_virtual_address(p):
     '''
