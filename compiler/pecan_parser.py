@@ -340,7 +340,8 @@ def p_np_array_access5(p):
     aux1_address, _ = operand_stack.pop()
     group_virtual_address = function_directory.get_variable_virtual_address(
         current_general_scope, dim_stack[-1][2], dim_stack[-1][3])
-    group_type = function_directory.get_variable_data_type(current_general_scope, dim_stack[-1][2], dim_stack[-1][3])
+    group_type = function_directory.get_variable_data_type(
+        current_general_scope, dim_stack[-1][2], dim_stack[-1][3])
     new_address = None
     if not constants.has_constant('int', str(group_virtual_address)):
         new_address = avail.get_new_address('int', 'constants')
@@ -387,7 +388,7 @@ def p_class_declaration2(p):
 
 def p_class_body(p):
     '''
-    class_body  : class_body1 class_body3
+    class_body  : class_body1
     '''
     pass
 
@@ -395,22 +396,6 @@ def p_class_body(p):
 def p_class_body1(p):
     '''
     class_body1 : attribute_declaration_loop
-    '''
-    pass
-
-
-def p_class_body3(p):
-    '''
-    class_body3 : class_function_declaration class_body4
-    '''
-    pass
-
-
-def p_class_body4(p):
-    '''
-    class_body4 : class_function_declaration class_body4
-                | epsilon
-
     '''
     pass
 
@@ -640,7 +625,7 @@ def p_statement(p):
                 | function_call SEMICOLON
     '''
     p[0] = p[1]
-    pass  
+    pass
 
 
 def p_assignment(p):
@@ -839,13 +824,6 @@ def p_data_type(p):
                 | BOOL
     '''
     p[0] = p[1]
-
-
-def p_class_function_declaration(p):
-    '''
-    class_function_declaration : FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg SEMICOLON
-    '''
-    pass
 
 
 def p_return_arg(p):

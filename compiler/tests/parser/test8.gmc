@@ -4,7 +4,6 @@ class Animal {
     var string nombre;
     var int edad;
     var string tipo;
-    function estudiar() returns void;
 };
 
 constructor Animal(int edad, int hola) {
