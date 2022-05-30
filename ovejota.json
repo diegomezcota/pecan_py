@@ -2,7 +2,13 @@
   "function_directory": {
     "#global": {
       "#global": {
-        "vars_table": {},
+        "vars_table": {
+          "c": {
+            "var_type": "var",
+            "var_data_type": "int",
+            "var_virtual_address": 0
+          }
+        },
         "param_signature": [],
         "workspace": {
           "variables_workspace": {
@@ -35,13 +41,37 @@
         "start_quad": 5
       },
       "main": {
-        "vars_table": {},
+        "vars_table": {
+          "i": {
+            "var_type": "var",
+            "var_data_type": "int",
+            "var_virtual_address": 8000
+          },
+          "shori": {
+            "var_type": "obj",
+            "var_data_type": "Animal",
+            "attributes": {
+              "nombre": {
+                "data_type": "string",
+                "address": 14000
+              },
+              "edad": {
+                "data_type": "int",
+                "address": 8001
+              },
+              "tipo": {
+                "data_type": "string",
+                "address": 14001
+              }
+            }
+          }
+        },
         "param_signature": [],
         "workspace": {
           "variables_workspace": {
-            "int": 1,
+            "int": 2,
             "float": 0,
-            "string": 0,
+            "string": 2,
             "bool": 0
           },
           "temps_workspace": {
@@ -80,7 +110,23 @@
         }
       },
       "constructor": {
-        "vars_table": {},
+        "vars_table": {
+          "edad": {
+            "var_type": "var",
+            "var_data_type": "int",
+            "var_virtual_address": 8000
+          },
+          "hola": {
+            "var_type": "var",
+            "var_data_type": "int",
+            "var_virtual_address": 8001
+          },
+          "ola": {
+            "var_type": "var",
+            "var_data_type": "int",
+            "var_virtual_address": 8002
+          }
+        },
         "param_signature": [
           "int",
           "int"

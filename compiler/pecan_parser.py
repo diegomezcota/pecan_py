@@ -25,6 +25,7 @@ current_var_name = None
 current_var_type = None
 current_var_data_type = None
 current_group_internal_scope = None
+current_class_object_to_declare = None
 
 # For function calls
 function_param_counter = None
@@ -81,7 +82,8 @@ def p_np_start_state(p):
     np_start_state : epsilon
     '''
     global function_directory, avail, quads, semantic_cube, operand_stack, operator_stack, jump_stack, control_variable_stack
-    global current_general_scope, current_internal_scope, current_var_name, current_var_type, current_var_data_type, constants, dim_stack, current_group_internal_scope, current_function_call_name_stack, function_param_counter_stack
+    global current_general_scope, current_internal_scope, current_var_name, current_var_type, current_var_data_type, constants, dim_stack
+    global current_group_internal_scope, current_function_call_name_stack, function_param_counter_stack, current_class_object_to_declare
     function_directory = FunctionDirectory()
     avail = Avail()
     quads = Quadruples()
@@ -111,6 +113,9 @@ def p_np_start_state(p):
     # Funciones
     current_function_call_name_stack = []
     function_param_counter_stack = []
+
+    # Objetos
+    current_class_object_to_declare = None
 
 
 def p_np_start_func_dir(p):
@@ -455,16 +460,35 @@ def p_np_create_object(p):
     '''
     np_create_object : epsilon
     '''
-    pass
+    class_vars_table = function_directory.get_class_vars_table(
+        current_class_object_to_declare, '#global')
+
+    function_directory.add_obj_variable(
+        current_general_scope, current_internal_scope, current_class_object_to_declare, current_var_name)
+
+    avail_block = None
+    if current_internal_scope == '#global':
+        avail_block = 'globals'
+    else:
+        avail_block = 'locals'
+
+    for attriibute_name, attribute_map in class_vars_table.items():
+        new_address = avail.get_new_address(
+            attribute_map['data_type'], avail_block)
+        function_directory.add_obj_attribute_data(
+            current_general_scope, current_internal_scope, current_var_name, attriibute_name, attribute_map['data_type'], new_address)
 
 
 def p_np_check_class_existence(p):
     '''
     np_check_class_existence : epsilon
     '''
+    global current_class_object_to_declare
     class_to_instance = p[-1]
     if not function_directory.has_general_scope(class_to_instance):
         raise Exception("Class " + class_to_instance + " does not exist")
+    else:
+        current_class_object_to_declare = p[-1]
 
 
 def p_np_set_current_var_type(p):
