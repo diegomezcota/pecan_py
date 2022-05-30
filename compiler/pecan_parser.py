@@ -38,8 +38,8 @@ def p_program(p):
     '''
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
-    #print(*quads.list, sep='\n')
-    print(json.dumps(function_directory.table, indent=2))
+    print(*quads.list, sep='\n')
+    # print(json.dumps(function_directory.table, indent=2))
 
     function_directory.generate_variable_workspace('#global', '#global')
 
@@ -171,12 +171,17 @@ def p_declaration(p):
 def p_variable(p):
     '''
     variable    : ID variable1
-                | DOLLAR_SIGN np_check_class_scope ID variable1
+                | DOLLAR_SIGN np_check_class_scope ID
     '''
     if len(p) == 3:
         p[0] = p[2]
     else:
-        p[0] = p[4]
+        if function_directory.class_has_attribute(current_general_scope, p[3]):
+            attribute_type, attribute_index = function_directory.get_class_attribute_type_and_index(
+                current_general_scope, p[3])
+            p[0] = ((attribute_index, attribute_type), attribute_type)
+        else:
+            raise Exception('Attribute' + p[3] + ' not in scope')
 
 
 def p_np_check_class_scope(p):
@@ -340,7 +345,8 @@ def p_np_array_access5(p):
     aux1_address, _ = operand_stack.pop()
     group_virtual_address = function_directory.get_variable_virtual_address(
         current_general_scope, dim_stack[-1][2], dim_stack[-1][3])
-    group_type = function_directory.get_variable_data_type(current_general_scope, dim_stack[-1][2], dim_stack[-1][3])
+    group_type = function_directory.get_variable_data_type(
+        current_general_scope, dim_stack[-1][2], dim_stack[-1][3])
     new_address = None
     if not constants.has_constant('int', str(group_virtual_address)):
         new_address = avail.get_new_address('int', 'constants')
@@ -387,7 +393,7 @@ def p_class_declaration2(p):
 
 def p_class_body(p):
     '''
-    class_body  : class_body1 class_body3
+    class_body  : class_body1
     '''
     pass
 
@@ -399,25 +405,9 @@ def p_class_body1(p):
     pass
 
 
-def p_class_body3(p):
-    '''
-    class_body3 : class_function_declaration class_body4
-    '''
-    pass
-
-
-def p_class_body4(p):
-    '''
-    class_body4 : class_function_declaration class_body4
-                | epsilon
-
-    '''
-    pass
-
-
 def p_constructor(p):
     '''
-    constructor : CONSTRUCTOR np_add_function_internal_scope ID np_validate_constructor_id OPEN_PARENTHESIS parameter np_add_parameters_to_var_table CLOSE_PARENTHESIS OPEN_KEY variable_declaration_loop statement_loop CLOSE_KEY np_end_function
+    constructor : CONSTRUCTOR np_add_function_internal_scope ID np_validate_constructor_id OPEN_PARENTHESIS parameter np_add_parameters_to_var_table CLOSE_PARENTHESIS OPEN_KEY variable_declaration_loop np_add_function_start_quad statement_loop CLOSE_KEY np_end_function
     '''
     global current_internal_scope
     current_internal_scope = '#global'
@@ -640,7 +630,7 @@ def p_statement(p):
                 | function_call SEMICOLON
     '''
     p[0] = p[1]
-    pass  
+    pass
 
 
 def p_assignment(p):
@@ -794,7 +784,6 @@ def p_factor(p):
             | variable
             | OPEN_PARENTHESIS np_add_open_parenthesis hyper_exp CLOSE_PARENTHESIS np_remove_open_parenthesis
     '''
-    #print('soy factor')
     if len(p) == 2:
         temp_tuple = p[1]
         operand_stack.append(temp_tuple)
@@ -839,13 +828,6 @@ def p_data_type(p):
                 | BOOL
     '''
     p[0] = p[1]
-
-
-def p_class_function_declaration(p):
-    '''
-    class_function_declaration : FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg SEMICOLON
-    '''
-    pass
 
 
 def p_return_arg(p):
@@ -1189,8 +1171,20 @@ def p_function_call(p):
     '''
     function_call : ID function_call1 OPEN_PARENTHESIS np_start_function_param_counter np_add_open_parenthesis function_call2 np_remove_open_parenthesis CLOSE_PARENTHESIS
     '''
+
+    general_name = None
+    internal_name = None
+    object_name = None
+    if '#' in current_function_call_name_stack[-1]:
+        general_name = current_function_call_name_stack[-1].split('#')[0]
+        internal_name = current_function_call_name_stack[-1].split('#')[1]
+        object_name = p[1]
+    else:
+        general_name = '#global'
+        internal_name = current_function_call_name_stack[-1]
+
     param_signature_length = function_directory.get_param_signature_length(
-        '#global', current_function_call_name_stack[-1])
+        general_name, internal_name)
     if param_signature_length != function_param_counter_stack[-1]:
         error_msg = "'" + current_function_call_name_stack[-1] + "'" + " function call expected " + \
             str(param_signature_length) + " params but received " + \
@@ -1198,11 +1192,11 @@ def p_function_call(p):
         raise ParamLengthMismatch(error_msg + " in line " + str(p.lineno(6)))
     else:
         function_start_quad = function_directory.get_function_start_quad(
-            '#global', current_function_call_name_stack[-1])
+            general_name, internal_name)
         quads.generate_quad(
-            'GOSUB', current_function_call_name_stack[-1], None, function_start_quad)
+            'GOSUB', internal_name, object_name, function_start_quad)
         function_return_type = function_directory.get_function_type(
-            '#global', current_function_call_name_stack[-1])
+            general_name, internal_name)
         if function_return_type != 'void':
             function_var_address = function_directory.get_function_virtual_address(
                 '#global', '#global', current_function_call_name_stack[-1])
@@ -1219,7 +1213,32 @@ def p_function_call1(p):
     function_call1 : DOT ID
                     | np_validate_function_existance_and_era
     '''
-    ...
+    global current_function_call_name
+    if len(p) == 3:
+        function_object = p[-1]
+        function_name = p[2]
+        function_class = None
+        object_scope = None
+        if (function_directory.has_variable(current_general_scope, current_internal_scope, function_object)):
+            function_class = function_directory.get_object_class_name(
+                current_general_scope, current_internal_scope, function_object)
+            object_scope = current_internal_scope
+        elif function_directory.has_variable(current_general_scope, '#global', function_object):
+            function_class = function_directory.get_object_class_name(
+                current_general_scope, '#global', function_object)
+            object_scope = '#global'
+        else:
+            raise Exception(
+                function_object + ' object has not been declared so method can not be run.')
+
+        if (function_directory.class_has_function(function_class, function_name)):
+            current_function_call_name = function_class + '#' + function_name
+            current_function_call_name_stack.append(current_function_call_name)
+            quads.generate_quad('ERA_OBJ_MET', object_scope, function_object,
+                                current_function_call_name_stack[-1])
+        else:
+            raise Exception('Function ' + function_name +
+                            ' does not exist in ' + function_class)
 
 
 def p_np_validate_function_existence_and_era(p):
@@ -1276,9 +1295,19 @@ def p_np_check_param_match(p):
     np_check_param_match : epsilon
     '''
     global function_param_counter_stack
+
+    general_name = None
+    internal_name = None
+    if '#' in current_function_call_name_stack[-1]:
+        general_name = current_function_call_name_stack[-1].split('#')[0]
+        internal_name = current_function_call_name_stack[-1].split('#')[1]
+    else:
+        general_name = '#global'
+        internal_name = current_function_call_name_stack[-1]
+
     param_address, param_type = operand_stack.pop()
     nth_signature_type = function_directory.get_nth_param_type(
-        '#global', current_function_call_name_stack[-1], function_param_counter_stack[-1])
+        general_name, internal_name, function_param_counter_stack[-1])
     if nth_signature_type != param_type:
         error_msg = "Expected " + nth_signature_type + " type for " + \
             str(function_param_counter_stack[-1] + 1) + "th param "
@@ -1293,10 +1322,18 @@ def p_np_check_param_match(p):
 
 def p_class_function(p):
     '''
-    class_function : AT_CLASS ID FUNCTION ID OPEN_PARENTHESIS parameter CLOSE_PARENTHESIS RETURNS return_arg OPEN_KEY function_statement_loop function_return CLOSE_KEY
+    class_function : AT_CLASS ID np_validate_class_method FUNCTION ID np_add_function_internal_scope OPEN_PARENTHESIS parameter np_add_parameters_to_var_table CLOSE_PARENTHESIS RETURNS return_arg np_set_function_return_type_objects OPEN_KEY variable_declaration_loop np_generate_variable_workspace np_add_function_start_quad function_statement_loop function_return CLOSE_KEY np_end_function
 
     '''
     pass
+
+
+def p_np_validate_class_method(p):
+    '''
+    np_validate_class_method : epsilon
+    '''
+    if current_general_scope != p[-1]:
+        raise Exception('Class scope and function declaration mismatch')
 
 
 def p_function_declaration(p):
@@ -1370,6 +1407,20 @@ def p_np_set_function_return_type(p):
             '#global', '#global', current_internal_scope, 'var', function_type, new_address)
 
 
+def p_np_set_function_return_type_objects(p):
+    '''
+    np_set_function_return_type_objects : epsilon
+    '''
+    function_type = p[-1]
+    function_directory.set_function_type(
+        current_general_scope, current_internal_scope, function_type)
+    if function_type != 'void':
+        new_address = avail.get_new_address(function_type, 'globals')
+        function_name = current_general_scope + '#' + current_internal_scope
+        function_directory.add_variable(
+            '#global', '#global', function_name, 'var', function_type, new_address)
+
+
 def p_function_return(p):
     '''
     function_return : RETURN hyper_exp SEMICOLON
@@ -1387,7 +1438,7 @@ def p_function_return(p):
         else:
             # TODO: Para apoyar a la recursion, pedir la direccion de esta funcion al inicio de la declaracion,
             # creo que no cambia nada el pedirla aqui, solo habria que hacer la query por la function address en este punto
-            #function_address = avail.get_new_global(function_return_type)
+            # function_address = avail.get_new_global(function_return_type)
             # function_directory.add_variable(
             #    '#global', '#global', current_internal_scope, 'var', function_return_type, function_address)
             function_address = function_directory.get_function_virtual_address(
