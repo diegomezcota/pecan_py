@@ -189,8 +189,14 @@ class FunctionDirectory:
         variable_workspace = {"int": 0, "float": 0, "string": 0, "bool": 0}
         # ir por todo el var table y sumar cada tipo
         vars_table = self.table[general_name][internal_name]['vars_table']
-        for _, var_dict in vars_table.items():
-            if var_dict['var_type'] != 'group':
+        for var_name, var_dict in vars_table.items():
+            if var_dict['var_type'] == 'obj':
+                class_name = var_dict['var_data_type']
+                class_workspace = self.get_object_workspace(
+                    class_name, '#global')
+                for data_type, frequency in class_workspace.items():
+                    variable_workspace[data_type] += frequency
+            elif var_dict['var_type'] != 'group':
                 variable_workspace[var_dict['var_data_type']] += 1
             else:
                 variable_workspace[var_dict['var_data_type']
