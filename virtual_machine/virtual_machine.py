@@ -80,6 +80,21 @@ def clean_quad_addresses(current_quad, memory):
             current_quad[i] = new_address
     return current_quad
 
+def clean_object_quads(current_quad, memory):
+    object_base_addresses = None
+    if memory.object:
+        object_base_addresses = memory.object['object_base_addresses']        
+    for i, element in enumerate(current_quad):
+        if element is not None and type(element) is list:
+            el_type = element[1]
+            element[0] += object_base_addresses[el_type]
+            element[1] = memory.object['object_scope']         
+    return current_quad
+
+def is_method_quad(quad_element):
+    return quad_element is not None and type(quad_element) is list
+            
+
 
 print('--------------------START OF EXECUTION-----------------------------')
 
@@ -87,6 +102,7 @@ while (instruction_pointer < len(quads)):
     current_quad = quads[instruction_pointer].copy()
     if memory_stack:
         current_quad = clean_quad_addresses(current_quad, memory_stack[-1])
+        current_quad = clean_object_quads(current_quad, memory_stack[-1])
     # GOTOMAIN execution
     if current_quad[0] == 'GOTOMAIN':
         main_vw = ovejota_manager.get_variable_workspace('#global', 'main')
@@ -104,8 +120,20 @@ while (instruction_pointer < len(quads)):
 
     # Assignment execution
     elif current_quad[0] == '=':
-        to_assign_type, to_assign_value = get_type_and_value(
-            memory_stack[-1], current_quad[1])
+        to_assign_type, to_assign_value = None, None
+        # check if quad involves two memories
+        if is_method_quad(current_quad[1]):
+            # check where the address "lives" (global, local)
+            object_scope = memory_stack[-1].object['object_scope']
+            if object_scope == '#global':
+                to_assign_type, to_assign_value = get_type_and_value(
+                    global_memory, current_quad[1][0])
+            else:
+                to_assign_type, to_assign_value = get_type_and_value(
+                    memory_stack[-2], current_quad[1][0])
+        else:
+            to_assign_type, to_assign_value = get_type_and_value(
+                memory_stack[-1], current_quad[1])
         to_assign_value = formatter.cast(to_assign_value, to_assign_type)
         memory_stack[-1] = set_value_in_memory(
             current_quad[3], memory_stack[-1], to_assign_value)
@@ -276,6 +304,7 @@ while (instruction_pointer < len(quads)):
         if 0 > index_value or index_value >= dim_size:
             raise Exception('Group index out of bounds')
 
+    # GOSUB execution (for global functions)
     elif current_quad[0] == 'GOSUB':
         function_name = current_quad[1]
         function_start_quad = current_quad[3]
@@ -285,6 +314,7 @@ while (instruction_pointer < len(quads)):
         instruction_pointer = function_start_quad
         continue
 
+    # ERA execution (for global functions)
     elif current_quad[0] == 'ERA':
         function_name = current_quad[3]
         function_vw = ovejota_manager.get_variable_workspace(
@@ -300,6 +330,7 @@ while (instruction_pointer < len(quads)):
         memories_to_be.append(
             [function_memory, {'int': 8000, 'float': 10000, 'bool': 12000, 'string': 14000}])
 
+    # PARAM execution
     elif current_quad[0] == 'PARAM':
         param_address = current_quad[1]
         param_index = current_quad[3]
@@ -310,9 +341,44 @@ while (instruction_pointer < len(quads)):
             new_param_address, param_value)
         memories_to_be[-1][1][param_type] += 1
 
+    # ENDFUNC execution
     elif current_quad[0] == 'ENDFUNC':
         memory_stack.pop()
         instruction_pointer = instruction_pointer_stack.pop()
+    
+    # ERA_OBJ_MET execution (for class methods)
+    elif current_quad[0] == 'ERA_OBJ_MET':
+        object_scope = current_quad[1] # helps us see where it was declares (global, main, etc)
+        object_base_addresses = current_quad[2] # helps us see the specific base addresses for the object calling the method
+        function_codename = current_quad[3]
+        class_name = function_codename.split('#')[0]
+        class_method_name = function_codename.split('#')[1]
+        method_vw = ovejota_manager.get_variable_workspace(class_name, class_method_name)
+        method_tw = ovejota_manager.get_temps_workspace(class_name, class_method_name)
+        method_variable_workspace = (
+             method_vw['int'], method_vw['float'], method_vw['bool'], method_vw['string'])
+        method_temps_workspace = (
+             method_tw['int'], method_tw['float'], method_tw['bool'], method_tw['string'])
+        method_memory = LocalMemory(
+             method_variable_workspace, method_temps_workspace)
+        # set object characteristics
+        method_memory.set_object_characteristics(object_scope, object_base_addresses)
+        memories_to_be.append(
+             [method_memory, {'int': 8000, 'float': 10000, 'bool': 12000, 'string': 14000}])
+    
+    # GOSUB_OBJ execution (for class methods)
+    elif current_quad[0] == 'GOSUB_OBJ':
+        # TODO: En clean quad adresses pasar las addreses checando las memorias, o podria ser en todos los cuadruplos
+        # TODO: cambiar erab_obj_met[2] a las direcciones base de ese objeto
+        # TODO: crear stacks para guardar era_obj_method[2][3]
+        class_method_name = current_quad[1]
+        object_var_name = current_quad[2]
+        method_start_quad = current_quad[3]
+        new_memory_to_execute = memories_to_be.pop()
+        memory_stack.append(new_memory_to_execute[0])
+        instruction_pointer_stack.append(instruction_pointer)
+        instruction_pointer = method_start_quad
+        continue
 
     instruction_pointer += 1
 

@@ -179,7 +179,7 @@ def p_variable(p):
         if function_directory.class_has_attribute(current_general_scope, p[3]):
             attribute_type, attribute_index = function_directory.get_class_attribute_type_and_index(
                 current_general_scope, p[3])
-            p[0] = ((attribute_index, attribute_type), attribute_type)
+            p[0] = ([attribute_index, attribute_type], attribute_type)
         else:
             raise Exception('Attribute' + p[3] + ' not in scope')
 

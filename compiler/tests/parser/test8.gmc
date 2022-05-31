@@ -14,28 +14,17 @@ constructor Animal(string nombre, int edad) {
 }
 
 @class Animal function comer(int aucsilio) returns void {
-    write("yuuum");
+    var string nombre_de_shori;
+    nombre_de_shori = $nombre;
+    write("yuuum", nombre_de_shori);
     return;
 }
 
 obj shori = Animal();
-obj blu = Animal();
-
-function c() returns int {
-    var int hola;
-    shori.nombre = "shori test";
-    //shori.comer(2);
-    return 2;
-}
-
 
 main() {
     var int i;
     //obj shori = Animal();
-    write(i);
-    c();
-    blu.nombre = "blu fukutake";
-    write(shori.nombre);
-    write(blu.nombre);
-    //shori.comer(5);
+    shori.nombre = "Tripsi";
+    shori.comer(1);
 }
