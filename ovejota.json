@@ -6,40 +6,103 @@
         "param_signature": [],
         "workspace": {
           "variables_workspace": {
-            "int": 30,
+            "int": 3,
             "float": 0,
-            "string": 0,
+            "string": 4,
             "bool": 0
           }
         },
         "function_type": "void"
       },
-      "multiplicaMatrices": {
+      "c": {
         "vars_table": {},
         "param_signature": [],
         "workspace": {
           "variables_workspace": {
-            "int": 4,
+            "int": 1,
             "float": 0,
             "string": 0,
             "bool": 0
           },
           "temps_workspace": {
-            "int": 20,
+            "int": 0,
             "float": 0,
-            "bool": 4,
+            "bool": 0,
             "string": 0
           }
         },
-        "function_type": "void",
-        "start_quad": 1
+        "function_type": "int",
+        "start_quad": 8
       },
       "main": {
         "vars_table": {},
         "param_signature": [],
         "workspace": {
           "variables_workspace": {
+            "int": 1,
+            "float": 0,
+            "string": 0,
+            "bool": 0
+          },
+          "temps_workspace": {
+            "int": 1,
+            "float": 0,
+            "bool": 0,
+            "string": 0
+          }
+        },
+        "function_type": "void",
+        "start_quad": 11
+      }
+    },
+    "Animal": {
+      "#global": {
+        "vars_table": {
+          "nombre": {
+            "data_type": "string",
+            "index": 0
+          },
+          "edad": {
+            "data_type": "int",
+            "index": 0
+          },
+          "tipo": {
+            "data_type": "string",
+            "index": 1
+          }
+        },
+        "param_signature": [],
+        "workspace": {
+          "int": 1,
+          "float": 0,
+          "bool": 0,
+          "string": 2
+        }
+      },
+      "constructor": {
+        "vars_table": {},
+        "param_signature": [
+          "string",
+          "int"
+        ],
+        "workspace": {
+          "temps_workspace": {
             "int": 0,
+            "float": 0,
+            "bool": 0,
+            "string": 0
+          }
+        },
+        "start_quad": 1
+      },
+      "comer": {
+        "vars_table": {},
+        "param_signature": [
+          "int"
+        ],
+        "workspace": {
+          "variables_workspace": {
+            "int": 1,
             "float": 0,
             "string": 0,
             "bool": 0
@@ -52,7 +115,7 @@
           }
         },
         "function_type": "void",
-        "start_quad": 57
+        "start_quad": 6
       }
     }
   },
@@ -61,337 +124,40 @@
       "GOTOMAIN",
       null,
       null,
-      57
+      11
     ],
     [
       "=",
-      24001,
+      14000,
       null,
-      0
+      [
+        0,
+        "string"
+      ]
     ],
     [
       "=",
-      24002,
+      8000,
       null,
-      1
+      [
+        0,
+        "int"
+      ]
     ],
     [
       "=",
-      24002,
+      30000,
       null,
-      2
-    ],
-    [
-      "=",
-      24003,
-      null,
-      3
-    ],
-    [
-      "!=",
-      1,
-      2,
-      20000
-    ],
-    [
-      "GOTOF",
-      20000,
-      null,
-      9
+      [
+        1,
+        "string"
+      ]
     ],
     [
       "WRITE",
       null,
       null,
-      30000
-    ],
-    [
-      "GOTO",
-      null,
-      null,
-      56
-    ],
-    [
-      "=",
-      24004,
-      null,
-      8000
-    ],
-    [
-      "=",
-      3,
-      null,
-      16000
-    ],
-    [
-      "<",
-      8000,
-      16000,
-      20001
-    ],
-    [
-      "GOTOF",
-      20001,
-      null,
-      56
-    ],
-    [
-      "=",
-      24004,
-      null,
-      8001
-    ],
-    [
-      "=",
-      0,
-      null,
-      16001
-    ],
-    [
-      "<",
-      8001,
-      16001,
-      20002
-    ],
-    [
-      "GOTOF",
-      20002,
-      null,
-      52
-    ],
-    [
-      "=",
-      24004,
-      null,
-      8003
-    ],
-    [
-      "=",
-      24004,
-      null,
-      8002
-    ],
-    [
-      "=",
-      1,
-      null,
-      16002
-    ],
-    [
-      "<",
-      8002,
-      16002,
-      20003
-    ],
-    [
-      "GOTOF",
-      20003,
-      null,
-      41
-    ],
-    [
-      "VERIFY",
-      2,
-      8001,
-      null
-    ],
-    [
-      "*",
-      8001,
-      24002,
-      16003
-    ],
-    [
-      "VERIFY",
-      3,
-      8002,
-      null
-    ],
-    [
-      "*",
-      8002,
-      24000,
-      16004
-    ],
-    [
-      "+",
-      16003,
-      16004,
-      16005
-    ],
-    [
-      "+",
-      16005,
-      24003,
-      16006
-    ],
-    [
-      "VERIFY",
-      3,
-      8002,
-      null
-    ],
-    [
-      "*",
-      8002,
-      24003,
-      16007
-    ],
-    [
-      "VERIFY",
-      4,
-      8000,
-      null
-    ],
-    [
-      "*",
-      8000,
-      24000,
-      16008
-    ],
-    [
-      "+",
-      16007,
-      16008,
-      16009
-    ],
-    [
-      "+",
-      16009,
-      24005,
-      16010
-    ],
-    [
-      "*",
-      "&16006",
-      "&16010",
-      16011
-    ],
-    [
-      "+",
-      8003,
-      16011,
-      16012
-    ],
-    [
-      "=",
-      16012,
-      null,
-      8003
-    ],
-    [
-      "+",
-      8002,
-      24000,
-      16013
-    ],
-    [
-      "=",
-      16013,
-      null,
-      8002
-    ],
-    [
-      "=",
-      16013,
-      null,
-      8002
-    ],
-    [
-      "GOTO",
-      null,
-      null,
-      20
-    ],
-    [
-      "VERIFY",
-      2,
-      8001,
-      null
-    ],
-    [
-      "*",
-      8001,
-      24003,
-      16014
-    ],
-    [
-      "VERIFY",
-      4,
-      8000,
-      null
-    ],
-    [
-      "*",
-      8000,
-      24000,
-      16015
-    ],
-    [
-      "+",
-      16014,
-      16015,
-      16016
-    ],
-    [
-      "+",
-      16016,
-      24006,
-      16017
-    ],
-    [
-      "=",
-      8003,
-      null,
-      "&16017"
-    ],
-    [
-      "+",
-      8001,
-      24000,
-      16018
-    ],
-    [
-      "=",
-      16018,
-      null,
-      8001
-    ],
-    [
-      "=",
-      16018,
-      null,
-      8001
-    ],
-    [
-      "GOTO",
-      null,
-      null,
-      15
-    ],
-    [
-      "+",
-      8000,
-      24000,
-      16019
-    ],
-    [
-      "=",
-      16019,
-      null,
-      8000
-    ],
-    [
-      "=",
-      16019,
-      null,
-      8000
-    ],
-    [
-      "GOTO",
-      null,
-      null,
-      11
+      30001
     ],
     [
       "ENDFUNC",
@@ -400,45 +166,97 @@
       null
     ],
     [
-      "ERA",
+      "WRITE",
       null,
       null,
-      "multiplicaMatrices"
+      30002
     ],
     [
-      "GOSUB",
-      "multiplicaMatrices",
+      "ENDFUNC",
       null,
-      1
+      null,
+      null
+    ],
+    [
+      "=",
+      30003,
+      null,
+      6000
+    ],
+    [
+      "=",
+      24001,
+      null,
+      2
+    ],
+    [
+      "ENDFUNC",
+      null,
+      null,
+      null
     ],
     [
       "WRITE",
       null,
       null,
-      30001
+      8000
+    ],
+    [
+      "ERA",
+      null,
+      null,
+      "c"
+    ],
+    [
+      "GOSUB",
+      "c",
+      null,
+      8
+    ],
+    [
+      "=",
+      2,
+      null,
+      16000
+    ],
+    [
+      "=",
+      30004,
+      null,
+      6002
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      6000
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      6002
     ]
   ],
   "constants_summary": {
-    "int": 7,
+    "int": 2,
     "float": 0,
     "bool": 0,
-    "string": 2
+    "string": 5
   },
   "constants_table": {
     "int": {
       "1": 24000,
-      "2": 24001,
-      "3": 24002,
-      "4": 24003,
-      "0": 24004,
-      "10": 24005,
-      "22": 24006
+      "2": 24001
     },
     "float": {},
     "bool": {},
     "string": {
-      "impossible matrix multiplication": 30000,
-      "multiplicacion completada": 30001
+      "trips": 30000,
+      "tripsi": 30001,
+      "yuuum": 30002,
+      "shori test": 30003,
+      "blu fukutake": 30004
     }
   }
 }

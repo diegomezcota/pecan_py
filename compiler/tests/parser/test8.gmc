@@ -24,18 +24,18 @@ obj blu = Animal();
 function c() returns int {
     var int hola;
     shori.nombre = "shori test";
-    shori.comer(2);
+    //shori.comer(2);
     return 2;
 }
 
 
 main() {
     var int i;
-    obj shori = Animal();
+    //obj shori = Animal();
     write(i);
     c();
     blu.nombre = "blu fukutake";
     write(shori.nombre);
     write(blu.nombre);
-    shori.comer(5);
+    //shori.comer(5);
 }
