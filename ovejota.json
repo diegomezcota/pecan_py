@@ -6,21 +6,117 @@
         "param_signature": [],
         "workspace": {
           "variables_workspace": {
+<<<<<<< HEAD
             "int": 0,
+=======
+            "int": 3,
+>>>>>>> 986f0f61a9f4322d7bbf567124b5de69fcb83085
             "float": 0,
-            "string": 0,
+            "string": 4,
             "bool": 0
           }
         },
         "function_type": "void"
+      },
+<<<<<<< HEAD
+      "main": {
+=======
+      "c": {
+        "vars_table": {},
+        "param_signature": [],
+        "workspace": {
+          "variables_workspace": {
+            "int": 1,
+            "float": 0,
+            "string": 0,
+            "bool": 0
+          },
+          "temps_workspace": {
+            "int": 0,
+            "float": 0,
+            "bool": 0,
+            "string": 0
+          }
+        },
+        "function_type": "int",
+        "start_quad": 8
       },
       "main": {
         "vars_table": {},
         "param_signature": [],
         "workspace": {
           "variables_workspace": {
+            "int": 1,
+            "float": 0,
+            "string": 0,
+            "bool": 0
+          },
+          "temps_workspace": {
+            "int": 1,
+            "float": 0,
+            "bool": 0,
+            "string": 0
+          }
+        },
+        "function_type": "void",
+        "start_quad": 11
+      }
+    },
+    "Animal": {
+      "#global": {
+        "vars_table": {
+          "nombre": {
+            "data_type": "string",
+            "index": 0
+          },
+          "edad": {
+            "data_type": "int",
+            "index": 0
+          },
+          "tipo": {
+            "data_type": "string",
+            "index": 1
+          }
+        },
+        "param_signature": [],
+        "workspace": {
+          "int": 1,
+          "float": 0,
+          "bool": 0,
+          "string": 2
+        }
+      },
+      "constructor": {
+        "vars_table": {},
+        "param_signature": [
+          "string",
+          "int"
+        ],
+        "workspace": {
+          "temps_workspace": {
+            "int": 0,
+            "float": 0,
+            "bool": 0,
+            "string": 0
+          }
+        },
+        "start_quad": 1
+      },
+      "comer": {
+>>>>>>> 986f0f61a9f4322d7bbf567124b5de69fcb83085
+        "vars_table": {},
+        "param_signature": [
+          "int"
+        ],
+        "workspace": {
+          "variables_workspace": {
+<<<<<<< HEAD
             "int": 0,
             "float": 1,
+=======
+            "int": 1,
+            "float": 0,
+>>>>>>> 986f0f61a9f4322d7bbf567124b5de69fcb83085
             "string": 0,
             "bool": 0
           },
@@ -32,7 +128,11 @@
           }
         },
         "function_type": "void",
+<<<<<<< HEAD
         "start_quad": 1
+=======
+        "start_quad": 6
+>>>>>>> 986f0f61a9f4322d7bbf567124b5de69fcb83085
       }
     }
   },
@@ -41,6 +141,7 @@
       "GOTOMAIN",
       null,
       null,
+<<<<<<< HEAD
       1
     ],
     [
@@ -60,12 +161,127 @@
       null,
       null,
       10000
+=======
+      11
+    ],
+    [
+      "=",
+      14000,
+      null,
+      [
+        0,
+        "string"
+      ]
+    ],
+    [
+      "=",
+      8000,
+      null,
+      [
+        0,
+        "int"
+      ]
+    ],
+    [
+      "=",
+      30000,
+      null,
+      [
+        1,
+        "string"
+      ]
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      30001
+    ],
+    [
+      "ENDFUNC",
+      null,
+      null,
+      null
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      30002
+    ],
+    [
+      "ENDFUNC",
+      null,
+      null,
+      null
+    ],
+    [
+      "=",
+      30003,
+      null,
+      6000
+    ],
+    [
+      "=",
+      24001,
+      null,
+      2
+    ],
+    [
+      "ENDFUNC",
+      null,
+      null,
+      null
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      8000
+    ],
+    [
+      "ERA",
+      null,
+      null,
+      "c"
+    ],
+    [
+      "GOSUB",
+      "c",
+      null,
+      8
+    ],
+    [
+      "=",
+      2,
+      null,
+      16000
+    ],
+    [
+      "=",
+      30004,
+      null,
+      6002
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      6000
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      6002
+>>>>>>> 986f0f61a9f4322d7bbf567124b5de69fcb83085
     ]
   ],
   "constants_summary": {
     "int": 2,
     "float": 0,
     "bool": 0,
+<<<<<<< HEAD
     "string": 0
   },
   "constants_table": {
@@ -76,5 +292,23 @@
     "float": {},
     "bool": {},
     "string": {}
+=======
+    "string": 5
+  },
+  "constants_table": {
+    "int": {
+      "1": 24000,
+      "2": 24001
+    },
+    "float": {},
+    "bool": {},
+    "string": {
+      "trips": 30000,
+      "tripsi": 30001,
+      "yuuum": 30002,
+      "shori test": 30003,
+      "blu fukutake": 30004
+    }
+>>>>>>> 986f0f61a9f4322d7bbf567124b5de69fcb83085
   }
 }

@@ -1,9 +1,41 @@
 program a;
 
-var int i;
-var int j;
+class Animal {
+    var string nombre;
+    var int edad;
+    var string tipo;
+};
+
+constructor Animal(string nombre, int edad) {
+    $nombre = nombre;
+    $edad = edad;
+    $tipo = "trips";
+    write("tripsi");
+}
+
+@class Animal function comer(int aucsilio) returns void {
+    write("yuuum");
+    return;
+}
+
+obj shori = Animal();
+obj blu = Animal();
+
+function c() returns int {
+    var int hola;
+    shori.nombre = "shori test";
+    //shori.comer(2);
+    return 2;
+}
+
 
 main() {
-    i = i--i;
+    var int i;
+    //obj shori = Animal();
     write(i);
+    c();
+    blu.nombre = "blu fukutake";
+    write(shori.nombre);
+    write(blu.nombre);
+    //shori.comer(5);
 }

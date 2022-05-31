@@ -1,0 +1,26 @@
+program structs;
+
+class Alumno {
+    var string sNombre;
+    var int iMatricula;
+};
+
+constructor Alumno() {
+    write("Alumno creado.");
+}
+
+obj mariana = Alumno();
+
+function inicializarMariana(string sNombre, int iMat) returns void {
+    mariana.sNombre = sNombre;
+    mariana.iMatricula = iMat; 
+    return;
+}
+
+main() {
+    obj diego = Alumno();
+    diego.iMatricula = 824758;
+    diego.sNombre = "Diego";
+    inicializarMariana("Mariana", 1194953);
+    write(diego.iMatricula, diego.sNombre, mariana.iMatricula, mariana.sNombre);
+}

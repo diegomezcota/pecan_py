@@ -91,3 +91,13 @@ Clase que maneja el casteo de tipos de datos entre Python y PecanPy.
 ### virtual_machine.py
 Archivo que se encarga del manejo de la ejecución de los quádruplos. Para esta entrega se manejan los cuádruplos de estatutos secuenciales y expresiones aritméticas como suma, resta, multiplicación, división, asignación, operadores relacionales, operadores lógicos, escritura y lectura dentro del scope global y main.
 
+## Avance 7: Generación de Código de Arreglos/Tipos estructurados. Máquina Virtual: Ejecución de Estatutos Condicionales
+
+### pecan_parser.py, function_directory.py
+Generación de código intermedio y chequeos semánticos para arreglos y matrices cuyo límite inferior de indexación es 0 (tipo C), así como funciones de ayuda del directorio de funciones. Generación de código intermedio y chequeos semánticos para la declaración y la llamada de funciones, así como guardar la información de ayuda pertinente (cuádruplo de inicio, tipo de retorno, pedir variable global, entre otros). 
+
+### avail.py
+Añadición de métodos de ayuda para separar bloques contiguos de memoria.
+
+### virtual_machine.py
+Implementación de función para pointers que nos ayuda a hacer el indexamiento indirecto. Ejecución de los códigos de operación de funciones, apoyándonos con un stack de memoria.
