@@ -22,6 +22,9 @@ class LocalMemory:
             'vars': {'int': [0] * vars_int, 'float': [0.0] * vars_float, 'bool': [False] * vars_bool, 'string': [''] * vars_string},
             'temps': {'int': [0] * temps_int, 'float': [0.0] * temps_float, 'bool': [False] * temps_bool, 'string': [''] * temps_string}
         }
+        
+        # Para distinguir si es un metodo de una clase
+        self.object = None
 
     # funcion para obtener la llave del tipo de dato dada una direccion virtual
     # entrada: direccion virtual
@@ -67,6 +70,13 @@ class LocalMemory:
         data_type, type_offset = self.get_data_type(address)
 
         return (table_scope, data_type, address-type_offset)
+    
+    #TODO: Documentar
+    def set_object_characteristics(self, object_scope, object_base_addresses):
+        self.object = {
+            'object_scope' : object_scope,
+            'object_base_addresses' : object_base_addresses  
+        }
 
     # funcion para agregar un valor dentro de una direccion virtual
     # entradas: direccion virtual y valor a agregar

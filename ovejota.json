@@ -6,33 +6,13 @@
         "param_signature": [],
         "workspace": {
           "variables_workspace": {
-            "int": 3,
+            "int": 1,
             "float": 0,
-            "string": 4,
-            "bool": 0
+            "string": 2,
+            "bool": 1
           }
         },
         "function_type": "void"
-      },
-      "c": {
-        "vars_table": {},
-        "param_signature": [],
-        "workspace": {
-          "variables_workspace": {
-            "int": 1,
-            "float": 0,
-            "string": 0,
-            "bool": 0
-          },
-          "temps_workspace": {
-            "int": 0,
-            "float": 0,
-            "bool": 0,
-            "string": 0
-          }
-        },
-        "function_type": "int",
-        "start_quad": 8
       },
       "main": {
         "vars_table": {},
@@ -41,18 +21,18 @@
           "variables_workspace": {
             "int": 1,
             "float": 0,
-            "string": 0,
+            "string": 2,
             "bool": 0
           },
           "temps_workspace": {
-            "int": 1,
+            "int": 0,
             "float": 0,
-            "bool": 0,
+            "bool": 1,
             "string": 0
           }
         },
         "function_type": "void",
-        "start_quad": 11
+        "start_quad": 19
       }
     },
     "Animal": {
@@ -95,6 +75,29 @@
         },
         "start_quad": 1
       },
+      "constructor_fake": {
+        "vars_table": {},
+        "param_signature": [
+          "string",
+          "int"
+        ],
+        "workspace": {
+          "variables_workspace": {
+            "int": 1,
+            "float": 0,
+            "string": 1,
+            "bool": 0
+          },
+          "temps_workspace": {
+            "int": 0,
+            "float": 0,
+            "bool": 1,
+            "string": 0
+          }
+        },
+        "function_type": "bool",
+        "start_quad": 6
+      },
       "comer": {
         "vars_table": {},
         "param_signature": [
@@ -104,7 +107,7 @@
           "variables_workspace": {
             "int": 1,
             "float": 0,
-            "string": 0,
+            "string": 1,
             "bool": 0
           },
           "temps_workspace": {
@@ -115,7 +118,7 @@
           }
         },
         "function_type": "void",
-        "start_quad": 6
+        "start_quad": 15
       }
     }
   },
@@ -124,7 +127,7 @@
       "GOTOMAIN",
       null,
       null,
-      11
+      19
     ],
     [
       "=",
@@ -166,88 +169,160 @@
       null
     ],
     [
+      "=",
+      14000,
+      null,
+      [
+        0,
+        "string"
+      ]
+    ],
+    [
+      "=",
+      8000,
+      null,
+      [
+        0,
+        "int"
+      ]
+    ],
+    [
+      "READ",
+      null,
+      null,
+      [
+        0,
+        "int"
+      ]
+    ],
+    [
+      "READ",
+      null,
+      null,
+      [
+        0,
+        "string"
+      ]
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      [
+        0,
+        "string"
+      ]
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      [
+        0,
+        "int"
+      ]
+    ],
+    [
+      "==",
+      24001,
+      [
+        0,
+        "int"
+      ],
+      20000
+    ],
+    [
+      "=",
+      20000,
+      null,
+      4000
+    ],
+    [
+      "ENDFUNC",
+      null,
+      null,
+      null
+    ],
+    [
+      "=",
+      [
+        0,
+        "string"
+      ],
+      null,
+      14000
+    ],
+    [
       "WRITE",
       null,
       null,
       30002
     ],
     [
+      "WRITE",
+      null,
+      null,
+      14000
+    ],
+    [
       "ENDFUNC",
       null,
       null,
       null
     ],
     [
-      "=",
+      "ERA_OBJ_MET",
+      "#global",
+      {
+        "int": 0,
+        "float": null,
+        "bool": null,
+        "string": 6000
+      },
+      "Animal#constructor_fake"
+    ],
+    [
+      "PARAM",
       30003,
       null,
-      6000
+      0
+    ],
+    [
+      "PARAM",
+      24002,
+      null,
+      1
+    ],
+    [
+      "GOSUB_OBJ",
+      "constructor_fake",
+      "shori",
+      6
     ],
     [
       "=",
-      24001,
+      4000,
       null,
-      2
-    ],
-    [
-      "ENDFUNC",
-      null,
-      null,
-      null
+      20000
     ],
     [
       "WRITE",
       null,
       null,
-      8000
-    ],
-    [
-      "ERA",
-      null,
-      null,
-      "c"
-    ],
-    [
-      "GOSUB",
-      "c",
-      null,
-      8
-    ],
-    [
-      "=",
-      2,
-      null,
-      16000
-    ],
-    [
-      "=",
-      30004,
-      null,
-      6002
-    ],
-    [
-      "WRITE",
-      null,
-      null,
-      6000
-    ],
-    [
-      "WRITE",
-      null,
-      null,
-      6002
+      20000
     ]
   ],
   "constants_summary": {
-    "int": 2,
+    "int": 3,
     "float": 0,
     "bool": 0,
-    "string": 5
+    "string": 4
   },
   "constants_table": {
     "int": {
       "1": 24000,
-      "2": 24001
+      "2": 24001,
+      "4": 24002
     },
     "float": {},
     "bool": {},
@@ -255,8 +330,7 @@
       "trips": 30000,
       "tripsi": 30001,
       "yuuum": 30002,
-      "shori test": 30003,
-      "blu fukutake": 30004
+      "Tripsi": 30003
     }
   }
 }

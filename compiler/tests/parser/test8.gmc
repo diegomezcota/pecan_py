@@ -13,29 +13,26 @@ constructor Animal(string nombre, int edad) {
     write("tripsi");
 }
 
+@class Animal function constructor_fake(string nombre, int edad) returns bool {
+    $nombre = nombre;
+    $edad = edad;
+    read($edad, $nombre);
+    write($nombre, $edad);
+    return 2 == $edad;
+}
+
 @class Animal function comer(int aucsilio) returns void {
-    write("yuuum");
+    var string nombre_de_shori;
+    nombre_de_shori = $nombre;
+    write("yuuum", nombre_de_shori);
     return;
 }
 
 obj shori = Animal();
-obj blu = Animal();
-
-function c() returns int {
-    var int hola;
-    shori.nombre = "shori test";
-    //shori.comer(2);
-    return 2;
-}
-
 
 main() {
-    var int i;
-    //obj shori = Animal();
-    write(i);
-    c();
-    blu.nombre = "blu fukutake";
-    write(shori.nombre);
-    write(blu.nombre);
-    //shori.comer(5);
+    obj brunis = Animal();
+    write(shori.constructor_fake("Tripsi", 4));
+    //brunis.constructor_fake("Bruno el perringo", 8);
+    //write(shori.nombre, shori.edad, brunis.nombre, brunis.edad);
 }

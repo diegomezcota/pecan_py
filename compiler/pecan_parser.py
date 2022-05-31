@@ -39,7 +39,7 @@ def p_program(p):
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
     print(*quads.list, sep='\n')
-    # print(json.dumps(function_directory.table, indent=2))
+    #print(json.dumps(function_directory.table, indent=2))
 
     function_directory.generate_variable_workspace('#global', '#global')
 
@@ -179,7 +179,7 @@ def p_variable(p):
         if function_directory.class_has_attribute(current_general_scope, p[3]):
             attribute_type, attribute_index = function_directory.get_class_attribute_type_and_index(
                 current_general_scope, p[3])
-            p[0] = ((attribute_index, attribute_type), attribute_type)
+            p[0] = ([attribute_index, attribute_type], attribute_type)
         else:
             raise Exception('Attribute' + p[3] + ' not in scope')
 
@@ -776,8 +776,8 @@ def add_exp_quad(operator_list, program_line_no='indefinite_line'):
 def p_factor(p):
     '''
     factor  : function_call
-            | FLOAT_VALUE np_add_constant_virtual_address
-            | INT_VALUE np_add_constant_virtual_address
+            | float_value np_add_constant_virtual_address
+            | int_value np_add_constant_virtual_address
             | BOOL_VALUE np_add_constant_virtual_address
             | STRING_VALUE np_add_constant_virtual_address
             | variable
@@ -791,6 +791,25 @@ def p_factor(p):
         temp_tuple = (p[2], const_type)
         operand_stack.append(temp_tuple)
 
+def p_float_value(p):
+    '''
+    float_value : FLOAT_VALUE
+                | MINUS FLOAT_VALUE
+    '''
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = ('-' + p[2][0], p[2][1])
+
+def p_int_value(p):
+    '''
+    int_value   : INT_VALUE
+                | MINUS INT_VALUE
+    '''
+    if len(p) == 2:
+        p[0] = p[1]
+    else:
+        p[0] = ('-' + p[2][0], p[2][1])
 
 def p_np_add_constant_virtual_address(p):
     '''
@@ -1196,10 +1215,14 @@ def p_function_call(p):
             general_name, internal_name)
         # TODO: podriamos poner en vez de object name, los puros indices iniciales de cada tipo
         # TODO: tenemos que saber en que memoria esta (si en local, global) en caso de global modificariamos stack[-2]
-        quads.generate_quad(
-            'GOSUB', internal_name, object_name, function_start_quad)
-        function_return_type = function_directory.get_function_type(
-            general_name, internal_name)
+        # check if it is a method or a regular function
+        if object_name:
+            quads.generate_quad(
+                'GOSUB_OBJ', internal_name, object_name, function_start_quad)
+        else:
+            quads.generate_quad(
+                'GOSUB', internal_name, None, function_start_quad)
+        function_return_type = function_directory.get_function_type(general_name, internal_name)
         if function_return_type != 'void':
             function_var_address = function_directory.get_function_virtual_address(
                 '#global', '#global', current_function_call_name_stack[-1])
@@ -1233,11 +1256,13 @@ def p_function_call1(p):
         else:
             raise Exception(
                 function_object + ' object has not been declared so method can not be run.')
-
+        # TODO: Con era obj met saber a que memoria "apuntar" que este siendo modificada o accesada en los metodos
         if (function_directory.class_has_function(function_class, function_name)):
             current_function_call_name = function_class + '#' + function_name
             current_function_call_name_stack.append(current_function_call_name)
-            quads.generate_quad('ERA_OBJ_MET', object_scope, function_object,
+            # get direcciones base de cada tipo de ese objeto
+            attribute_base_addresses = function_directory.get_initial_attribute_addresses_type(current_general_scope, object_scope, function_object)
+            quads.generate_quad('ERA_OBJ_MET', object_scope, attribute_base_addresses,
                                 current_function_call_name_stack[-1])
         else:
             raise Exception('Function ' + function_name +
@@ -1328,7 +1353,7 @@ def p_class_function(p):
     class_function : AT_CLASS ID np_validate_class_method FUNCTION ID np_add_function_internal_scope OPEN_PARENTHESIS parameter np_add_parameters_to_var_table CLOSE_PARENTHESIS RETURNS return_arg np_set_function_return_type_objects OPEN_KEY variable_declaration_loop np_generate_variable_workspace np_add_function_start_quad function_statement_loop function_return CLOSE_KEY np_end_function
 
     '''
-    pass
+    avail.reset_local_counters()
 
 
 def p_np_validate_class_method(p):
@@ -1439,8 +1464,13 @@ def p_function_return(p):
             raise FunctionReturnError(
                 error_msg + " in line " + str(p.lineno(3)))
         else:
+            global_variable_function_name = None
+            if current_general_scope == '#global':
+                global_variable_function_name = current_internal_scope
+            else:
+                global_variable_function_name = current_general_scope + '#' + current_internal_scope
             function_address = function_directory.get_function_virtual_address(
-                '#global', '#global', current_internal_scope)
+                '#global', '#global', global_variable_function_name)
             quads.generate_quad('=', return_exp_address,
                                 None, function_address)
     else:
