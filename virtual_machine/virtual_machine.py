@@ -300,7 +300,7 @@ while (instruction_pointer < len(quads)):
         to_write_type, to_write_value = None, None
         if is_method_quad(current_quad[3]):
             to_write_type, to_write_value = get_type_and_value(
-                memory_stack[-2], current_quad[3])
+                memory_stack[-2], current_quad[3][0])
         else:
             to_write_type, to_write_value = get_type_and_value(
                 memory_stack[-1], current_quad[3])
@@ -308,15 +308,25 @@ while (instruction_pointer < len(quads)):
 
     # Read execution
     elif current_quad[0] == 'READ':
-        to_save_type, to_save_value = get_type_and_value(
-            memory_stack[-1], current_quad[3])
+        to_save_type, to_save_value = None, None
+        flag_method_quad = is_method_quad(current_quad[3]) 
+        if flag_method_quad:
+            to_save_type, to_save_value = get_type_and_value(
+                memory_stack[-2], current_quad[3][0])
+        else:
+            to_save_type, to_save_value = get_type_and_value(
+                memory_stack[-1], current_quad[3])
         to_save_value = input()
         # print(type(to_save_value))
         if to_save_type == 'int':
             try:
                 to_save_value = int(to_save_value)
-                set_value_in_memory(
-                    current_quad[3],  memory_stack[-1], to_save_value)
+                if flag_method_quad:
+                    set_value_in_memory(
+                        current_quad[3][0],  memory_stack[-2], to_save_value)
+                else:
+                    set_value_in_memory(
+                        current_quad[3],  memory_stack[-1], to_save_value)
             except Exception as e:
                 raise Exception(
                     'Input type mismatch, expected: ' + to_save_type)
@@ -327,16 +337,24 @@ while (instruction_pointer < len(quads)):
                     raise Exception(
                         'Input type mismatch, expected: ' + to_save_type)
                 to_save_value = float(to_save_value)
-                set_value_in_memory(
-                    current_quad[3],  memory_stack[-1], to_save_value)
+                if flag_method_quad:
+                    set_value_in_memory(
+                        current_quad[3][0],  memory_stack[-2], to_save_value)
+                else:
+                    set_value_in_memory(
+                        current_quad[3],  memory_stack[-1], to_save_value)
             except Exception as e:
                 raise Exception(e)
 
         elif to_save_type == 'bool':
             if to_save_value == 'true' or to_save_value == 'false':
                 to_save_value = to_save_value == 'true'
-                set_value_in_memory(
-                    current_quad[3],  memory_stack[-1], to_save_value)
+                if flag_method_quad:
+                    set_value_in_memory(
+                        current_quad[3][0],  memory_stack[-2], to_save_value)
+                else:
+                    set_value_in_memory(
+                        current_quad[3],  memory_stack[-1], to_save_value)
             else:
                 raise Exception(
                     'Input type mismatch, expected: ' + to_save_type)
@@ -346,8 +364,12 @@ while (instruction_pointer < len(quads)):
                 raise Exception(
                     'Input type mismatch, expected: ' + to_save_type)
             else:
-                set_value_in_memory(
-                    current_quad[3],  memory_stack[-1], to_save_value)
+                if flag_method_quad:
+                    set_value_in_memory(
+                        current_quad[3][0],  memory_stack[-2], to_save_value)
+                else:
+                    set_value_in_memory(
+                        current_quad[3],  memory_stack[-1], to_save_value)
         else:
             raise Exception('Input type mismatch, expected: ' + to_save_type)
 
@@ -358,16 +380,26 @@ while (instruction_pointer < len(quads)):
 
     # GOTOF execution
     elif current_quad[0] == 'GOTOF':
-        _, condition_value = get_type_and_value(
-            memory_stack[-1], current_quad[1])
+        condition_value = None
+        if is_method_quad(current_quad[1]):
+            _, condition_value = get_type_and_value(
+            memory_stack[-2], current_quad[1][0])
+        else:
+            _, condition_value = get_type_and_value(
+                memory_stack[-1], current_quad[1])
         if not condition_value:
             instruction_pointer = current_quad[3]
             continue
 
     # GOTOT execution
     elif current_quad[0] == 'GOTOT':
-        _, condition_value = get_type_and_value(
-            memory_stack[-1], current_quad[1])
+        condition_value = None
+        if is_method_quad(current_quad[1]):
+            _, condition_value = get_type_and_value(
+            memory_stack[-2], current_quad[1][0])
+        else:
+            _, condition_value = get_type_and_value(
+                memory_stack[-1], current_quad[1])
         if condition_value:
             instruction_pointer = current_quad[3]
             continue
@@ -375,8 +407,13 @@ while (instruction_pointer < len(quads)):
     # VERIFY execution (for group data structures)
     elif current_quad[0] == 'VERIFY':
         dim_size = current_quad[1]
-        index_type, index_value = get_type_and_value(
-            memory_stack[-1], current_quad[2])
+        index_type, index_value = None, None
+        if is_method_quad(current_quad[2]):
+            index_type, index_value = get_type_and_value(
+                memory_stack[-2], current_quad[2][0])
+        else:
+            index_type, index_value = get_type_and_value(
+                memory_stack[-1], current_quad[2])
         if 0 > index_value or index_value >= dim_size:
             raise Exception('Group index out of bounds')
 

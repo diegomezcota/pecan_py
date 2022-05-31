@@ -32,7 +32,7 @@
           }
         },
         "function_type": "void",
-        "start_quad": 15
+        "start_quad": 19
       }
     },
     "Animal": {
@@ -118,7 +118,7 @@
           }
         },
         "function_type": "void",
-        "start_quad": 11
+        "start_quad": 15
       }
     }
   },
@@ -127,7 +127,7 @@
       "GOTOMAIN",
       null,
       null,
-      15
+      19
     ],
     [
       "=",
@@ -180,6 +180,42 @@
     [
       "=",
       8000,
+      null,
+      [
+        0,
+        "int"
+      ]
+    ],
+    [
+      "READ",
+      null,
+      null,
+      [
+        0,
+        "int"
+      ]
+    ],
+    [
+      "READ",
+      null,
+      null,
+      [
+        0,
+        "string"
+      ]
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      [
+        0,
+        "string"
+      ]
+    ],
+    [
+      "WRITE",
+      null,
       null,
       [
         0,

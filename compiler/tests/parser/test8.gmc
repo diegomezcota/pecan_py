@@ -16,6 +16,8 @@ constructor Animal(string nombre, int edad) {
 @class Animal function constructor_fake(string nombre, int edad) returns bool {
     $nombre = nombre;
     $edad = edad;
+    read($edad, $nombre);
+    write($nombre, $edad);
     return 2 == $edad;
 }
 
