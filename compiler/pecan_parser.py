@@ -283,7 +283,6 @@ def p_np_array_access2(p):
     group_dim = function_directory.get_group_dimensions(
         current_general_scope, current_group_internal_scope, current_var_name)
 
-    # TODO: Check for second dimension validation
     if group_dim > 0:
         dim_arr = [group_id_address, 1,
                    current_group_internal_scope, current_var_name]
@@ -1098,7 +1097,9 @@ def p_read(p):
     '''
     for variable in p[3]:
         variable_address, variable_type = variable
-        # TODO: If variable address in variable stack raise error
+        if variable_address in control_variable_stack:
+            raise Exception(
+            "Changing the control variable inside a for loop is invalid in line " + str(p.lineno(5)))
         quads.generate_quad('READ', None, None, variable_address)
 
 
@@ -1193,6 +1194,8 @@ def p_function_call(p):
     else:
         function_start_quad = function_directory.get_function_start_quad(
             general_name, internal_name)
+        # TODO: podriamos poner en vez de object name, los puros indices iniciales de cada tipo
+        # TODO: tenemos que saber en que memoria esta (si en local, global) en caso de global modificariamos stack[-2]
         quads.generate_quad(
             'GOSUB', internal_name, object_name, function_start_quad)
         function_return_type = function_directory.get_function_type(
@@ -1436,11 +1439,6 @@ def p_function_return(p):
             raise FunctionReturnError(
                 error_msg + " in line " + str(p.lineno(3)))
         else:
-            # TODO: Para apoyar a la recursion, pedir la direccion de esta funcion al inicio de la declaracion,
-            # creo que no cambia nada el pedirla aqui, solo habria que hacer la query por la function address en este punto
-            # function_address = avail.get_new_global(function_return_type)
-            # function_directory.add_variable(
-            #    '#global', '#global', current_internal_scope, 'var', function_return_type, function_address)
             function_address = function_directory.get_function_virtual_address(
                 '#global', '#global', current_internal_scope)
             quads.generate_quad('=', return_exp_address,
