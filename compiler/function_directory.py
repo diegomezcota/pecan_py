@@ -161,6 +161,17 @@ class FunctionDirectory:
         attribute_index = self.table[general_name]['#global'][
             'vars_table'][attribute_name]['index']
         return (attribute_type, attribute_index)
+    
+    def get_initial_attribute_addresses_type(self, general_name, internal_name, var_name):
+        result_map = {"int" : None, "float" : None, "bool" : None, "string" : None}
+        object_attributes = self.table[general_name][internal_name]['vars_table'][var_name]['attributes']
+        for _, attr_map in object_attributes.items():
+            if not result_map[attr_map['data_type']]:
+                result_map[attr_map['data_type']] = attr_map['address']
+            else:
+                result_map[attr_map['data_type']] = min(result_map[attr_map['data_type']], attr_map['address'])
+        return result_map
+        
 
     # funcion para agregar el workspace de temporales de un scope interno
     # entradas: scope general, scope interno (funcion) y workspace de temporales
