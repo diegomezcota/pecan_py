@@ -297,8 +297,13 @@ while (instruction_pointer < len(quads)):
 
     # Write execution
     elif current_quad[0] == 'WRITE':
-        to_write_type, to_write_value = get_type_and_value(
-            memory_stack[-1], current_quad[3])
+        to_write_type, to_write_value = None, None
+        if is_method_quad(current_quad[3]):
+            to_write_type, to_write_value = get_type_and_value(
+                memory_stack[-2], current_quad[3])
+        else:
+            to_write_type, to_write_value = get_type_and_value(
+                memory_stack[-1], current_quad[3])
         print(to_write_value)  # This is functionality and not for testing
 
     # Read execution
