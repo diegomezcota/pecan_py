@@ -37,6 +37,18 @@ class FunctionDirectory:
                 "workspace": {}
             }
 
+    # funcioon para agregar atributos de una clase
+    # entradas: scope general, nombre de la variable y tipo de dato
+    def add_class_attribute(self, general_name, var_name, var_data_type):
+        vars_map = self.table[general_name]['#global']['vars_table']
+        index = 0
+        for _, var_map in vars_map.items():
+            if var_map['data_type'] == var_data_type:
+                index += 1
+
+        self.table[general_name]['#global']['vars_table'][var_name] = {
+            'data_type': var_data_type, 'index': index}
+
     # funcion para obtener el parametro numero n de una funcion
     # entradas: scope general, scope interno, indice del parametro
     # salida: error o el parametro en el indice buscado
@@ -113,6 +125,43 @@ class FunctionDirectory:
     def get_m_dim(self, general_name, internal_name, var_name, dim):
         return self.table[general_name][internal_name]['vars_table'][var_name]['dim_list'][dim-1]['m']
 
+    # funcion para obtener el workspace de un objeto
+    # entradas: scope general y scope interno
+    # salida: el workspace del scope interno
+    def get_object_workspace(self, general_name, internal_name):
+        return self.table[general_name][internal_name]['workspace']
+
+    # funcion para obtener la tabla de variables de una clase
+    # entradas: scope general y scope interno
+    # salida: tabla de variables de una clase;
+    def get_class_vars_table(self, general_name, internal_name):
+        return self.table[general_name][internal_name]['vars_table']
+
+    # funcion para obtener el tipo de dato y direccion virtual de un atributo de una clase
+    # entradas: scope general, scope interno, nombre de la variable y el nombre del atributo
+    # salida: tupla que contiene la direccion y el tipo de dato del atributo
+    def get_attribute_type_and_address(self, general_name, internal_name, var_name, attribute_name):
+        attribute_type = self.table[general_name][internal_name][
+            'vars_table'][var_name]['attributes'][attribute_name]['data_type']
+        attribute_address = self.table[general_name][internal_name][
+            'vars_table'][var_name]['attributes'][attribute_name]['address']
+        return (attribute_address, attribute_type)
+
+    # funcion para obtener el nombre de la clase a la que pertenece un objeto
+    # entradas: scope general, scope interno, nombre de variable
+    def get_object_class_name(self, general_name, internal_name, var_name):
+        return self.table[general_name][internal_name]['vars_table'][var_name]['var_data_type']
+
+    # funcion para obtener el tipo y el indice de un atributo de una clase
+    # entradas: scope general y nombre del atributo
+    # salida: tupla quee contiene el tipo y el indice del atributo
+    def get_class_attribute_type_and_index(self, general_name, attribute_name):
+        attribute_type = self.table[general_name]['#global'][
+            'vars_table'][attribute_name]['data_type']
+        attribute_index = self.table[general_name]['#global'][
+            'vars_table'][attribute_name]['index']
+        return (attribute_type, attribute_index)
+
     # funcion para agregar el workspace de temporales de un scope interno
     # entradas: scope general, scope interno (funcion) y workspace de temporales
     def set_temps_workspace(self, general_name, internal_name, temps_workspace):
@@ -128,6 +177,16 @@ class FunctionDirectory:
     def set_start_quad(self, general_name, internal_name, quad_id):
         self.table[general_name][internal_name]['start_quad'] = quad_id
 
+    # funcion para agregar el resumen de un objeto
+    # entradas: scope general y scope interno
+    def set_object_summary(self, general_name, internal_name):
+        class_workspace = {'int': 0, 'float': 0, 'bool': 0, 'string': 0}
+
+        for _, attribute_map in self.table[general_name][internal_name]['vars_table'].items():
+            class_workspace[attribute_map['data_type']] += 1
+
+        self.table[general_name][internal_name]['workspace'] = class_workspace
+
     # funcion para agregar una variable con sus caracteristicas a la tabla de variables de un scope interno
     # entradas: scope general, scope interno (funcion), nombre de la variable, tipo de variable,
     # tipo de dato de la variable y direccion virtual de la variable
@@ -141,6 +200,28 @@ class FunctionDirectory:
                 'var_data_type': var_data_type,
                 'var_virtual_address': var_virtual_address
             }
+
+    # funcion para agregar una variable de tipo objeto
+    # entradas: scope general, scope interno, nombre de la clase y nombre de la variable (objeto)
+    def add_obj_variable(self, general_name, internal_name, class_name, var_name):
+        if var_name in self.table[general_name][internal_name]['vars_table'].keys():
+            raise VariableAlreadyDeclared(
+                "Variable named " + var_name + " has already been declared in the same scope.")
+        else:
+            self.table[general_name][internal_name]['vars_table'][var_name] = {
+                'var_type': 'obj',
+                'var_data_type': class_name,
+                'attributes': {}
+            }
+
+    # funcion para agregar informacion de un atributo de un objeto
+    # entradas: scope general, scope interno, nombre de la variable, nombre del atributo,
+    # tipo de dato del atributo y direccion virtual del atributo
+    def add_obj_attribute_data(self, general_name, internal_name, var_name, attriibute_name, attriibute_data_type, attribute_address):
+        self.table[general_name][internal_name]['vars_table'][var_name]['attributes'][attriibute_name] = {
+            'data_type': attriibute_data_type,
+            'address': attribute_address
+        }
 
     # funcion para modificar la firma de parametros de una funcion
     # entradas: scope general, scope interno (funcion) y tipo de dato del parameetro
@@ -182,6 +263,24 @@ class FunctionDirectory:
     # entradas: scope general, scope interno (funcion) y nombre de la variable
     def has_variable(self, general_name, internal_name, var_name):
         return (var_name in self.table[general_name][internal_name]['vars_table'].keys())
+
+    # funcion para verificar que una clase tenga cierta funcion
+    # entradas: scope general y nombre de la funcion
+    # salida: true si si se tiene, false si no
+    def class_has_function(self, general_name, function_name):
+        return (function_name in self.table[general_name].keys())
+
+    # funcion parar verificar si un objeto tiene cierto atributo
+    # entradas: scope general, scope interno, nombre de la variable y nombre del atributo
+    # salida: true si si se tiene, false si no
+    def variable_has_attribute(self, general_name, internal_name, var_name, attribute_name):
+        return (attribute_name in self.table[general_name][internal_name]['vars_table'][var_name]['attributes'].keys())
+
+    # funcion para verificar si cierta clase tenga cierto atributo
+    # entradas: scope general, nombre del atributo
+    # salida: true si si se tiene, false si no
+    def class_has_attribute(self, general_name, attribute_name):
+        return (attribute_name in self.table[general_name]['#global']['vars_table'].keys())
 
     # funcion para generar el workspace de variables de un scope interno
     # entradas: nombre del scope general y nombre del scope interno
