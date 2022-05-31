@@ -1,19 +1,31 @@
-# TODO: Mandar tabla de constantes thru ovejota
+# Mariana Martinez Celis Gonzalez
+# Diego Gomez Cota
+# Memory.py
+# Estructura para el manejo de memorias en ejecucion de manera local y global
+
 from formatter import Formatter
+
+# Estructura para memorias locales
 
 
 class LocalMemory:
+
+    # se inicializa con el tamaño de variables de cada tipo y sus temporales necesarias
     def __init__(self, vars_sizes, temps_sizes):
 
         vars_int, vars_float, vars_bool, vars_string = vars_sizes
 
         temps_int, temps_float, temps_bool, temps_string = temps_sizes
 
+        # tabla que guarda los valores en cada tipo de dato correspondiente
         self.table = {
             'vars': {'int': [0] * vars_int, 'float': [0.0] * vars_float, 'bool': [False] * vars_bool, 'string': [''] * vars_string},
             'temps': {'int': [0] * temps_int, 'float': [0.0] * temps_float, 'bool': [False] * temps_bool, 'string': [''] * temps_string}
         }
 
+    # funcion para obtener la llave del tipo de dato dada una direccion virtual
+    # entrada: direccion virtual
+    # salidas: la llave correspondiente sea locals, temps o None
     def get_scope_key(self, address):
         if (address >= 8000 and address < 16000):
             return 'locals'
@@ -21,6 +33,9 @@ class LocalMemory:
             return 'temps'
         return None
 
+    # funcion para obtener el tipo de dato de una variable dada una direccion virtual
+    # entrada: direccion
+    # salidas: tupla de tipo de dato y su limite inferior correspondiente
     def get_data_type(self, address):
         if (address >= 0 and address < 2000):
             return ('int', 0)
@@ -31,6 +46,9 @@ class LocalMemory:
         else:
             return ('string', 6000)
 
+    # funcion para obtener las llaves del diccionario dada una direccion virtual
+    # entrada: direccion virtual
+    # salidas: tupla con scope de la tabla, tipo de dato y la direccion de la memoria donde se encuentra el valor
     def get_table_keys(self, address):
 
         scope_key = self.get_scope_key(address)
@@ -50,6 +68,9 @@ class LocalMemory:
 
         return (table_scope, data_type, address-type_offset)
 
+    # funcion para agregar un valor dentro de una direccion virtual
+    # entradas: direccion virtual y valor a agregar
+    # salida: None si la direccion virtual se encuentra fuera del scope
     def set_value_in_address(self, address, value):
 
         table_scope, data_type, index = self.get_table_keys(address)
@@ -59,6 +80,9 @@ class LocalMemory:
 
         self.table[table_scope][data_type][index] = value
 
+    # funcion para obtener el valor dentro de una direccion virtual
+    # entrada: direccion virtual
+    # salida tupla de tipo de dato y valor o None en caso de que se encuentre fuera del scope
     def get_value_from_address(self, address):
 
         table_scope, data_type, index = self.get_table_keys(address)
@@ -74,7 +98,10 @@ class LocalMemory:
 # print(gm.table)
 
 
+# Estructura para memorias globales
 class GlobalMemory:
+
+    # se inicializa con el tamaño de variables de cada tipo y sus constantes necesarias
     def __init__(self, vars_sizes, consts_sizes, consts_table):
 
         vars_int, vars_float, vars_bool, vars_string = vars_sizes
@@ -83,6 +110,7 @@ class GlobalMemory:
 
         self.fm = Formatter()
 
+        # tabla que guarda los valores en cada tipo de dato correspondiente
         self.table = {
             'vars': {'int': [0] * vars_int, 'float': [0.0] * vars_float, 'bool': [False] * vars_bool, 'string': [''] * vars_string},
             'constants': {'int': [0] * consts_int, 'float': [0.0] * consts_float, 'bool': [False] * consts_bool, 'string': [''] * consts_string}
@@ -91,13 +119,18 @@ class GlobalMemory:
         for data_type, value_dict in consts_table.items():
             for value, address in value_dict.items():
                 self.set_const_in_address(address, value)
-        # print(self.table)
 
+    # funcion para obtener la llave del tipo de dato dada una direccion virtual
+    # entrada: direccion virtual
+    # salidas: la llave correspondiente sea vars, constants o None
     def get_scope_key(self, address):
         if (address >= 0 and address < 8000):
             return 'vars'
         return 'constants'
 
+    # funcion para obtener el tipo de dato de una variable dada una direccion virtual
+    # entrada: direccion
+    # salidas: tupla de tipo de dato y su limite inferior correspondiente
     def get_data_type(self, address):
         data_type = None
 
@@ -115,6 +148,9 @@ class GlobalMemory:
             address -= 6000
         return (data_type, address)
 
+    # funcion para obtener las llaves del diccionario dada una direccion virtual
+    # entrada: direccion virtual
+    # salidas: tupla con scope de la tabla, tipo de dato y la direccion de la memoria donde se encuentra el valor
     def get_table_keys(self, address):
 
         scope_key = self.get_scope_key(address)
@@ -125,17 +161,25 @@ class GlobalMemory:
         data_type, index = self.get_data_type(address)
         return (scope_key, data_type, index)
 
+    # funcion para agregar una constante en cierta direccion
+    # entradas: direccion virtual y valor de la constante a agregar
     def set_const_in_address(self, address, value):
         # We're using our own Formatter here due to constants loading are not defined in quads
         table_scope, data_type, index = self.get_table_keys(address)
         value = self.fm.cast(value, data_type)
         self.table[table_scope][data_type][index] = value
 
+    # funcion para agregar un valor dentro de una direccion virtual
+    # entradas: direccion virtual y valor a agregar
+    # salida: None si la direccion virtual se encuentra fuera del scope
     def set_value_in_address(self, address, value):
 
         table_scope, data_type, index = self.get_table_keys(address)
         self.table[table_scope][data_type][index] = value
 
+    # funcion para obtener el valor dentro de una direccion virtual
+    # entrada: direccion virtual
+    # salida tupla de tipo de dato y valor o None en caso de que se encuentre fuera del scope
     def get_value_from_address(self, address):
 
         table_scope, data_type, index = self.get_table_keys(address)
