@@ -1464,8 +1464,13 @@ def p_function_return(p):
             raise FunctionReturnError(
                 error_msg + " in line " + str(p.lineno(3)))
         else:
+            global_variable_function_name = None
+            if current_general_scope == '#global':
+                global_variable_function_name = current_internal_scope
+            else:
+                global_variable_function_name = current_general_scope + '#' + current_internal_scope
             function_address = function_directory.get_function_virtual_address(
-                '#global', '#global', current_internal_scope)
+                '#global', '#global', global_variable_function_name)
             quads.generate_quad('=', return_exp_address,
                                 None, function_address)
     else:

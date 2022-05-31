@@ -13,10 +13,10 @@ constructor Animal(string nombre, int edad) {
     write("tripsi");
 }
 
-@class Animal function constructor_fake(string nombre, int edad) returns void {
+@class Animal function constructor_fake(string nombre, int edad) returns bool {
     $nombre = nombre;
     $edad = edad;
-    return;
+    return 2 == $edad;
 }
 
 @class Animal function comer(int aucsilio) returns void {
@@ -30,7 +30,7 @@ obj shori = Animal();
 
 main() {
     obj brunis = Animal();
-    shori.constructor_fake("Tripsi", 4);
-    brunis.constructor_fake("Bruno el perringo", 8);
-    write(shori.nombre, shori.edad, brunis.nombre, brunis.edad);
+    write(shori.constructor_fake("Tripsi", 4));
+    //brunis.constructor_fake("Bruno el perringo", 8);
+    //write(shori.nombre, shori.edad, brunis.nombre, brunis.edad);
 }

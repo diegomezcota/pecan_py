@@ -96,7 +96,22 @@ def clean_object_quads(current_quad, memory):
 
 def is_method_quad(quad_element):
     return quad_element is not None and type(quad_element) is list
-            
+
+def get_method_binary_operands(method_memory, calling_function_memory, left_operand_elem, right_operand_elem):
+    if is_method_quad(left_operand_elem):
+        _, left_operand = get_type_and_value(
+            calling_function_memory, left_operand_elem[0])
+    else:
+        _, left_operand = get_type_and_value(
+            method_memory, left_operand_elem)
+    if is_method_quad(right_operand_elem):
+        _, right_operand = get_type_and_value(
+            calling_function_memory, right_operand_elem[0])
+    else:
+        _, right_operand = get_type_and_value(
+            method_memory, right_operand_elem)
+    return left_operand, right_operand
+    
 
 
 print('--------------------START OF EXECUTION-----------------------------')
@@ -146,72 +161,117 @@ while (instruction_pointer < len(quads)):
 
     # Addition execution
     elif current_quad[0] == '+':
-        left_operand, right_operand = get_binary_operands(
-            memory_stack[-1], current_quad[1], current_quad[2])
+        left_operand, right_operand = None, None
+        # check if it's a method quad
+        if is_method_quad(current_quad[1]) or is_method_quad(current_quad[2]):
+            left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+        else:
+            left_operand, right_operand = get_binary_operands(
+                memory_stack[-1], current_quad[1], current_quad[2])
         sum_result = left_operand + right_operand
         memory_stack[-1] = set_value_in_memory(
             current_quad[3], memory_stack[-1], sum_result)
 
     # Subtraction execution
     elif current_quad[0] == '-':
-        left_operand, right_operand = get_binary_operands(
-            memory_stack[-1], current_quad[1], current_quad[2])
+        left_operand, right_operand = None, None
+        # check if it's a method quad
+        if is_method_quad(current_quad[1]) or is_method_quad(current_quad[2]):
+            left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+        else:
+            left_operand, right_operand = get_binary_operands(
+                memory_stack[-1], current_quad[1], current_quad[2])
         sub_result = left_operand - right_operand
         memory_stack[-1] = set_value_in_memory(
             current_quad[3], memory_stack[-1], sub_result)
 
     # Multiplication execution
     elif current_quad[0] == '*':
-        left_operand, right_operand = get_binary_operands(
-            memory_stack[-1], current_quad[1], current_quad[2])
+        left_operand, right_operand = None, None
+        # check if it's a method quad
+        if is_method_quad(current_quad[1]) or is_method_quad(current_quad[2]):
+            left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+        else:
+            left_operand, right_operand = get_binary_operands(
+                memory_stack[-1], current_quad[1], current_quad[2])
         mult_result = left_operand * right_operand
         memory_stack[-1] = set_value_in_memory(
             current_quad[3], memory_stack[-1], mult_result)
 
     # Division execution
     elif current_quad[0] == '/':
-        left_operand, right_operand = get_binary_operands(
-            memory_stack[-1], current_quad[1], current_quad[2])
+        left_operand, right_operand = None, None
+        # check if it's a method quad
+        if is_method_quad(current_quad[1]) or is_method_quad(current_quad[2]):
+            left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+        else:
+            left_operand, right_operand = get_binary_operands(
+                memory_stack[-1], current_quad[1], current_quad[2])
         div_result = left_operand / right_operand
         memory_stack[-1] = set_value_in_memory(
             current_quad[3], memory_stack[-1], div_result)
 
     # Greater than execution
     elif current_quad[0] == '>':
-        left_operand, right_operand = get_binary_operands(
-            memory_stack[-1], current_quad[1], current_quad[2])
+        left_operand, right_operand = None, None
+        # check if it's a method quad
+        if is_method_quad(current_quad[1]) or is_method_quad(current_quad[2]):
+            left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+        else:
+            left_operand, right_operand = get_binary_operands(
+                memory_stack[-1], current_quad[1], current_quad[2])
         gt_result = left_operand > right_operand
         memory_stack[-1] = set_value_in_memory(
             current_quad[3], memory_stack[-1], gt_result)
 
     # Less than execution
     elif current_quad[0] == '<':
-        left_operand, right_operand = get_binary_operands(
-            memory_stack[-1], current_quad[1], current_quad[2])
+        left_operand, right_operand = None, None
+        # check if it's a method quad
+        if is_method_quad(current_quad[1]) or is_method_quad(current_quad[2]):
+            left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+        else:
+            left_operand, right_operand = get_binary_operands(
+                memory_stack[-1], current_quad[1], current_quad[2])
         lt_result = left_operand < right_operand
         memory_stack[-1] = set_value_in_memory(
             current_quad[3], memory_stack[-1], lt_result)
 
     # Equals execution
     elif current_quad[0] == '==':
-        left_operand, right_operand = get_binary_operands(
-            memory_stack[-1], current_quad[1], current_quad[2])
+        left_operand, right_operand = None, None
+        # check if it's a method quad
+        if is_method_quad(current_quad[1]) or is_method_quad(current_quad[2]):
+            left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+        else:
+            left_operand, right_operand = get_binary_operands(
+                memory_stack[-1], current_quad[1], current_quad[2])
         equals_result = left_operand == right_operand
         memory_stack[-1] = set_value_in_memory(
             current_quad[3], memory_stack[-1], equals_result)
 
     # Not equals execution
     elif current_quad[0] == '!=':
-        left_operand, right_operand = get_binary_operands(
-            memory_stack[-1], current_quad[1], current_quad[2])
+        left_operand, right_operand = None, None
+        # check if it's a method quad
+        if is_method_quad(current_quad[1]) or is_method_quad(current_quad[2]):
+            left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+        else:
+            left_operand, right_operand = get_binary_operands(
+                memory_stack[-1], current_quad[1], current_quad[2])
         not_equals_result = left_operand != right_operand
         memory_stack[-1] = set_value_in_memory(
             current_quad[3], memory_stack[-1], not_equals_result)
 
     # And execution
     elif current_quad[0] == '&&':
-        left_operand, right_operand = get_binary_operands(
-            memory_stack[-1], current_quad[1], current_quad[2])
+        left_operand, right_operand = None, None
+        # check if it's a method quad
+        if is_method_quad(current_quad[1]) or is_method_quad(current_quad[2]):
+            left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+        else:
+            left_operand, right_operand = get_binary_operands(
+                memory_stack[-1], current_quad[1], current_quad[2])
         if left_operand and right_operand:
             and_result = True
         else:
@@ -221,8 +281,13 @@ while (instruction_pointer < len(quads)):
 
     # Or execution
     elif current_quad[0] == '||':
-        left_operand, right_operand = get_binary_operands(
-            memory_stack[-1], current_quad[1], current_quad[2])
+        left_operand, right_operand = None, None
+        # check if it's a method quad
+        if is_method_quad(current_quad[1]) or is_method_quad(current_quad[2]):
+            left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+        else:
+            left_operand, right_operand = get_binary_operands(
+                memory_stack[-1], current_quad[1], current_quad[2])
         if left_operand or right_operand:
             or_result = True
         else:

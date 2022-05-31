@@ -9,7 +9,7 @@
             "int": 1,
             "float": 0,
             "string": 2,
-            "bool": 0
+            "bool": 1
           }
         },
         "function_type": "void"
@@ -27,12 +27,12 @@
           "temps_workspace": {
             "int": 0,
             "float": 0,
-            "bool": 0,
+            "bool": 1,
             "string": 0
           }
         },
         "function_type": "void",
-        "start_quad": 13
+        "start_quad": 15
       }
     },
     "Animal": {
@@ -91,11 +91,11 @@
           "temps_workspace": {
             "int": 0,
             "float": 0,
-            "bool": 0,
+            "bool": 1,
             "string": 0
           }
         },
-        "function_type": "void",
+        "function_type": "bool",
         "start_quad": 6
       },
       "comer": {
@@ -118,7 +118,7 @@
           }
         },
         "function_type": "void",
-        "start_quad": 9
+        "start_quad": 11
       }
     }
   },
@@ -127,7 +127,7 @@
       "GOTOMAIN",
       null,
       null,
-      13
+      15
     ],
     [
       "=",
@@ -187,6 +187,21 @@
       ]
     ],
     [
+      "==",
+      24001,
+      [
+        0,
+        "int"
+      ],
+      20000
+    ],
+    [
+      "=",
+      20000,
+      null,
+      4000
+    ],
+    [
       "ENDFUNC",
       null,
       null,
@@ -238,7 +253,7 @@
     ],
     [
       "PARAM",
-      24001,
+      24002,
       null,
       1
     ],
@@ -249,70 +264,29 @@
       6
     ],
     [
-      "ERA_OBJ_MET",
-      "main",
-      {
-        "int": 8000,
-        "float": null,
-        "bool": null,
-        "string": 14000
-      },
-      "Animal#constructor_fake"
-    ],
-    [
-      "PARAM",
-      30004,
+      "=",
+      4000,
       null,
-      0
-    ],
-    [
-      "PARAM",
-      24002,
-      null,
-      1
-    ],
-    [
-      "GOSUB_OBJ",
-      "constructor_fake",
-      "brunis",
-      6
+      20000
     ],
     [
       "WRITE",
       null,
       null,
-      6000
-    ],
-    [
-      "WRITE",
-      null,
-      null,
-      0
-    ],
-    [
-      "WRITE",
-      null,
-      null,
-      14000
-    ],
-    [
-      "WRITE",
-      null,
-      null,
-      8000
+      20000
     ]
   ],
   "constants_summary": {
     "int": 3,
     "float": 0,
     "bool": 0,
-    "string": 5
+    "string": 4
   },
   "constants_table": {
     "int": {
       "1": 24000,
-      "4": 24001,
-      "8": 24002
+      "2": 24001,
+      "4": 24002
     },
     "float": {},
     "bool": {},
@@ -320,8 +294,7 @@
       "trips": 30000,
       "tripsi": 30001,
       "yuuum": 30002,
-      "Tripsi": 30003,
-      "Bruno el perringo": 30004
+      "Tripsi": 30003
     }
   }
 }
