@@ -1215,10 +1215,14 @@ def p_function_call(p):
             general_name, internal_name)
         # TODO: podriamos poner en vez de object name, los puros indices iniciales de cada tipo
         # TODO: tenemos que saber en que memoria esta (si en local, global) en caso de global modificariamos stack[-2]
-        quads.generate_quad(
-            'GOSUB', internal_name, object_name, function_start_quad)
-        function_return_type = function_directory.get_function_type(
-            general_name, internal_name)
+        # check if it is a method or a regular function
+        if object_name:
+            quads.generate_quad(
+                'GOSUB_OBJ', internal_name, object_name, function_start_quad)
+        else:
+            quads.generate_quad(
+                'GOSUB', internal_name, None, function_start_quad)
+        function_return_type = function_directory.get_function_type(general_name, internal_name)
         if function_return_type != 'void':
             function_var_address = function_directory.get_function_virtual_address(
                 '#global', '#global', current_function_call_name_stack[-1])
@@ -1252,7 +1256,7 @@ def p_function_call1(p):
         else:
             raise Exception(
                 function_object + ' object has not been declared so method can not be run.')
-
+        # TODO: Con era obj met saber a que memoria "apuntar" que este siendo modificada o accesada en los metodos
         if (function_directory.class_has_function(function_class, function_name)):
             current_function_call_name = function_class + '#' + function_name
             current_function_call_name_stack.append(current_function_call_name)
