@@ -1353,7 +1353,7 @@ def p_class_function(p):
     class_function : AT_CLASS ID np_validate_class_method FUNCTION ID np_add_function_internal_scope OPEN_PARENTHESIS parameter np_add_parameters_to_var_table CLOSE_PARENTHESIS RETURNS return_arg np_set_function_return_type_objects OPEN_KEY variable_declaration_loop np_generate_variable_workspace np_add_function_start_quad function_statement_loop function_return CLOSE_KEY np_end_function
 
     '''
-    pass
+    avail.reset_local_counters()
 
 
 def p_np_validate_class_method(p):

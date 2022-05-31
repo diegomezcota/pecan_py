@@ -83,12 +83,15 @@ def clean_quad_addresses(current_quad, memory):
 def clean_object_quads(current_quad, memory):
     object_base_addresses = None
     if memory.object:
-        object_base_addresses = memory.object['object_base_addresses']        
+        object_base_addresses = memory.object['object_base_addresses']       
     for i, element in enumerate(current_quad):
         if element is not None and type(element) is list:
-            el_type = element[1]
-            element[0] += object_base_addresses[el_type]
-            element[1] = memory.object['object_scope']         
+            new_element = element.copy()
+            el_type = new_element[1]
+            new_element[0] += object_base_addresses[el_type]
+            new_element[1] = memory.object['object_scope']
+            current_quad[i] = new_element
+                     
     return current_quad
 
 def is_method_quad(quad_element):
@@ -121,22 +124,25 @@ while (instruction_pointer < len(quads)):
     # Assignment execution
     elif current_quad[0] == '=':
         to_assign_type, to_assign_value = None, None
-        # check if quad involves two memories
+        # check if value to assign involves two memories
         if is_method_quad(current_quad[1]):
             # check where the address "lives" (global, local)
             object_scope = memory_stack[-1].object['object_scope']
-            if object_scope == '#global':
-                to_assign_type, to_assign_value = get_type_and_value(
-                    global_memory, current_quad[1][0])
-            else:
-                to_assign_type, to_assign_value = get_type_and_value(
+            to_assign_type, to_assign_value = get_type_and_value(
                     memory_stack[-2], current_quad[1][0])
         else:
             to_assign_type, to_assign_value = get_type_and_value(
                 memory_stack[-1], current_quad[1])
         to_assign_value = formatter.cast(to_assign_value, to_assign_type)
-        memory_stack[-1] = set_value_in_memory(
-            current_quad[3], memory_stack[-1], to_assign_value)
+        # check which memory to assign to
+        if is_method_quad(current_quad[3]):
+            # check where the address "lives" (global, local)
+            object_scope = memory_stack[-1].object['object_scope']
+            memory_stack[-2] = set_value_in_memory(
+                    current_quad[3][0], memory_stack[-2], to_assign_value)
+        else:
+            memory_stack[-1] = set_value_in_memory(
+                current_quad[3], memory_stack[-1], to_assign_value)
 
     # Addition execution
     elif current_quad[0] == '+':

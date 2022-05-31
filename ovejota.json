@@ -21,7 +21,7 @@
           "variables_workspace": {
             "int": 1,
             "float": 0,
-            "string": 0,
+            "string": 2,
             "bool": 0
           },
           "temps_workspace": {
@@ -32,7 +32,7 @@
           }
         },
         "function_type": "void",
-        "start_quad": 10
+        "start_quad": 13
       }
     },
     "Animal": {
@@ -75,6 +75,29 @@
         },
         "start_quad": 1
       },
+      "constructor_fake": {
+        "vars_table": {},
+        "param_signature": [
+          "string",
+          "int"
+        ],
+        "workspace": {
+          "variables_workspace": {
+            "int": 1,
+            "float": 0,
+            "string": 1,
+            "bool": 0
+          },
+          "temps_workspace": {
+            "int": 0,
+            "float": 0,
+            "bool": 0,
+            "string": 0
+          }
+        },
+        "function_type": "void",
+        "start_quad": 6
+      },
       "comer": {
         "vars_table": {},
         "param_signature": [
@@ -95,7 +118,7 @@
           }
         },
         "function_type": "void",
-        "start_quad": 6
+        "start_quad": 9
       }
     }
   },
@@ -104,7 +127,7 @@
       "GOTOMAIN",
       null,
       null,
-      10
+      13
     ],
     [
       "=",
@@ -147,6 +170,30 @@
     ],
     [
       "=",
+      14000,
+      null,
+      [
+        0,
+        "string"
+      ]
+    ],
+    [
+      "=",
+      8000,
+      null,
+      [
+        0,
+        "int"
+      ]
+    ],
+    [
+      "ENDFUNC",
+      null,
+      null,
+      null
+    ],
+    [
+      "=",
       [
         0,
         "string"
@@ -173,12 +220,6 @@
       null
     ],
     [
-      "=",
-      30003,
-      null,
-      6000
-    ],
-    [
       "ERA_OBJ_MET",
       "#global",
       {
@@ -187,30 +228,91 @@
         "bool": null,
         "string": 6000
       },
-      "Animal#comer"
+      "Animal#constructor_fake"
     ],
     [
       "PARAM",
-      24000,
+      30003,
       null,
       0
     ],
     [
+      "PARAM",
+      24001,
+      null,
+      1
+    ],
+    [
       "GOSUB_OBJ",
-      "comer",
+      "constructor_fake",
       "shori",
       6
+    ],
+    [
+      "ERA_OBJ_MET",
+      "main",
+      {
+        "int": 8000,
+        "float": null,
+        "bool": null,
+        "string": 14000
+      },
+      "Animal#constructor_fake"
+    ],
+    [
+      "PARAM",
+      30004,
+      null,
+      0
+    ],
+    [
+      "PARAM",
+      24002,
+      null,
+      1
+    ],
+    [
+      "GOSUB_OBJ",
+      "constructor_fake",
+      "brunis",
+      6
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      6000
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      0
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      14000
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      8000
     ]
   ],
   "constants_summary": {
-    "int": 1,
+    "int": 3,
     "float": 0,
     "bool": 0,
-    "string": 4
+    "string": 5
   },
   "constants_table": {
     "int": {
-      "1": 24000
+      "1": 24000,
+      "4": 24001,
+      "8": 24002
     },
     "float": {},
     "bool": {},
@@ -218,7 +320,8 @@
       "trips": 30000,
       "tripsi": 30001,
       "yuuum": 30002,
-      "Tripsi": 30003
+      "Tripsi": 30003,
+      "Bruno el perringo": 30004
     }
   }
 }
