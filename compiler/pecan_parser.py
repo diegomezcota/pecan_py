@@ -39,7 +39,7 @@ def p_program(p):
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
     print(*quads.list, sep='\n')
-    # print(json.dumps(function_directory.table, indent=2))
+    #print(json.dumps(function_directory.table, indent=2))
 
     function_directory.generate_variable_workspace('#global', '#global')
 
@@ -1260,7 +1260,9 @@ def p_function_call1(p):
         if (function_directory.class_has_function(function_class, function_name)):
             current_function_call_name = function_class + '#' + function_name
             current_function_call_name_stack.append(current_function_call_name)
-            quads.generate_quad('ERA_OBJ_MET', object_scope, function_object,
+            # get direcciones base de cada tipo de ese objeto
+            attribute_base_addresses = function_directory.get_initial_attribute_addresses_type(current_general_scope, object_scope, function_object)
+            quads.generate_quad('ERA_OBJ_MET', object_scope, attribute_base_addresses,
                                 current_function_call_name_stack[-1])
         else:
             raise Exception('Function ' + function_name +
