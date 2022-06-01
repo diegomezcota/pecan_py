@@ -105,12 +105,6 @@ class LocalMemory:
 
         return (data_type, self.table[table_scope][data_type][index])
 
-
-# gm = LocalMemory()
-# gm.set_value_in_address(8004, 'tripsi')
-# print(gm.table)
-
-
 # Estructura para memorias globales
 class GlobalMemory:
 

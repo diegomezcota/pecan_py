@@ -1,3 +1,78 @@
 {
-  "error": "test 14 : 'Animal#constructor' function call expected 2 params but received 0 in line 42"
+  "function_directory": {
+    "#global": {
+      "#global": {
+        "vars_table": {},
+        "param_signature": [],
+        "workspace": {
+          "variables_workspace": {
+            "int": 0,
+            "float": 0,
+            "string": 0,
+            "bool": 0
+          }
+        },
+        "function_type": "void"
+      },
+      "main": {
+        "vars_table": {},
+        "param_signature": [],
+        "workspace": {
+          "variables_workspace": {
+            "int": 5,
+            "float": 9,
+            "string": 0,
+            "bool": 0
+          },
+          "temps_workspace": {
+            "int": 0,
+            "float": 0,
+            "bool": 0,
+            "string": 0
+          }
+        },
+        "function_type": "void",
+        "start_quad": 2
+      }
+    }
+  },
+  "quads": [
+    [
+      "SOLVE_GLOBAL_OBJ",
+      null,
+      null,
+      null
+    ],
+    [
+      "GOTOMAIN",
+      null,
+      null,
+      2
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      30000
+    ]
+  ],
+  "constants_summary": {
+    "int": 3,
+    "float": 0,
+    "bool": 0,
+    "string": 1
+  },
+  "constants_table": {
+    "int": {
+      "1": 24000,
+      "5": 24001,
+      "3": 24002
+    },
+    "float": {},
+    "bool": {},
+    "string": {
+      "hola": 30000
+    }
+  },
+  "global_objects_constructors_start_quads": []
 }
