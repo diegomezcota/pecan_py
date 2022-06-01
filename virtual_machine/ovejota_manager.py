@@ -46,6 +46,7 @@ class OvejotaManager:
     def get_constants_table(self):
         return self.constants_table
 
+    # funcion para obtener los cuádruplos de inicio de los constructores de objetos globales
     def get_global_objects_constructors_start_quads(self):
         return self.global_objects_constructors_start_quads 
 

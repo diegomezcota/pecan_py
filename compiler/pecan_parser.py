@@ -188,7 +188,7 @@ def p_variable(p):
                 current_general_scope, p[3])
             p[0] = ([attribute_index, attribute_type], attribute_type)
         else:
-            raise Exception('Attribute' + p[3] + ' not in scope')
+            raise Exception('Attribute ' + p[3] + ' not in scope')
 
 
 def p_np_check_class_scope(p):
@@ -213,8 +213,8 @@ def p_variable1(p):
             variable_address, variable_data_type = variable_map[
                 'var_virtual_address'], variable_map['var_data_type']
             p[0] = (variable_address, variable_data_type)
-        elif (function_directory.has_variable(current_general_scope, '#global', p[-1])):
-            variable_map = function_directory.table[current_general_scope]['#global']['vars_table'][p[-1]]
+        elif (function_directory.has_variable('#global', '#global', p[-1])):
+            variable_map = function_directory.table['#global']['#global']['vars_table'][p[-1]]
             variable_address, variable_data_type = variable_map[
                 'var_virtual_address'], variable_map['var_data_type']
             p[0] = (variable_address, variable_data_type)
@@ -527,7 +527,7 @@ def p_np_check_class_existence(p):
             current_general_scope, current_internal_scope, current_var_name, attriibute_name, attribute_map['data_type'], new_address)
     # Do era
     current_function_call_name = class_to_instance + '#' + 'constructor'
-    current_function_call_name_stack.append(current_function_call_name) # TODO: poppearlo al final
+    current_function_call_name_stack.append(current_function_call_name)
     # get direcciones base de cada tipo de ese objeto
     attribute_base_addresses = function_directory.get_initial_attribute_addresses_type(current_general_scope, current_internal_scope, current_var_name)
     # If current general scope is global, add start quad to be solved in execution

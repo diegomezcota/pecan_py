@@ -2,8 +2,9 @@
 program p3;
 
 main() {
-    var int a;
+    var bool a;
     var float b;
     a = 3 * 4 + 5 > 10 && 8 == 7;
-    b = 5.1235 + 10 - a * (1 + 2 + 3);
+    b = 5.1235 + 10 * (1 + 2 + 3);
+    write("El valor de b es de:", b);
 }
