@@ -13,18 +13,31 @@ constructor Animal(string nombre, int edad) {
     write("tripsi");
 }
 
-@class Animal function constructor_fake(string nombre, int edad) returns bool {
+@class Animal function constructor_fake(string nombre, int edad, string tipo) returns void {
     $nombre = nombre;
     $edad = edad;
-    read($edad, $nombre);
-    write($nombre, $edad);
-    return 2 == $edad;
+    $tipo = tipo;
+    return;
 }
 
-@class Animal function comer(int aucsilio) returns void {
-    var string nombre_de_shori;
-    nombre_de_shori = $nombre;
-    write("yuuum", nombre_de_shori);
+// hay que bloquear la definicion del mismo tipo en un metodo de la clase
+@class Animal function set_nombre(string nombre) returns void {
+    obj shori = Animal();
+    shori.set_nombre("hola");
+    write(shori.nombre, $nombre, nombre);
+    $nombre = nombre;
+    return;
+}
+
+@class Animal function get_nombre() returns string {
+    return $nombre;
+}
+
+@class Animal function comer(int iTimes) returns void {
+    var int i;
+    for i = 0 to iTimes {
+        write(i + 1, $nombre, "esta comiendo...");
+    }
     return;
 }
 
@@ -32,7 +45,9 @@ obj shori = Animal();
 
 main() {
     obj brunis = Animal();
-    write(shori.constructor_fake("Tripsi", 4));
-    //brunis.constructor_fake("Bruno el perringo", 8);
-    //write(shori.nombre, shori.edad, brunis.nombre, brunis.edad);
+    obj lucas = Animal();
+    //shori.constructor_fake("Shori Mtz Celos", 5, "perro");
+    brunis.constructor_fake("Bruno Gomez Cota", 8, "perro");
+    brunis.set_nombre("Calypso");
+    //write(brunis.get_nombre());
 }

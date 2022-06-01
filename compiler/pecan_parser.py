@@ -39,7 +39,7 @@ def p_program(p):
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
     print(*quads.list, sep='\n')
-    #print(json.dumps(function_directory.table, indent=2))
+    #print(json.dumps(function_directory.table, indent=4))
 
     function_directory.generate_variable_workspace('#global', '#global')
 
@@ -363,15 +363,19 @@ def p_np_array_access5(p):
 
 def p_class_declaration(p):
     '''
-    class_declaration   : CLASS ID np_create_class_scope class_declaration1 OPEN_KEY class_body CLOSE_KEY SEMICOLON constructor class_declaration2
+    class_declaration   : CLASS ID np_create_class_scope class_declaration1 OPEN_KEY class_body np_set_object_summary CLOSE_KEY SEMICOLON constructor class_declaration2
     '''
     global current_general_scope, current_internal_scope
 
-    function_directory.set_object_summary(
-        current_general_scope, '#global')
-
     current_general_scope = '#global'
     current_internal_scope = '#global'
+    
+def p_np_set_object_summary(p):
+    '''
+    np_set_object_summary : epsilon
+    '''
+    function_directory.set_object_summary(
+        current_general_scope, '#global')
 
 
 def p_class_declaration1(p):
@@ -455,6 +459,19 @@ def p_variable_declaration_loop(p):
     '''
     pass
 
+def p_class_method_variable_declaration_loop(p):
+    '''
+    class_method_variable_declaration_loop : class_method_variable_declaration class_method_variable_declaration_loop
+                                            | epsilon
+    '''
+    pass
+
+def p_class_method_variable_declaration(p):
+    '''
+    class_method_variable_declaration : VAR np_set_current_var_type data_type np_set_current_var_data_type ID np_set_current_var_name SEMICOLON np_add_variable
+                                      | GROUP np_set_current_var_type ID np_set_current_var_name ASSIGN data_type np_set_current_var_data_type np_add_variable OPEN_BRACKET np_add_dim1_list INT_VALUE np_add_dim1 CLOSE_BRACKET group1 SEMICOLON
+    '''
+    pass
 
 def p_variable_declaration(p):
     '''
@@ -1350,7 +1367,7 @@ def p_np_check_param_match(p):
 
 def p_class_function(p):
     '''
-    class_function : AT_CLASS ID np_validate_class_method FUNCTION ID np_add_function_internal_scope OPEN_PARENTHESIS parameter np_add_parameters_to_var_table CLOSE_PARENTHESIS RETURNS return_arg np_set_function_return_type_objects OPEN_KEY variable_declaration_loop np_generate_variable_workspace np_add_function_start_quad function_statement_loop function_return CLOSE_KEY np_end_function
+    class_function : AT_CLASS ID np_validate_class_method FUNCTION ID np_add_function_internal_scope OPEN_PARENTHESIS parameter np_add_parameters_to_var_table CLOSE_PARENTHESIS RETURNS return_arg np_set_function_return_type_objects OPEN_KEY class_method_variable_declaration_loop np_generate_variable_workspace np_add_function_start_quad function_statement_loop function_return CLOSE_KEY np_end_function
 
     '''
     avail.reset_local_counters()
