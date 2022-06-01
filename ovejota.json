@@ -8,13 +8,140 @@
           "variables_workspace": {
             "int": 1,
             "float": 0,
-            "string": 0,
+            "string": 3,
             "bool": 0
           }
         },
         "function_type": "void"
       },
-      "fib": {
+      "main": {
+        "vars_table": {},
+        "param_signature": [],
+        "workspace": {
+          "variables_workspace": {
+            "int": 2,
+            "float": 0,
+            "string": 4,
+            "bool": 0
+          },
+          "temps_workspace": {
+            "int": 0,
+            "float": 0,
+            "bool": 0,
+            "string": 1
+          }
+        },
+        "function_type": "void",
+        "start_quad": 32
+      }
+    },
+    "Animal": {
+      "#global": {
+        "vars_table": {
+          "nombre": {
+            "data_type": "string",
+            "index": 0
+          },
+          "edad": {
+            "data_type": "int",
+            "index": 0
+          },
+          "tipo": {
+            "data_type": "string",
+            "index": 1
+          }
+        },
+        "param_signature": [],
+        "workspace": {
+          "int": 1,
+          "float": 0,
+          "bool": 0,
+          "string": 2
+        }
+      },
+      "constructor": {
+        "vars_table": {},
+        "param_signature": [
+          "string",
+          "int"
+        ],
+        "workspace": {
+          "temps_workspace": {
+            "int": 0,
+            "float": 0,
+            "bool": 0,
+            "string": 0
+          }
+        },
+        "start_quad": 1
+      },
+      "constructor_fake": {
+        "vars_table": {},
+        "param_signature": [
+          "string",
+          "int",
+          "string"
+        ],
+        "workspace": {
+          "variables_workspace": {
+            "int": 1,
+            "float": 0,
+            "string": 2,
+            "bool": 0
+          },
+          "temps_workspace": {
+            "int": 0,
+            "float": 0,
+            "bool": 0,
+            "string": 0
+          }
+        },
+        "function_type": "void",
+        "start_quad": 6
+      },
+      "set_nombre": {
+        "vars_table": {},
+        "param_signature": [
+          "string"
+        ],
+        "workspace": {
+          "variables_workspace": {
+            "int": 0,
+            "float": 0,
+            "string": 1,
+            "bool": 0
+          },
+          "temps_workspace": {
+            "int": 0,
+            "float": 0,
+            "bool": 0,
+            "string": 0
+          }
+        },
+        "function_type": "void",
+        "start_quad": 10
+      },
+      "get_nombre": {
+        "vars_table": {},
+        "param_signature": [],
+        "workspace": {
+          "variables_workspace": {
+            "int": 0,
+            "float": 0,
+            "string": 0,
+            "bool": 0
+          },
+          "temps_workspace": {
+            "int": 0,
+            "float": 0,
+            "bool": 0,
+            "string": 0
+          }
+        },
+        "function_type": "string",
+        "start_quad": 17
+      },
+      "comer": {
         "vars_table": {},
         "param_signature": [
           "int"
@@ -27,29 +154,9 @@
             "bool": 0
           },
           "temps_workspace": {
-            "int": 5,
-            "float": 0,
-            "bool": 1,
-            "string": 0
-          }
-        },
-        "function_type": "int",
-        "start_quad": 1
-      },
-      "main": {
-        "vars_table": {},
-        "param_signature": [],
-        "workspace": {
-          "variables_workspace": {
-            "int": 2,
-            "float": 0,
-            "string": 0,
-            "bool": 0
-          },
-          "temps_workspace": {
             "int": 3,
             "float": 0,
-            "bool": 2,
+            "bool": 1,
             "string": 0
           }
         },
@@ -63,109 +170,73 @@
       "GOTOMAIN",
       null,
       null,
-      19
+      32
     ],
     [
-      "<",
-      8000,
-      24001,
-      20000
-    ],
-    [
-      "GOTOF",
-      20000,
+      "=",
+      14000,
       null,
-      5
+      [
+        0,
+        "string"
+      ]
     ],
     [
       "=",
       8000,
       null,
-      8001
+      [
+        0,
+        "int"
+      ]
     ],
     [
-      "GOTO",
+      "=",
+      30000,
       null,
-      null,
-      17
+      [
+        1,
+        "string"
+      ]
     ],
     [
-      "ERA",
+      "WRITE",
       null,
       null,
-      "fib"
+      30001
     ],
     [
-      "-",
+      "ENDFUNC",
+      null,
+      null,
+      null
+    ],
+    [
+      "=",
+      14000,
+      null,
+      [
+        0,
+        "string"
+      ]
+    ],
+    [
+      "=",
       8000,
-      24000,
-      16000
-    ],
-    [
-      "PARAM",
-      16000,
       null,
-      0
-    ],
-    [
-      "GOSUB",
-      "fib",
-      null,
-      1
+      [
+        0,
+        "int"
+      ]
     ],
     [
       "=",
-      0,
+      14001,
       null,
-      16001
-    ],
-    [
-      "ERA",
-      null,
-      null,
-      "fib"
-    ],
-    [
-      "-",
-      8000,
-      24001,
-      16002
-    ],
-    [
-      "PARAM",
-      16002,
-      null,
-      0
-    ],
-    [
-      "GOSUB",
-      "fib",
-      null,
-      1
-    ],
-    [
-      "=",
-      0,
-      null,
-      16003
-    ],
-    [
-      "+",
-      16001,
-      16003,
-      16004
-    ],
-    [
-      "=",
-      16004,
-      null,
-      8001
-    ],
-    [
-      "=",
-      8001,
-      null,
-      0
+      [
+        1,
+        "string"
+      ]
     ],
     [
       "ENDFUNC",
@@ -177,101 +248,119 @@
       "WRITE",
       null,
       null,
-      30000
+      30002
     ],
     [
-      "READ",
+      "WRITE",
       null,
+      null,
+      30003
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      [
+        0,
+        "string"
+      ]
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      30004
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      14000
+    ],
+    [
+      "=",
+      14000,
+      null,
+      [
+        0,
+        "string"
+      ]
+    ],
+    [
+      "ENDFUNC",
+      null,
+      null,
+      null
+    ],
+    [
+      "=",
+      [
+        0,
+        "string"
+      ],
+      null,
+      6000
+    ],
+    [
+      "ENDFUNC",
+      null,
+      null,
+      null
+    ],
+    [
+      "=",
+      24001,
       null,
       8001
     ],
     [
+      "=",
+      8000,
+      null,
+      16000
+    ],
+    [
       "<",
       8001,
-      24002,
+      16000,
       20000
     ],
     [
       "GOTOF",
       20000,
       null,
-      25
-    ],
-    [
-      "WRITE",
-      null,
-      null,
-      30001
-    ],
-    [
-      "GOTO",
-      null,
-      null,
-      39
-    ],
-    [
-      "WRITE",
-      null,
-      null,
-      30002
-    ],
-    [
-      "=",
-      24002,
-      null,
-      8000
-    ],
-    [
-      "=",
-      8001,
-      null,
-      16000
-    ],
-    [
-      "<",
-      8000,
-      16000,
-      20001
-    ],
-    [
-      "GOTOF",
-      20001,
-      null,
-      39
-    ],
-    [
-      "ERA",
-      null,
-      null,
-      "fib"
-    ],
-    [
-      "PARAM",
-      8000,
-      null,
-      0
-    ],
-    [
-      "GOSUB",
-      "fib",
-      null,
-      1
-    ],
-    [
-      "=",
-      0,
-      null,
-      16001
-    ],
-    [
-      "WRITE",
-      null,
-      null,
-      16001
+      31
     ],
     [
       "+",
-      8000,
+      8001,
+      24000,
+      16001
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      16001
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      [
+        0,
+        "string"
+      ]
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      30005
+    ],
+    [
+      "+",
+      8001,
       24000,
       16002
     ],
@@ -279,39 +368,138 @@
       "=",
       16002,
       null,
-      8000
+      8001
     ],
     [
       "=",
       16002,
       null,
-      8000
+      8001
     ],
     [
       "GOTO",
       null,
       null,
-      28
+      21
+    ],
+    [
+      "ENDFUNC",
+      null,
+      null,
+      null
+    ],
+    [
+      "ERA_OBJ_MET",
+      "main",
+      {
+        "int": 8000,
+        "float": null,
+        "bool": null,
+        "string": 14000
+      },
+      "Animal#constructor_fake"
+    ],
+    [
+      "PARAM",
+      30006,
+      null,
+      0
+    ],
+    [
+      "PARAM",
+      24002,
+      null,
+      1
+    ],
+    [
+      "PARAM",
+      30007,
+      null,
+      2
+    ],
+    [
+      "GOSUB_OBJ",
+      "constructor_fake",
+      "brunis",
+      6
+    ],
+    [
+      "ERA_OBJ_MET",
+      "main",
+      {
+        "int": 8000,
+        "float": null,
+        "bool": null,
+        "string": 14000
+      },
+      "Animal#set_nombre"
+    ],
+    [
+      "PARAM",
+      30008,
+      null,
+      0
+    ],
+    [
+      "GOSUB_OBJ",
+      "set_nombre",
+      "brunis",
+      10
+    ],
+    [
+      "ERA_OBJ_MET",
+      "main",
+      {
+        "int": 8000,
+        "float": null,
+        "bool": null,
+        "string": 14000
+      },
+      "Animal#get_nombre"
+    ],
+    [
+      "GOSUB_OBJ",
+      "get_nombre",
+      "brunis",
+      17
+    ],
+    [
+      "=",
+      6000,
+      null,
+      22000
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      22000
     ]
   ],
   "constants_summary": {
     "int": 3,
     "float": 0,
     "bool": 0,
-    "string": 3
+    "string": 9
   },
   "constants_table": {
     "int": {
       "1": 24000,
-      "2": 24001,
-      "0": 24002
+      "0": 24001,
+      "8": 24002
     },
     "float": {},
     "bool": {},
     "string": {
-      "Ingresa cuantos elementos de la serie de fibonacci quieres:": 30000,
-      "Solo se aceptan numeros positivos": 30001,
-      "Serie fibonacci:": 30002
+      "trips": 30000,
+      "tripsi": 30001,
+      "Cambiando nombre...": 30002,
+      "Viejo nombre:": 30003,
+      "Nuevo nombre:": 30004,
+      "esta comiendo...": 30005,
+      "Bruno Gomez Cota": 30006,
+      "perro": 30007,
+      "Calypso": 30008
     }
   }
 }
