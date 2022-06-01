@@ -188,7 +188,7 @@ def p_variable(p):
                 current_general_scope, p[3])
             p[0] = ([attribute_index, attribute_type], attribute_type)
         else:
-            raise Exception('Attribute' + p[3] + ' not in scope')
+            raise Exception('Attribute ' + p[3] + ' not in scope')
 
 
 def p_np_check_class_scope(p):
@@ -213,8 +213,8 @@ def p_variable1(p):
             variable_address, variable_data_type = variable_map[
                 'var_virtual_address'], variable_map['var_data_type']
             p[0] = (variable_address, variable_data_type)
-        elif (function_directory.has_variable(current_general_scope, '#global', p[-1])):
-            variable_map = function_directory.table[current_general_scope]['#global']['vars_table'][p[-1]]
+        elif (function_directory.has_variable('#global', '#global', p[-1])):
+            variable_map = function_directory.table['#global']['#global']['vars_table'][p[-1]]
             variable_address, variable_data_type = variable_map[
                 'var_virtual_address'], variable_map['var_data_type']
             p[0] = (variable_address, variable_data_type)
