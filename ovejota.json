@@ -1,3 +1,214 @@
 {
-  "error": "test 15 : Global variable i must not be used as control variable in line 6"
+  "function_directory": {
+    "#global": {
+      "#global": {
+        "vars_table": {},
+        "param_signature": [],
+        "workspace": {
+          "variables_workspace": {
+            "int": 1,
+            "float": 0,
+            "string": 2,
+            "bool": 0
+          }
+        },
+        "function_type": "void"
+      },
+      "main": {
+        "vars_table": {},
+        "param_signature": [],
+        "workspace": {
+          "variables_workspace": {
+            "int": 0,
+            "float": 0,
+            "string": 0,
+            "bool": 0
+          },
+          "temps_workspace": {
+            "int": 0,
+            "float": 0,
+            "bool": 0,
+            "string": 0
+          }
+        },
+        "function_type": "void",
+        "start_quad": 12
+      }
+    },
+    "Animal": {
+      "#global": {
+        "vars_table": {
+          "nombre": {
+            "data_type": "string",
+            "index": 0
+          },
+          "edad": {
+            "data_type": "int",
+            "index": 0
+          },
+          "tipo": {
+            "data_type": "string",
+            "index": 1
+          }
+        },
+        "param_signature": [],
+        "workspace": {
+          "int": 1,
+          "float": 0,
+          "bool": 0,
+          "string": 2
+        }
+      },
+      "constructor": {
+        "vars_table": {},
+        "param_signature": [
+          "string",
+          "int",
+          "string"
+        ],
+        "workspace": {
+          "variables_workspace": {
+            "int": 1,
+            "float": 0,
+            "string": 2,
+            "bool": 0
+          },
+          "temps_workspace": {
+            "int": 0,
+            "float": 0,
+            "bool": 0,
+            "string": 0
+          }
+        },
+        "start_quad": 2
+      }
+    }
+  },
+  "quads": [
+    [
+      "SOLVE_GLOBAL_OBJ",
+      null,
+      null,
+      null
+    ],
+    [
+      "GOTOMAIN",
+      null,
+      null,
+      12
+    ],
+    [
+      "=",
+      14000,
+      null,
+      [
+        0,
+        "string"
+      ]
+    ],
+    [
+      "=",
+      8000,
+      null,
+      [
+        0,
+        "int"
+      ]
+    ],
+    [
+      "=",
+      14001,
+      null,
+      [
+        1,
+        "string"
+      ]
+    ],
+    [
+      "ENDFUNC",
+      null,
+      null,
+      null
+    ],
+    [
+      "ERA_OBJ_MET",
+      "shori",
+      {
+        "int": 0,
+        "float": null,
+        "bool": null,
+        "string": 6000
+      },
+      "Animal#constructor"
+    ],
+    [
+      "PARAM",
+      30000,
+      null,
+      0
+    ],
+    [
+      "PARAM",
+      24001,
+      null,
+      1
+    ],
+    [
+      "PARAM",
+      30001,
+      null,
+      2
+    ],
+    [
+      "GOSUB_OBJ",
+      "Animal#constructor",
+      "shori",
+      2
+    ],
+    [
+      "GO_BACK_TO_SOLVE_GLOBAL_OBJ",
+      null,
+      null,
+      null
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      6000
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      0
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      6001
+    ]
+  ],
+  "constants_summary": {
+    "int": 2,
+    "float": 0,
+    "bool": 0,
+    "string": 2
+  },
+  "constants_table": {
+    "int": {
+      "1": 24000,
+      "3": 24001
+    },
+    "float": {},
+    "bool": {},
+    "string": {
+      "Tripsi": 30000,
+      "perringo": 30001
+    }
+  },
+  "global_objects_constructors_start_quads": [
+    6
+  ]
 }

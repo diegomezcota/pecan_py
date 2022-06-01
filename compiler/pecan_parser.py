@@ -33,6 +33,9 @@ current_function_call_name = None
 current_function_call_name_stack = None
 function_param_counter_stack = None
 
+# For global object declaration
+start_quad_global_object_list = None
+
 
 def p_program(p):
     '''
@@ -48,7 +51,7 @@ def p_program(p):
     constants_table = avail.get_counter_summary('constants')
 
     obj = {"function_directory": function_directory.table,
-           "quads": quads.list, "constants_summary": constants_table, "constants_table": constants.table}
+           "quads": quads.list, "constants_summary": constants_table, "constants_table": constants.table, "global_objects_constructors_start_quads" : start_quad_global_object_list}
     with open('ovejota.json', "w") as output_file:
         json.dump(obj, output_file, indent=2)
 
@@ -74,7 +77,7 @@ def p_np_add_main_internal_scope(p):
         current_general_scope, current_internal_scope, 'void')
 
     # Llenar el numero de cuadruplo de inicio de la funcion main al primer cuadruplo
-    quads.fill_quad(0, 3, quads.counter)
+    quads.fill_quad(1, 3, quads.counter)
 
 
 def p_np_start_state(p):
@@ -84,6 +87,7 @@ def p_np_start_state(p):
     global function_directory, avail, quads, semantic_cube, operand_stack, operator_stack, jump_stack, control_variable_stack
     global current_general_scope, current_internal_scope, current_var_name, current_var_type, current_var_data_type, constants, dim_stack
     global current_group_internal_scope, current_function_call_name_stack, function_param_counter_stack, current_class_object_to_declare
+    global start_quad_global_object_list
     function_directory = FunctionDirectory()
     avail = Avail()
     quads = Quadruples()
@@ -103,7 +107,9 @@ def p_np_start_state(p):
     one_constant_address = avail.get_new_address('int', 'constants')
     constants.add_constant('int', one_constant_address, '1')
 
-    # Primer cuadruplo para empezar en el main
+    # Primer cuadruplo para resolver declaraciones de objetos globales
+    quads.generate_quad('SOLVE_GLOBAL_OBJ', None, None, None)
+    # Segundo cuadruplo para empezar en el main
     quads.generate_quad('GOTOMAIN', None, None, None)
 
     # Arrays and matrices
@@ -116,6 +122,7 @@ def p_np_start_state(p):
 
     # Objetos
     current_class_object_to_declare = None
+    start_quad_global_object_list = []
 
 
 def p_np_start_func_dir(p):
@@ -410,7 +417,7 @@ def p_class_body1(p):
 
 def p_constructor(p):
     '''
-    constructor : CONSTRUCTOR np_add_function_internal_scope ID np_validate_constructor_id OPEN_PARENTHESIS parameter np_add_parameters_to_var_table CLOSE_PARENTHESIS OPEN_KEY variable_declaration_loop np_add_function_start_quad statement_loop CLOSE_KEY np_end_function
+    constructor : CONSTRUCTOR np_add_function_internal_scope ID np_validate_constructor_id OPEN_PARENTHESIS parameter np_add_parameters_to_var_table CLOSE_PARENTHESIS OPEN_KEY variable_declaration_loop np_add_function_start_quad np_generate_variable_workspace statement_loop CLOSE_KEY np_end_function
     '''
     global current_internal_scope
     current_internal_scope = '#global'
@@ -459,20 +466,48 @@ def p_variable_declaration_loop(p):
     '''
     pass
 
+
 def p_variable_declaration(p):
     '''
     variable_declaration    : VAR np_set_current_var_type data_type np_set_current_var_data_type ID np_set_current_var_name SEMICOLON np_add_variable
                             | GROUP np_set_current_var_type ID np_set_current_var_name ASSIGN data_type np_set_current_var_data_type np_add_variable OPEN_BRACKET np_add_dim1_list INT_VALUE np_add_dim1 CLOSE_BRACKET group1 SEMICOLON
-                            | OBJ np_set_current_var_type ID np_set_current_var_name ASSIGN ID np_check_class_existence OPEN_PARENTHESIS np_start_function_param_counter np_add_open_parenthesis variable_declaration1 np_remove_open_parenthesis CLOSE_PARENTHESIS SEMICOLON np_create_object
+                            | OBJ np_set_current_var_type ID np_set_current_var_name ASSIGN ID np_check_class_existence OPEN_PARENTHESIS np_start_function_param_counter np_add_open_parenthesis function_call2 np_remove_open_parenthesis CLOSE_PARENTHESIS SEMICOLON
 
     '''
-    pass
+    if len(p) == 15:
+        # we need to force the call to constructor
+        param_signature_length = function_directory.get_param_signature_length(
+            p[6], 'constructor')
+        if param_signature_length != function_param_counter_stack[-1]:
+            error_msg = "'" + current_function_call_name_stack[-1] + "'" + " function call expected " + \
+                str(param_signature_length) + " params but received " + \
+                str(function_param_counter_stack[-1])
+            raise ParamLengthMismatch(error_msg + " in line " + str(p.lineno(6)))
+        else:
+            function_param_counter_stack.pop()
+        # gosub
+        constructor_name = current_function_call_name_stack.pop()
+        constructor_start_quad = function_directory.get_function_start_quad(p[6], 'constructor')
+        quads.generate_quad(
+                'GOSUB_OBJ', constructor_name, p[3], constructor_start_quad)
+        if current_general_scope == '#global' and current_internal_scope == '#global':
+            quads.generate_quad(
+                'GO_BACK_TO_SOLVE_GLOBAL_OBJ', None, None, None)
+        
 
 
-def p_np_create_object(p):
+def p_np_check_class_existence(p):
     '''
-    np_create_object : epsilon
+    np_check_class_existence : epsilon
     '''
+    global current_class_object_to_declare
+    
+    class_to_instance = p[-1]
+    if not function_directory.has_general_scope(class_to_instance):
+        raise Exception("Class " + class_to_instance + " does not exist")
+    else:
+        current_class_object_to_declare = p[-1]
+    # Add object attributes
     class_vars_table = function_directory.get_class_vars_table(
         current_class_object_to_declare, '#global')
 
@@ -490,18 +525,16 @@ def p_np_create_object(p):
             attribute_map['data_type'], avail_block)
         function_directory.add_obj_attribute_data(
             current_general_scope, current_internal_scope, current_var_name, attriibute_name, attribute_map['data_type'], new_address)
-
-
-def p_np_check_class_existence(p):
-    '''
-    np_check_class_existence : epsilon
-    '''
-    global current_class_object_to_declare
-    class_to_instance = p[-1]
-    if not function_directory.has_general_scope(class_to_instance):
-        raise Exception("Class " + class_to_instance + " does not exist")
-    else:
-        current_class_object_to_declare = p[-1]
+    # Do era
+    current_function_call_name = class_to_instance + '#' + 'constructor'
+    current_function_call_name_stack.append(current_function_call_name) # TODO: poppearlo al final
+    # get direcciones base de cada tipo de ese objeto
+    attribute_base_addresses = function_directory.get_initial_attribute_addresses_type(current_general_scope, current_internal_scope, current_var_name)
+    # If current general scope is global, add start quad to be solved in execution
+    if current_general_scope == '#global' and current_internal_scope == '#global':
+        start_quad_global_object_list.append(quads.counter)
+    quads.generate_quad('ERA_OBJ_MET', current_var_name, attribute_base_addresses, current_function_call_name_stack[-1])
+        
 
 
 def p_np_set_current_var_type(p):
@@ -612,14 +645,6 @@ def p_np_add_dim2(p):
     if not constants.has_constant('int', p[-1][0]):
         constant_address = avail.get_new_address('int', 'constants')
         constants.add_constant('int', constant_address, p[-1][0])
-
-
-def p_variable_declaration1(p):
-    '''
-    variable_declaration1   : hyper_exp_loop
-                            | epsilon
-    '''
-    pass
 
 
 def p_statement(p):
@@ -1169,22 +1194,6 @@ def p_np_add_write_quad(p):
     '''
     operand_address, _ = operand_stack.pop()
     quads.generate_quad('WRITE', None, None, operand_address)
-
-
-def p_hyper_exp_loop(p):
-    '''
-    hyper_exp_loop : hyper_exp hyper_exp_loop1
-    '''
-    pass
-
-
-def p_hyper_exp_loop1(p):
-    '''
-    hyper_exp_loop1 : COMMA hyper_exp hyper_exp_loop1
-                    | epsilon
-
-    '''
-    pass
 
 
 def p_function_call(p):

@@ -23,6 +23,8 @@ class OvejotaManager:
         self.constants_summary = self.ovejota['constants_summary']
 
         self.constants_table = self.ovejota['constants_table']
+        
+        self.global_objects_constructors_start_quads = self.ovejota['global_objects_constructors_start_quads']
 
     # funcion para obtener el workspace de variables de un scope interno
     # entradas: scope general, scope interno
@@ -44,6 +46,8 @@ class OvejotaManager:
     def get_constants_table(self):
         return self.constants_table
 
+    def get_global_objects_constructors_start_quads(self):
+        return self.global_objects_constructors_start_quads 
 
 #om = OvejotaManager()
 #print(json.dumps(om.function_directory, indent=2))
