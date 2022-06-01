@@ -976,10 +976,7 @@ def p_np_for_1(p):
             raise VariableNotDefined(
                 "Variable " + p[-1] + " not defined in line " + str(p.lineno(1)))
         else:
-            var_address = function_directory.get_variable_virtual_address(
-                current_general_scope, '#global', p[-1])
-            var_data_type = function_directory.get_variable_data_type(
-                current_general_scope, '#global', p[-1])
+            raise Exception("Global variable " + p[-1] + " must not be used as control variable in line " + str(p.lineno(1)))
     else:
         var_address = function_directory.get_variable_virtual_address(
             current_general_scope, current_internal_scope, p[-1])
@@ -1216,8 +1213,6 @@ def p_function_call(p):
     else:
         function_start_quad = function_directory.get_function_start_quad(
             general_name, internal_name)
-        # TODO: podriamos poner en vez de object name, los puros indices iniciales de cada tipo
-        # TODO: tenemos que saber en que memoria esta (si en local, global) en caso de global modificariamos stack[-2]
         # check if it is a method or a regular function
         if object_name:
             quads.generate_quad(
@@ -1259,7 +1254,6 @@ def p_function_call1(p):
         else:
             raise Exception(
                 function_object + ' object has not been declared so method can not be run.')
-        # TODO: Con era obj met saber a que memoria "apuntar" que este siendo modificada o accesada en los metodos
         if (function_directory.class_has_function(function_class, function_name)):
             current_function_call_name = function_class + '#' + function_name
             current_function_call_name_stack.append(current_function_call_name)
