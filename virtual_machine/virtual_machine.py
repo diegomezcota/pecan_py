@@ -112,12 +112,15 @@ def get_method_binary_operands(method_memory, calling_function_memory, left_oper
             method_memory, right_operand_elem)
     return left_operand, right_operand
     
-
+# TODO: No dejar que funciones de clase tengan objetos declarados -- ya quedo (checar loop)
 
 print('--------------------START OF EXECUTION-----------------------------')
 
 while (instruction_pointer < len(quads)):
     current_quad = quads[instruction_pointer].copy()
+    # TODO: Checar con mariana stack overflow, agregar error en doc (por ejemplo, una funcion recursiva con una mala condicion de salida)
+    if len(memory_stack) > 100000:
+        raise Exception('Stack overflow: too many pending calls')
     if memory_stack:
         current_quad = clean_quad_addresses(current_quad, memory_stack[-1])
         current_quad = clean_object_quads(current_quad, memory_stack[-1])
