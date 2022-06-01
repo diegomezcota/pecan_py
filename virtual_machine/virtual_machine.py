@@ -2,6 +2,7 @@ from Memory import GlobalMemory
 from Memory import LocalMemory
 from ovejota_manager import OvejotaManager
 from formatter import Formatter
+from collections import deque
 
 # try to read ovejota for successful compilation
 ovejota_manager = OvejotaManager()
@@ -15,6 +16,8 @@ global_variable_workspace = (
 constants_workspace = (cs['int'], cs['float'], cs['bool'], cs['string'])
 global_memory = GlobalMemory(
     global_variable_workspace, constants_workspace, constants_table)
+# Queue of start quads constructors for global objects
+global_objects_constructors_start_quads_queue = deque(ovejota_manager.get_global_objects_constructors_start_quads())
 
 quads = ovejota_manager.quads
 
@@ -111,19 +114,24 @@ def get_method_binary_operands(method_memory, calling_function_memory, left_oper
         _, right_operand = get_type_and_value(
             method_memory, right_operand_elem)
     return left_operand, right_operand
-    
-# TODO: No dejar que funciones de clase tengan objetos declarados -- ya quedo (checar loop)
 
 print('--------------------START OF EXECUTION-----------------------------')
 
 while (instruction_pointer < len(quads)):
     current_quad = quads[instruction_pointer].copy()
-    # TODO: Checar con mariana stack overflow, agregar error en doc (por ejemplo, una funcion recursiva con una mala condicion de salida)
     if len(memory_stack) > 100000:
         raise Exception('Stack overflow: too many pending calls')
     if memory_stack:
         current_quad = clean_quad_addresses(current_quad, memory_stack[-1])
         current_quad = clean_object_quads(current_quad, memory_stack[-1])
+    # SOLVE_GLOBAL_OBJ execution
+    if current_quad[0] == 'SOLVE_GLOBAL_OBJ':
+        if len(global_objects_constructors_start_quads_queue) > 0:
+            constructor_start_quad = global_objects_constructors_start_quads_queue.popleft()
+            instruction_pointer = constructor_start_quad
+            continue
+    if current_quad[0] == 'GO_BACK_TO_SOLVE_GLOBAL_OBJ':
+        instruction_pointer = 0
     # GOTOMAIN execution
     if current_quad[0] == 'GOTOMAIN':
         main_vw = ovejota_manager.get_variable_workspace('#global', 'main')
@@ -146,8 +154,13 @@ while (instruction_pointer < len(quads)):
         if is_method_quad(current_quad[1]):
             # check where the address "lives" (global, local)
             object_scope = memory_stack[-1].object['object_scope']
-            to_assign_type, to_assign_value = get_type_and_value(
-                    memory_stack[-2], current_quad[1][0])
+            # handle special case of global constructor
+            if len(memory_stack) >= 2:
+                to_assign_type, to_assign_value = get_type_and_value(
+                        memory_stack[-2], current_quad[1][0])
+            else:
+                to_assign_type, to_assign_value = get_type_and_value(
+                        global_memory, current_quad[1][0])
         else:
             to_assign_type, to_assign_value = get_type_and_value(
                 memory_stack[-1], current_quad[1])
@@ -156,8 +169,13 @@ while (instruction_pointer < len(quads)):
         if is_method_quad(current_quad[3]):
             # check where the address "lives" (global, local)
             object_scope = memory_stack[-1].object['object_scope']
-            memory_stack[-2] = set_value_in_memory(
-                    current_quad[3][0], memory_stack[-2], to_assign_value)
+            # handle special case of global constructor
+            if len(memory_stack) >= 2:
+                memory_stack[-2] = set_value_in_memory(
+                        current_quad[3][0], memory_stack[-2], to_assign_value)
+            else:
+                global_memory = set_value_in_memory(
+                        current_quad[3][0], global_memory, to_assign_value)
         else:
             memory_stack[-1] = set_value_in_memory(
                 current_quad[3], memory_stack[-1], to_assign_value)
@@ -167,7 +185,10 @@ while (instruction_pointer < len(quads)):
         left_operand, right_operand = None, None
         # check if it's a method quad
         if is_method_quad(current_quad[1]) or is_method_quad(current_quad[2]):
-            left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+            if len(memory_stack) >= 2:
+                left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+            else:
+                left_operand, right_operand = get_method_binary_operands(memory_stack[-1], global_memory, current_quad[1], current_quad[2])
         else:
             left_operand, right_operand = get_binary_operands(
                 memory_stack[-1], current_quad[1], current_quad[2])
@@ -180,7 +201,10 @@ while (instruction_pointer < len(quads)):
         left_operand, right_operand = None, None
         # check if it's a method quad
         if is_method_quad(current_quad[1]) or is_method_quad(current_quad[2]):
-            left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+            if len(memory_stack >= 2):
+                left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+            else:
+                left_operand, right_operand = get_method_binary_operands(memory_stack[-1], global_memory, current_quad[1], current_quad[2])
         else:
             left_operand, right_operand = get_binary_operands(
                 memory_stack[-1], current_quad[1], current_quad[2])
@@ -193,7 +217,10 @@ while (instruction_pointer < len(quads)):
         left_operand, right_operand = None, None
         # check if it's a method quad
         if is_method_quad(current_quad[1]) or is_method_quad(current_quad[2]):
-            left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+            if len(memory_stack) >= 2:
+                left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+            else:
+                left_operand, right_operand = get_method_binary_operands(memory_stack[-1], global_memory, current_quad[1], current_quad[2])
         else:
             left_operand, right_operand = get_binary_operands(
                 memory_stack[-1], current_quad[1], current_quad[2])
@@ -206,7 +233,10 @@ while (instruction_pointer < len(quads)):
         left_operand, right_operand = None, None
         # check if it's a method quad
         if is_method_quad(current_quad[1]) or is_method_quad(current_quad[2]):
-            left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+            if len(memory_stack) >= 2:
+                left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+            else:
+                left_operand, right_operand = get_method_binary_operands(memory_stack[-1], global_memory, current_quad[1], current_quad[2])
         else:
             left_operand, right_operand = get_binary_operands(
                 memory_stack[-1], current_quad[1], current_quad[2])
@@ -219,7 +249,10 @@ while (instruction_pointer < len(quads)):
         left_operand, right_operand = None, None
         # check if it's a method quad
         if is_method_quad(current_quad[1]) or is_method_quad(current_quad[2]):
-            left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+            if len(memory_stack) >= 2:
+                left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+            else:
+                left_operand, right_operand = get_method_binary_operands(memory_stack[-1], global_memory, current_quad[1], current_quad[2])
         else:
             left_operand, right_operand = get_binary_operands(
                 memory_stack[-1], current_quad[1], current_quad[2])
@@ -232,7 +265,10 @@ while (instruction_pointer < len(quads)):
         left_operand, right_operand = None, None
         # check if it's a method quad
         if is_method_quad(current_quad[1]) or is_method_quad(current_quad[2]):
-            left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+            if len(memory_stack) >= 2:
+                left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+            else:
+                left_operand, right_operand = get_method_binary_operands(memory_stack[-1], global_memory, current_quad[1], current_quad[2])
         else:
             left_operand, right_operand = get_binary_operands(
                 memory_stack[-1], current_quad[1], current_quad[2])
@@ -245,7 +281,10 @@ while (instruction_pointer < len(quads)):
         left_operand, right_operand = None, None
         # check if it's a method quad
         if is_method_quad(current_quad[1]) or is_method_quad(current_quad[2]):
-            left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+            if len(memory_stack) >= 2:
+                left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+            else:
+                left_operand, right_operand = get_method_binary_operands(memory_stack[-1], global_memory, current_quad[1], current_quad[2])
         else:
             left_operand, right_operand = get_binary_operands(
                 memory_stack[-1], current_quad[1], current_quad[2])
@@ -258,7 +297,10 @@ while (instruction_pointer < len(quads)):
         left_operand, right_operand = None, None
         # check if it's a method quad
         if is_method_quad(current_quad[1]) or is_method_quad(current_quad[2]):
-            left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+            if len(memory_stack) >= 2:
+                left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+            else:
+                left_operand, right_operand = get_method_binary_operands(memory_stack[-1], global_memory, current_quad[1], current_quad[2])
         else:
             left_operand, right_operand = get_binary_operands(
                 memory_stack[-1], current_quad[1], current_quad[2])
@@ -271,7 +313,10 @@ while (instruction_pointer < len(quads)):
         left_operand, right_operand = None, None
         # check if it's a method quad
         if is_method_quad(current_quad[1]) or is_method_quad(current_quad[2]):
-            left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+            if len(memory_stack) >= 2:
+                left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+            else:
+                left_operand, right_operand = get_method_binary_operands(memory_stack[-1], global_memory, current_quad[1], current_quad[2])
         else:
             left_operand, right_operand = get_binary_operands(
                 memory_stack[-1], current_quad[1], current_quad[2])
@@ -287,7 +332,10 @@ while (instruction_pointer < len(quads)):
         left_operand, right_operand = None, None
         # check if it's a method quad
         if is_method_quad(current_quad[1]) or is_method_quad(current_quad[2]):
-            left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+            if len(memory_stack) >= 2:
+                left_operand, right_operand = get_method_binary_operands(memory_stack[-1], memory_stack[-2], current_quad[1], current_quad[2])
+            else:
+                left_operand, right_operand = get_method_binary_operands(memory_stack[-1], global_memory, current_quad[1], current_quad[2])
         else:
             left_operand, right_operand = get_binary_operands(
                 memory_stack[-1], current_quad[1], current_quad[2])
@@ -302,8 +350,12 @@ while (instruction_pointer < len(quads)):
     elif current_quad[0] == 'WRITE':
         to_write_type, to_write_value = None, None
         if is_method_quad(current_quad[3]):
-            to_write_type, to_write_value = get_type_and_value(
-                memory_stack[-2], current_quad[3][0])
+            if len(memory_stack) >= 2:
+                to_write_type, to_write_value = get_type_and_value(
+                    memory_stack[-2], current_quad[3][0])
+            else:
+                to_write_type, to_write_value = get_type_and_value(
+                    global_memory, current_quad[3][0])
         else:
             to_write_type, to_write_value = get_type_and_value(
                 memory_stack[-1], current_quad[3])
@@ -314,8 +366,12 @@ while (instruction_pointer < len(quads)):
         to_save_type, to_save_value = None, None
         flag_method_quad = is_method_quad(current_quad[3]) 
         if flag_method_quad:
-            to_save_type, to_save_value = get_type_and_value(
-                memory_stack[-2], current_quad[3][0])
+            if len(memory_stack) >= 2:
+                to_save_type, to_save_value = get_type_and_value(
+                    memory_stack[-2], current_quad[3][0])
+            else:
+                to_save_type, to_save_value = get_type_and_value(
+                    global_memory, current_quad[3][0])
         else:
             to_save_type, to_save_value = get_type_and_value(
                 memory_stack[-1], current_quad[3])
@@ -325,8 +381,12 @@ while (instruction_pointer < len(quads)):
             try:
                 to_save_value = int(to_save_value)
                 if flag_method_quad:
-                    set_value_in_memory(
-                        current_quad[3][0],  memory_stack[-2], to_save_value)
+                    if len(memory_stack) >= 2:
+                        set_value_in_memory(
+                            current_quad[3][0],  memory_stack[-2], to_save_value)
+                    else:
+                        set_value_in_memory(
+                            current_quad[3][0],  global_memory, to_save_value)
                 else:
                     set_value_in_memory(
                         current_quad[3],  memory_stack[-1], to_save_value)
@@ -341,8 +401,12 @@ while (instruction_pointer < len(quads)):
                         'Input type mismatch, expected: ' + to_save_type)
                 to_save_value = float(to_save_value)
                 if flag_method_quad:
-                    set_value_in_memory(
-                        current_quad[3][0],  memory_stack[-2], to_save_value)
+                    if len(memory_stack) >= 2:
+                        set_value_in_memory(
+                            current_quad[3][0],  memory_stack[-2], to_save_value)
+                    else:
+                        set_value_in_memory(
+                            current_quad[3][0],  global_memory, to_save_value)
                 else:
                     set_value_in_memory(
                         current_quad[3],  memory_stack[-1], to_save_value)
@@ -353,8 +417,12 @@ while (instruction_pointer < len(quads)):
             if to_save_value == 'true' or to_save_value == 'false':
                 to_save_value = to_save_value == 'true'
                 if flag_method_quad:
-                    set_value_in_memory(
-                        current_quad[3][0],  memory_stack[-2], to_save_value)
+                    if len(memory_stack) >= 2:
+                        set_value_in_memory(
+                            current_quad[3][0],  memory_stack[-2], to_save_value)
+                    else:
+                        set_value_in_memory(
+                            current_quad[3][0],  global_memory, to_save_value)
                 else:
                     set_value_in_memory(
                         current_quad[3],  memory_stack[-1], to_save_value)
@@ -368,8 +436,12 @@ while (instruction_pointer < len(quads)):
                     'Input type mismatch, expected: ' + to_save_type)
             else:
                 if flag_method_quad:
-                    set_value_in_memory(
-                        current_quad[3][0],  memory_stack[-2], to_save_value)
+                    if len(memory_stack) >= 2:
+                        set_value_in_memory(
+                            current_quad[3][0],  memory_stack[-2], to_save_value)
+                    else:
+                        set_value_in_memory(
+                            current_quad[3][0],  global_memory, to_save_value)
                 else:
                     set_value_in_memory(
                         current_quad[3],  memory_stack[-1], to_save_value)
@@ -385,8 +457,12 @@ while (instruction_pointer < len(quads)):
     elif current_quad[0] == 'GOTOF':
         condition_value = None
         if is_method_quad(current_quad[1]):
-            _, condition_value = get_type_and_value(
-            memory_stack[-2], current_quad[1][0])
+            if len(memory_stack) >= 2:
+                _, condition_value = get_type_and_value(
+                memory_stack[-2], current_quad[1][0])
+            else:
+                _, condition_value = get_type_and_value(
+                global_memory, current_quad[1][0])
         else:
             _, condition_value = get_type_and_value(
                 memory_stack[-1], current_quad[1])
@@ -398,8 +474,12 @@ while (instruction_pointer < len(quads)):
     elif current_quad[0] == 'GOTOT':
         condition_value = None
         if is_method_quad(current_quad[1]):
-            _, condition_value = get_type_and_value(
-            memory_stack[-2], current_quad[1][0])
+            if len(memory_stack) >= 2:
+                _, condition_value = get_type_and_value(
+                memory_stack[-2], current_quad[1][0])
+            else:
+                 _, condition_value = get_type_and_value(
+                global_memory, current_quad[1][0])
         else:
             _, condition_value = get_type_and_value(
                 memory_stack[-1], current_quad[1])
@@ -412,8 +492,12 @@ while (instruction_pointer < len(quads)):
         dim_size = current_quad[1]
         index_type, index_value = None, None
         if is_method_quad(current_quad[2]):
-            index_type, index_value = get_type_and_value(
-                memory_stack[-2], current_quad[2][0])
+            if len(memory_stack) >= 2:
+                index_type, index_value = get_type_and_value(
+                    memory_stack[-2], current_quad[2][0])
+            else:
+                index_type, index_value = get_type_and_value(
+                    global_memory, current_quad[2][0])
         else:
             index_type, index_value = get_type_and_value(
                 memory_stack[-1], current_quad[2])
@@ -450,8 +534,14 @@ while (instruction_pointer < len(quads)):
     elif current_quad[0] == 'PARAM':
         param_address = current_quad[1]
         param_index = current_quad[3]
-        param_type, param_value = get_type_and_value(
-            memory_stack[-1], param_address)
+        param_type, param_value = None, None
+        # if it's called from method
+        if memory_stack:
+            param_type, param_value = get_type_and_value(
+                memory_stack[-1], param_address)
+        else:
+            param_type, param_value = get_type_and_value(
+                global_memory, param_address)
         new_param_address = memories_to_be[-1][1][param_type]
         memories_to_be[-1][0].set_value_in_address(
             new_param_address, param_value)

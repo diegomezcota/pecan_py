@@ -8,164 +8,121 @@
           "variables_workspace": {
             "int": 1,
             "float": 0,
-            "string": 0,
+            "string": 2,
             "bool": 0
           }
         },
         "function_type": "void"
-      },
-      "fib": {
-        "vars_table": {},
-        "param_signature": [
-          "int"
-        ],
-        "workspace": {
-          "variables_workspace": {
-            "int": 2,
-            "float": 0,
-            "string": 0,
-            "bool": 0
-          },
-          "temps_workspace": {
-            "int": 5,
-            "float": 0,
-            "bool": 1,
-            "string": 0
-          }
-        },
-        "function_type": "int",
-        "start_quad": 1
       },
       "main": {
         "vars_table": {},
         "param_signature": [],
         "workspace": {
           "variables_workspace": {
-            "int": 2,
+            "int": 0,
             "float": 0,
             "string": 0,
             "bool": 0
           },
           "temps_workspace": {
-            "int": 3,
+            "int": 0,
             "float": 0,
-            "bool": 2,
+            "bool": 0,
             "string": 0
           }
         },
         "function_type": "void",
-        "start_quad": 19
+        "start_quad": 12
+      }
+    },
+    "Animal": {
+      "#global": {
+        "vars_table": {
+          "nombre": {
+            "data_type": "string",
+            "index": 0
+          },
+          "edad": {
+            "data_type": "int",
+            "index": 0
+          },
+          "tipo": {
+            "data_type": "string",
+            "index": 1
+          }
+        },
+        "param_signature": [],
+        "workspace": {
+          "int": 1,
+          "float": 0,
+          "bool": 0,
+          "string": 2
+        }
+      },
+      "constructor": {
+        "vars_table": {},
+        "param_signature": [
+          "string",
+          "int",
+          "string"
+        ],
+        "workspace": {
+          "variables_workspace": {
+            "int": 1,
+            "float": 0,
+            "string": 2,
+            "bool": 0
+          },
+          "temps_workspace": {
+            "int": 0,
+            "float": 0,
+            "bool": 0,
+            "string": 0
+          }
+        },
+        "start_quad": 2
       }
     }
   },
   "quads": [
     [
+      "SOLVE_GLOBAL_OBJ",
+      null,
+      null,
+      null
+    ],
+    [
       "GOTOMAIN",
       null,
       null,
-      19
+      12
     ],
     [
-      "<",
-      8000,
-      24001,
-      20000
-    ],
-    [
-      "GOTOF",
-      20000,
+      "=",
+      14000,
       null,
-      5
+      [
+        0,
+        "string"
+      ]
     ],
     [
       "=",
       8000,
       null,
-      8001
-    ],
-    [
-      "GOTO",
-      null,
-      null,
-      17
-    ],
-    [
-      "ERA",
-      null,
-      null,
-      "fib"
-    ],
-    [
-      "-",
-      8000,
-      24000,
-      16000
-    ],
-    [
-      "PARAM",
-      16000,
-      null,
-      0
-    ],
-    [
-      "GOSUB",
-      "fib",
-      null,
-      1
+      [
+        0,
+        "int"
+      ]
     ],
     [
       "=",
-      0,
+      14001,
       null,
-      16001
-    ],
-    [
-      "ERA",
-      null,
-      null,
-      "fib"
-    ],
-    [
-      "-",
-      8000,
-      24001,
-      16002
-    ],
-    [
-      "PARAM",
-      16002,
-      null,
-      0
-    ],
-    [
-      "GOSUB",
-      "fib",
-      null,
-      1
-    ],
-    [
-      "=",
-      0,
-      null,
-      16003
-    ],
-    [
-      "+",
-      16001,
-      16003,
-      16004
-    ],
-    [
-      "=",
-      16004,
-      null,
-      8001
-    ],
-    [
-      "=",
-      8001,
-      null,
-      0
+      [
+        1,
+        "string"
+      ]
     ],
     [
       "ENDFUNC",
@@ -174,144 +131,84 @@
       null
     ],
     [
-      "WRITE",
-      null,
-      null,
-      30000
-    ],
-    [
-      "READ",
-      null,
-      null,
-      8001
-    ],
-    [
-      "<",
-      8001,
-      24002,
-      20000
-    ],
-    [
-      "GOTOF",
-      20000,
-      null,
-      25
-    ],
-    [
-      "WRITE",
-      null,
-      null,
-      30001
-    ],
-    [
-      "GOTO",
-      null,
-      null,
-      39
-    ],
-    [
-      "WRITE",
-      null,
-      null,
-      30002
-    ],
-    [
-      "=",
-      24002,
-      null,
-      8000
-    ],
-    [
-      "=",
-      8001,
-      null,
-      16000
-    ],
-    [
-      "<",
-      8000,
-      16000,
-      20001
-    ],
-    [
-      "GOTOF",
-      20001,
-      null,
-      39
-    ],
-    [
-      "ERA",
-      null,
-      null,
-      "fib"
+      "ERA_OBJ_MET",
+      "shori",
+      {
+        "int": 0,
+        "float": null,
+        "bool": null,
+        "string": 6000
+      },
+      "Animal#constructor"
     ],
     [
       "PARAM",
-      8000,
+      30000,
       null,
       0
     ],
     [
-      "GOSUB",
-      "fib",
+      "PARAM",
+      24001,
       null,
       1
     ],
     [
-      "=",
-      0,
+      "PARAM",
+      30001,
       null,
-      16001
+      2
+    ],
+    [
+      "GOSUB_OBJ",
+      "Animal#constructor",
+      "shori",
+      2
+    ],
+    [
+      "GO_BACK_TO_SOLVE_GLOBAL_OBJ",
+      null,
+      null,
+      null
     ],
     [
       "WRITE",
       null,
       null,
-      16001
+      6000
     ],
     [
-      "+",
-      8000,
-      24000,
-      16002
+      "WRITE",
+      null,
+      null,
+      0
     ],
     [
-      "=",
-      16002,
-      null,
-      8000
-    ],
-    [
-      "=",
-      16002,
-      null,
-      8000
-    ],
-    [
-      "GOTO",
+      "WRITE",
       null,
       null,
-      28
+      6001
     ]
   ],
   "constants_summary": {
-    "int": 3,
+    "int": 2,
     "float": 0,
     "bool": 0,
-    "string": 3
+    "string": 2
   },
   "constants_table": {
     "int": {
       "1": 24000,
-      "2": 24001,
-      "0": 24002
+      "3": 24001
     },
     "float": {},
     "bool": {},
     "string": {
-      "Ingresa cuantos elementos de la serie de fibonacci quieres:": 30000,
-      "Solo se aceptan numeros positivos": 30001,
-      "Serie fibonacci:": 30002
+      "Tripsi": 30000,
+      "perringo": 30001
     }
-  }
+  },
+  "global_objects_constructors_start_quads": [
+    6
+  ]
 }

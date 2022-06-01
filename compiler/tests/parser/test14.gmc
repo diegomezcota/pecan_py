@@ -40,12 +40,11 @@ constructor Animal(string nombre, int edad) {
 }
 
 obj shori = Animal();
-obj trips = Animal();
 
 main() {
     obj brunis = Animal();
     obj lucas = Animal();
-    //shori.constructor_fake("Shori Mtz Celis", 5, "perro");
+    //shori.constructor_fake("Shori Mtz Celos", 5, "perro");
     brunis.constructor_fake("Bruno Gomez Cota", 8, "perro");
     brunis.set_nombre("Calypso");
     write(brunis.get_nombre());
