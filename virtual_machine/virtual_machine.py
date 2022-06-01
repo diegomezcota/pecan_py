@@ -132,6 +132,7 @@ while (instruction_pointer < len(quads)):
             continue
     if current_quad[0] == 'GO_BACK_TO_SOLVE_GLOBAL_OBJ':
         instruction_pointer = 0
+        continue
     # GOTOMAIN execution
     if current_quad[0] == 'GOTOMAIN':
         main_vw = ovejota_manager.get_variable_workspace('#global', 'main')

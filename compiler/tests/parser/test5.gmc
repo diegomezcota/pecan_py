@@ -1,23 +1,27 @@
 // Test 5: dedicado a usar llamadas a funciones (read, write, funciones definidas o de clase)
 program test5;
 
-function sayHi(var string text) returns void {
+function sayHi(string text) returns void {
     var int times;
     write(text);
+    return;
 }
 
 // Requisito para la clase es que tenga atributos y funciones
 class Saludador {
     var float a;
-    function run(var string text, var int times) returns void;
 };
 
 constructor Saludador() {
-    a = b;
+    $a = 10.2;
 }
 
-@class Saludador function run(var string text, var int times) returns void {
-    return a;
+@class Saludador function run(string text, int times) returns void {
+    var int i;
+    for i = 0 to times {
+        write(text);
+    }
+    return;
 }
 
 main() {
@@ -27,7 +31,7 @@ main() {
     obj saludador = Saludador();
 
     read(a, b, c);
-    write(6 * 14.3 + a || c, c, b);
+    write(6 * 14.3 + a, c, b);
 
     sayHi("Como estan todos?");
     saludador.run("Hola", 4); 

@@ -10,5 +10,4 @@ main() {
     write(mat[0][1]);
     write(vect[0]);
     write(mat[3][1]);
-    //write(mat[0][2]);
 }

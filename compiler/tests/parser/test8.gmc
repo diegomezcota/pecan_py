@@ -10,14 +10,6 @@ constructor Animal(string nombre, int edad) {
     $nombre = nombre;
     $edad = edad;
     $tipo = "trips";
-    write("tripsi");
-}
-
-@class Animal function constructor_fake(string nombre, int edad, string tipo) returns void {
-    $nombre = nombre;
-    $edad = edad;
-    $tipo = tipo;
-    return;
 }
 
 // hay que bloquear la definicion del mismo tipo en un metodo de la clase
@@ -39,15 +31,14 @@ constructor Animal(string nombre, int edad) {
     return;
 }
 
-obj shori = Animal();
-obj trips = Animal();
+
+obj shori = Animal("Shori", 4);
+obj trips = Animal("Trips", 5);
 
 main() {
-    obj brunis = Animal();
-    obj lucas = Animal();
-    //shori.constructor_fake("Shori Mtz Celis", 5, "perro");
-    brunis.constructor_fake("Bruno Gomez Cota", 8, "perro");
+    obj brunis = Animal("Bruni", 8);
+    obj lucas = Animal("Pelucas", 15);
     brunis.set_nombre("Calypso");
-    write(brunis.get_nombre());
-    //write(brunis.get_nombre());
+    write("PASANDO LISTA");
+    write(brunis.get_nombre(), lucas.get_nombre(), shori.get_nombre(), trips.get_nombre());
 }
