@@ -554,7 +554,7 @@ while (instruction_pointer < len(quads)):
     
     # ERA_OBJ_MET execution (for class methods)
     elif current_quad[0] == 'ERA_OBJ_MET':
-        object_scope = current_quad[1] # helps us see where it was declares (global, main, etc)
+        object_scope = current_quad[1] # helps us see where it was declared (global, main, etc)
         object_base_addresses = current_quad[2] # helps us see the specific base addresses for the object calling the method
         function_codename = current_quad[3]
         class_name = function_codename.split('#')[0]
@@ -574,9 +574,6 @@ while (instruction_pointer < len(quads)):
     
     # GOSUB_OBJ execution (for class methods)
     elif current_quad[0] == 'GOSUB_OBJ':
-        # TODO: En clean quad adresses pasar las addreses checando las memorias, o podria ser en todos los cuadruplos
-        # TODO: cambiar erab_obj_met[2] a las direcciones base de ese objeto
-        # TODO: crear stacks para guardar era_obj_method[2][3]
         class_method_name = current_quad[1]
         object_var_name = current_quad[2]
         method_start_quad = current_quad[3]

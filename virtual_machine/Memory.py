@@ -71,7 +71,10 @@ class LocalMemory:
 
         return (table_scope, data_type, address-type_offset)
     
-    #TODO: Documentar
+    # function para settear información extra para las memorias que corresponden a un método de una clase
+    # entradas: 
+    #   object_scope:   a qué scope pertenece el objeto llamando el método (global, main, function1, etc..)
+    #   object_base_addresses: mapa de base addresses para los tipos del objeto llamando el método
     def set_object_characteristics(self, object_scope, object_base_addresses):
         self.object = {
             'object_scope' : object_scope,

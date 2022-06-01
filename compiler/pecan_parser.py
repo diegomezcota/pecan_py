@@ -527,7 +527,7 @@ def p_np_check_class_existence(p):
             current_general_scope, current_internal_scope, current_var_name, attriibute_name, attribute_map['data_type'], new_address)
     # Do era
     current_function_call_name = class_to_instance + '#' + 'constructor'
-    current_function_call_name_stack.append(current_function_call_name) # TODO: poppearlo al final
+    current_function_call_name_stack.append(current_function_call_name)
     # get direcciones base de cada tipo de ese objeto
     attribute_base_addresses = function_directory.get_initial_attribute_addresses_type(current_general_scope, current_internal_scope, current_var_name)
     # If current general scope is global, add start quad to be solved in execution
