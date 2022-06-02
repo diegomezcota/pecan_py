@@ -2,130 +2,37 @@
   "function_directory": {
     "#global": {
       "#global": {
-        "vars_table": {
-          "i": {
-            "var_type": "group",
-            "var_data_type": "int",
-            "var_virtual_address": 0,
-            "dim_list": [
-              {
-                "dim": 1,
-                "size": 10,
-                "m": 1.0
-              }
-            ],
-            "r": 1.0,
-            "group_size": 10
-          },
-          "Animal#get_nombre": {
-            "var_type": "var",
-            "var_data_type": "string",
-            "var_virtual_address": 6000
-          },
-          "gato": {
-            "var_type": "obj",
-            "var_data_type": "Animal",
-            "attributes": {
-              "nombre": {
-                "data_type": "string",
-                "address": 6001
-              },
-              "edad": {
-                "data_type": "int",
-                "address": 10
-              },
-              "tipo": {
-                "data_type": "string",
-                "address": 6002
-              }
-            }
-          },
-          "trips": {
-            "var_type": "obj",
-            "var_data_type": "Animal",
-            "attributes": {
-              "nombre": {
-                "data_type": "string",
-                "address": 6003
-              },
-              "edad": {
-                "data_type": "int",
-                "address": 11
-              },
-              "tipo": {
-                "data_type": "string",
-                "address": 6004
-              }
-            }
-          }
-        },
+        "vars_table": {},
         "param_signature": [],
         "workspace": {
           "variables_workspace": {
-            "int": 12,
+            "int": 3,
             "float": 0,
-            "string": 5,
+            "string": 6,
             "bool": 0
           }
         },
         "function_type": "void"
       },
       "main": {
-        "vars_table": {
-          "brunis": {
-            "var_type": "obj",
-            "var_data_type": "Animal",
-            "attributes": {
-              "nombre": {
-                "data_type": "string",
-                "address": 14000
-              },
-              "edad": {
-                "data_type": "int",
-                "address": 8000
-              },
-              "tipo": {
-                "data_type": "string",
-                "address": 14001
-              }
-            }
-          },
-          "lucas": {
-            "var_type": "obj",
-            "var_data_type": "Animal",
-            "attributes": {
-              "nombre": {
-                "data_type": "string",
-                "address": 14002
-              },
-              "edad": {
-                "data_type": "int",
-                "address": 8001
-              },
-              "tipo": {
-                "data_type": "string",
-                "address": 14003
-              }
-            }
-          }
-        },
+        "vars_table": {},
         "param_signature": [],
         "workspace": {
           "variables_workspace": {
-            "int": 2,
+            "int": 0,
             "float": 0,
-            "string": 4,
+            "string": 0,
             "bool": 0
           },
           "temps_workspace": {
             "int": 0,
             "float": 0,
             "bool": 0,
-            "string": 3
+            "string": 0
           }
         },
         "function_type": "void",
-        "start_quad": 50
+        "start_quad": 29
       }
     },
     "Animal": {
@@ -153,54 +60,65 @@
         }
       },
       "constructor": {
-        "vars_table": {
-          "nombre": {
-            "var_type": "var",
-            "var_data_type": "string",
-            "var_virtual_address": 14000
-          },
-          "edad": {
-            "var_type": "var",
-            "var_data_type": "int",
-            "var_virtual_address": 8000
-          }
-        },
+        "vars_table": {},
         "param_signature": [
           "string",
-          "int"
+          "int",
+          "string"
         ],
         "workspace": {
           "variables_workspace": {
             "int": 1,
             "float": 0,
-            "string": 1,
+            "string": 2,
             "bool": 0
           },
           "temps_workspace": {
-            "int": 2,
+            "int": 0,
             "float": 0,
             "bool": 0,
             "string": 0
           }
         },
         "start_quad": 2
-      },
-      "set_nombre": {
+      }
+    },
+    "Animal2": {
+      "#global": {
         "vars_table": {
           "nombre": {
-            "var_type": "var",
-            "var_data_type": "string",
-            "var_virtual_address": 14000
+            "data_type": "string",
+            "index": 0
+          },
+          "edad": {
+            "data_type": "int",
+            "index": 0
+          },
+          "tipo": {
+            "data_type": "string",
+            "index": 1
           }
         },
+        "param_signature": [],
+        "workspace": {
+          "int": 1,
+          "float": 0,
+          "bool": 0,
+          "string": 2
+        }
+      },
+      "constructor": {
+        "vars_table": {},
         "param_signature": [
+          "string",
+          "int",
           "string"
         ],
         "workspace": {
           "variables_workspace": {
-            "int": 0,
+            "int": 1,
             "float": 0,
-            "string": 1,
+            "string": 2,
             "bool": 0
           },
           "temps_workspace": {
@@ -210,61 +128,7 @@
             "string": 0
           }
         },
-        "function_type": "void",
-        "start_quad": 10
-      },
-      "get_nombre": {
-        "vars_table": {},
-        "param_signature": [],
-        "workspace": {
-          "variables_workspace": {
-            "int": 0,
-            "float": 0,
-            "string": 0,
-            "bool": 0
-          },
-          "temps_workspace": {
-            "int": 0,
-            "float": 0,
-            "bool": 0,
-            "string": 0
-          }
-        },
-        "function_type": "string",
-        "start_quad": 17
-      },
-      "comer": {
-        "vars_table": {
-          "iTimes": {
-            "var_type": "var",
-            "var_data_type": "int",
-            "var_virtual_address": 8000
-          },
-          "i": {
-            "var_type": "var",
-            "var_data_type": "int",
-            "var_virtual_address": 8001
-          }
-        },
-        "param_signature": [
-          "int"
-        ],
-        "workspace": {
-          "variables_workspace": {
-            "int": 2,
-            "float": 0,
-            "string": 0,
-            "bool": 0
-          },
-          "temps_workspace": {
-            "int": 3,
-            "float": 0,
-            "bool": 1,
-            "string": 0
-          }
-        },
-        "function_type": "void",
-        "start_quad": 19
+        "start_quad": 12
       }
     }
   },
@@ -279,7 +143,7 @@
       "GOTOMAIN",
       null,
       null,
-      42
+      29
     ],
     [
       "=",
@@ -301,36 +165,12 @@
     ],
     [
       "=",
-      30000,
+      14001,
       null,
       [
         1,
         "string"
       ]
-    ],
-    [
-      "VERIFY",
-      10,
-      24002,
-      null
-    ],
-    [
-      "*",
-      24002,
-      24000,
-      16000
-    ],
-    [
-      "+",
-      16000,
-      24002,
-      16001
-    ],
-    [
-      "WRITE",
-      null,
-      null,
-      "&16001"
     ],
     [
       "ENDFUNC",
@@ -339,37 +179,51 @@
       null
     ],
     [
-      "WRITE",
+      "ERA_OBJ_MET",
+      "a",
+      {
+        "int": 0,
+        "float": null,
+        "bool": null,
+        "string": 6000
+      },
+      "Animal#constructor"
+    ],
+    [
+      "PARAM",
+      30000,
+      null,
+      0
+    ],
+    [
+      "PARAM",
+      24001,
+      null,
+      1
+    ],
+    [
+      "PARAM",
+      30000,
+      null,
+      2
+    ],
+    [
+      "GOSUB_OBJ",
+      "Animal#constructor",
+      "a",
+      2
+    ],
+    [
+      "GO_BACK_TO_SOLVE_GLOBAL_OBJ",
       null,
       null,
-      30001
+      null
     ],
     [
       "WRITE",
       null,
       null,
-      30002
-    ],
-    [
-      "WRITE",
-      null,
-      null,
-      [
-        0,
-        "string"
-      ]
-    ],
-    [
-      "WRITE",
-      null,
-      null,
-      30003
-    ],
-    [
-      "WRITE",
-      null,
-      null,
-      14000
+      6000
     ],
     [
       "=",
@@ -381,100 +235,22 @@
       ]
     ],
     [
-      "ENDFUNC",
-      null,
-      null,
-      null
-    ],
-    [
-      "=",
-      [
-        0,
-        "string"
-      ],
-      null,
-      6000
-    ],
-    [
-      "ENDFUNC",
-      null,
-      null,
-      null
-    ],
-    [
-      "=",
-      24002,
-      null,
-      8001
-    ],
-    [
       "=",
       8000,
       null,
-      16000
-    ],
-    [
-      "<",
-      8001,
-      16000,
-      20000
-    ],
-    [
-      "GOTOF",
-      20000,
-      null,
-      31
-    ],
-    [
-      "+",
-      8001,
-      24000,
-      16001
-    ],
-    [
-      "WRITE",
-      null,
-      null,
-      16001
-    ],
-    [
-      "WRITE",
-      null,
-      null,
       [
         0,
-        "string"
+        "int"
       ]
     ],
     [
-      "WRITE",
-      null,
-      null,
-      30004
-    ],
-    [
-      "+",
-      8001,
-      24000,
-      16002
-    ],
-    [
       "=",
-      16002,
+      14001,
       null,
-      8001
-    ],
-    [
-      "=",
-      16002,
-      null,
-      8001
-    ],
-    [
-      "GOTO",
-      null,
-      null,
-      21
+      [
+        1,
+        "string"
+      ]
     ],
     [
       "ENDFUNC",
@@ -484,18 +260,59 @@
     ],
     [
       "ERA_OBJ_MET",
-      "gato",
+      "lambda",
       {
-        "int": 10,
+        "int": 1,
         "float": null,
         "bool": null,
-        "string": 6001
+        "string": 6002
       },
       "Animal#constructor"
     ],
     [
       "PARAM",
-      30005,
+      30001,
+      null,
+      0
+    ],
+    [
+      "PARAM",
+      24002,
+      null,
+      1
+    ],
+    [
+      "PARAM",
+      30002,
+      null,
+      2
+    ],
+    [
+      "GOSUB_OBJ",
+      "Animal#constructor",
+      "lambda",
+      2
+    ],
+    [
+      "GO_BACK_TO_SOLVE_GLOBAL_OBJ",
+      null,
+      null,
+      null
+    ],
+    [
+      "ERA_OBJ_MET",
+      "nala",
+      {
+        "int": 2,
+        "float": null,
+        "bool": null,
+        "string": 6004
+      },
+      "Animal2#constructor"
+    ],
+    [
+      "PARAM",
+      30003,
       null,
       0
     ],
@@ -506,10 +323,16 @@
       1
     ],
     [
-      "GOSUB_OBJ",
-      "Animal#constructor",
-      "gato",
+      "PARAM",
+      30004,
+      null,
       2
+    ],
+    [
+      "GOSUB_OBJ",
+      "Animal2#constructor",
+      "nala",
+      12
     ],
     [
       "GO_BACK_TO_SOLVE_GLOBAL_OBJ",
@@ -518,249 +341,38 @@
       null
     ],
     [
-      "ERA_OBJ_MET",
-      "trips",
-      {
-        "int": 11,
-        "float": null,
-        "bool": null,
-        "string": 6003
-      },
-      "Animal#constructor"
-    ],
-    [
-      "PARAM",
-      30006,
-      null,
-      0
-    ],
-    [
-      "PARAM",
-      24004,
-      null,
-      1
-    ],
-    [
-      "GOSUB_OBJ",
-      "Animal#constructor",
-      "trips",
-      2
-    ],
-    [
-      "GO_BACK_TO_SOLVE_GLOBAL_OBJ",
-      null,
-      null,
-      null
-    ],
-    [
-      "ERA_OBJ_MET",
-      "brunis",
-      {
-        "int": 8000,
-        "float": null,
-        "bool": null,
-        "string": 14000
-      },
-      "Animal#constructor"
-    ],
-    [
-      "PARAM",
-      30007,
-      null,
-      0
-    ],
-    [
-      "PARAM",
-      24005,
-      null,
-      1
-    ],
-    [
-      "GOSUB_OBJ",
-      "Animal#constructor",
-      "brunis",
-      2
-    ],
-    [
-      "ERA_OBJ_MET",
-      "lucas",
-      {
-        "int": 8001,
-        "float": null,
-        "bool": null,
-        "string": 14002
-      },
-      "Animal#constructor"
-    ],
-    [
-      "PARAM",
-      30008,
-      null,
-      0
-    ],
-    [
-      "PARAM",
-      24006,
-      null,
-      1
-    ],
-    [
-      "GOSUB_OBJ",
-      "Animal#constructor",
-      "lucas",
-      2
-    ],
-    [
-      "ERA_OBJ_MET",
-      "main",
-      {
-        "int": 8000,
-        "float": null,
-        "bool": null,
-        "string": 14000
-      },
-      "Animal#set_nombre"
-    ],
-    [
-      "PARAM",
-      30009,
-      null,
-      0
-    ],
-    [
-      "GOSUB_OBJ",
-      "set_nombre",
-      "brunis",
-      10
-    ],
-    [
       "WRITE",
       null,
       null,
-      30010
-    ],
-    [
-      "ERA_OBJ_MET",
-      "main",
-      {
-        "int": 8000,
-        "float": null,
-        "bool": null,
-        "string": 14000
-      },
-      "Animal#get_nombre"
-    ],
-    [
-      "GOSUB_OBJ",
-      "get_nombre",
-      "brunis",
-      17
-    ],
-    [
-      "=",
-      6000,
-      null,
-      22000
-    ],
-    [
-      "WRITE",
-      null,
-      null,
-      22000
-    ],
-    [
-      "ERA_OBJ_MET",
-      "main",
-      {
-        "int": 8001,
-        "float": null,
-        "bool": null,
-        "string": 14002
-      },
-      "Animal#get_nombre"
-    ],
-    [
-      "GOSUB_OBJ",
-      "get_nombre",
-      "lucas",
-      17
-    ],
-    [
-      "=",
-      6000,
-      null,
-      22001
-    ],
-    [
-      "WRITE",
-      null,
-      null,
-      22001
-    ],
-    [
-      "ERA_OBJ_MET",
-      "#global",
-      {
-        "int": 11,
-        "float": null,
-        "bool": null,
-        "string": 6003
-      },
-      "Animal#get_nombre"
-    ],
-    [
-      "GOSUB_OBJ",
-      "get_nombre",
-      "trips",
-      17
-    ],
-    [
-      "=",
-      6000,
-      null,
-      22002
-    ],
-    [
-      "WRITE",
-      null,
-      null,
-      22002
+      6002
     ]
   ],
   "constants_summary": {
-    "int": 7,
+    "int": 4,
     "float": 0,
     "bool": 0,
-    "string": 11
+    "string": 5
   },
   "constants_table": {
     "int": {
       "1": 24000,
-      "10": 24001,
-      "0": 24002,
-      "4": 24003,
-      "5": 24004,
-      "8": 24005,
-      "15": 24006
+      "9": 24001,
+      "4": 24002,
+      "5": 24003
     },
     "float": {},
     "bool": {},
     "string": {
-      "trips": 30000,
-      "Cambiando nombre...": 30001,
-      "Viejo nombre:": 30002,
-      "Nuevo nombre:": 30003,
-      "esta comiendo...": 30004,
-      "Lambda": 30005,
-      "Trips": 30006,
-      "Bruni": 30007,
-      "Pelucas": 30008,
-      "Calypso": 30009,
-      "PASANDO LISTA": 30010
+      "a": 30000,
+      "Lambda": 30001,
+      "gato": 30002,
+      "Nala": 30003,
+      "perro": 30004
     }
   },
   "global_objects_constructors_start_quads": [
-    32,
-    37
+    6,
+    17,
+    23
   ]
 }

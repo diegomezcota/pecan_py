@@ -12,9 +12,24 @@ constructor Animal(string nombre, int edad, string tipo) {
     $tipo = tipo;
 }
 
+obj a = Animal("a", 9, "a");
+
+class Animal2 {
+    var string nombre;
+    var int edad;
+    var string tipo;
+};
+
+constructor Animal2(string nombre, int edad, string tipo) {
+    write(a.nombre);
+    $nombre = nombre;
+    $edad = edad;
+    $tipo = tipo;
+}
+
 
 obj lambda = Animal("Lambda", 4, "gato");
-obj nala = Animal("Nala", 5, "perro");
+obj nala = Animal2("Nala", 5, "perro");
 
 main() {
     write(lambda.nombre);
