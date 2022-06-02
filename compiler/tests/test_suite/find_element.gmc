@@ -23,7 +23,7 @@ main() {
     var float x;
     var float which;
     // ingresar elementos
-    write("Elementos a ingresar:", 3);
+    write("Elementos (flotantes) a ingresar:", 3);
     for i = 0 to 3 {
         write("Ingrese el elemento del arreglo:");
         read(x);

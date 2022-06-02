@@ -41,7 +41,7 @@ def p_program(p):
     '''
     program : PROGRAM np_start_state np_start_func_dir ID SEMICOLON declaration_loop main_function
     '''
-    print(*quads.list, sep='\n')
+    #print(*quads.list, sep='\n')
     #print(json.dumps(function_directory.table, indent=4))
 
     function_directory.generate_variable_workspace('#global', '#global')
@@ -233,10 +233,10 @@ def p_variable1(p):
             else:
                 raise Exception(
                     'Object has no attribute named: ' + var_attribute_name)
-        elif (function_directory.has_variable(current_general_scope, '#global', p[-1])):
-            if (function_directory.variable_has_attribute(current_general_scope, '#global', var_name, var_attribute_name)):
+        elif (function_directory.has_variable('#global', '#global', p[-1])):
+            if (function_directory.variable_has_attribute('#global', '#global', var_name, var_attribute_name)):
                 p[0] = function_directory.get_attribute_type_and_address(
-                    current_general_scope, '#global', var_name, var_attribute_name)
+                    '#global', '#global', var_name, var_attribute_name)
             else:
                 raise Exception(
                     'Object has no attribute named: ' + var_attribute_name)
@@ -268,8 +268,8 @@ def p_np_array_access1(p):
         variable_address, variable_data_type = variable_map[
             'var_virtual_address'], variable_map['var_data_type']
         current_group_internal_scope = current_internal_scope
-    elif (function_directory.has_variable(current_general_scope, '#global', p[-1])):
-        variable_map = function_directory.table[current_general_scope]['#global']['vars_table'][p[-1]]
+    elif (function_directory.has_variable('#global', '#global', p[-1])):
+        variable_map = function_directory.table['#global']['#global']['vars_table'][p[-1]]
         variable_address, variable_data_type = variable_map[
             'var_virtual_address'], variable_map['var_data_type']
         current_group_internal_scope = '#global'
@@ -287,8 +287,13 @@ def p_np_array_access2(p):
     '''
 
     group_id_address, _ = operand_stack.pop()
-    group_dim = function_directory.get_group_dimensions(
-        current_general_scope, current_group_internal_scope, current_var_name)
+    group_dim = None
+    if function_directory.has_variable(current_general_scope, current_internal_scope, current_var_name):   
+        group_dim = function_directory.get_group_dimensions(
+            current_general_scope, current_group_internal_scope, current_var_name)
+    else:
+        group_dim = function_directory.get_group_dimensions(
+            '#global', '#global', current_var_name)
 
     if group_dim > 0:
         dim_arr = [group_id_address, 1,
@@ -304,8 +309,13 @@ def p_np_array_access3(p):
     '''
     np_array_access3 : epsilon
     '''
+    general_scope = None
+    if function_directory.has_variable(current_general_scope, current_internal_scope, current_var_name):
+        general_scope = current_general_scope
+    else:
+        general_scope = '#global'
     dim_size = function_directory.get_dim_size(
-        current_general_scope, dim_stack[-1][2], dim_stack[-1][3], dim_stack[-1][1])
+            general_scope, dim_stack[-1][2], dim_stack[-1][3], dim_stack[-1][1])
     index = operand_stack[-1][0]
 
     quads.generate_quad('VERIFY', dim_size, index, None)
@@ -315,7 +325,7 @@ def p_np_array_access3(p):
         raise Exception('Can not index variable ' +
                         dim_stack[-1][3] + ' with type ' + aux_type)
     mdim = function_directory.get_m_dim(
-        current_general_scope, dim_stack[-1][2], dim_stack[-1][3], dim_stack[-1][1])
+        general_scope, dim_stack[-1][2], dim_stack[-1][3], dim_stack[-1][1])
     new_address = constants.get_constant_address('int', str(int(mdim)))
     temp_address = avail.get_new_address('int', 'temps')
     quads.generate_quad('*', aux_address, new_address, temp_address)
@@ -334,10 +344,14 @@ def p_np_array_access4(p):
     np_array_access4 : epsilon
     '''
     global dim_stack
-
+    general_scope = None
+    if function_directory.has_variable(current_general_scope, dim_stack[-1][2], dim_stack[-1][3]):
+        general_scope = current_general_scope
+    else:
+        general_scope = '#global'
     # dim_stack[-1][2] contiene el internal_scope del group
     # dim_stack[-1][3] contiene el nombre de la variable del group
-    if function_directory.get_group_dimensions(current_general_scope, dim_stack[-1][2], dim_stack[-1][3]) != 2:
+    if function_directory.get_group_dimensions(general_scope, dim_stack[-1][2], dim_stack[-1][3]) != 2:
         raise Exception(
             'Variable ' + dim_stack[-1][3] + ' has only one dimension')
     else:
@@ -348,11 +362,16 @@ def p_np_array_access5(p):
     '''
     np_array_access5 : epsilon
     '''
+    general_scope = None
+    if function_directory.has_variable(current_general_scope, dim_stack[-1][2], dim_stack[-1][3]):
+        general_scope = current_general_scope
+    else:
+        general_scope = '#global'
     aux1_address, _ = operand_stack.pop()
     group_virtual_address = function_directory.get_variable_virtual_address(
-        current_general_scope, dim_stack[-1][2], dim_stack[-1][3])
+        general_scope, dim_stack[-1][2], dim_stack[-1][3])
     group_type = function_directory.get_variable_data_type(
-        current_general_scope, dim_stack[-1][2], dim_stack[-1][3])
+        general_scope, dim_stack[-1][2], dim_stack[-1][3])
     new_address = None
     if not constants.has_constant('int', str(group_virtual_address)):
         new_address = avail.get_new_address('int', 'constants')
@@ -370,7 +389,7 @@ def p_np_array_access5(p):
 
 def p_class_declaration(p):
     '''
-    class_declaration   : CLASS ID np_create_class_scope class_declaration1 OPEN_KEY class_body np_set_object_summary CLOSE_KEY SEMICOLON constructor class_declaration2
+    class_declaration   : CLASS ID np_create_class_scope OPEN_KEY class_body np_set_object_summary CLOSE_KEY SEMICOLON constructor class_declaration2
     '''
     global current_general_scope, current_internal_scope
 
@@ -384,13 +403,6 @@ def p_np_set_object_summary(p):
     function_directory.set_object_summary(
         current_general_scope, '#global')
 
-
-def p_class_declaration1(p):
-    '''
-    class_declaration1  : IS ID
-                        | epsilon
-    '''
-    pass
 
 
 def p_class_declaration2(p):
@@ -997,7 +1009,7 @@ def p_np_for_1(p):
     var_data_type = None
     # Check existence for variable
     if not (function_directory.has_variable(current_general_scope, current_internal_scope, p[-1])):
-        if not (function_directory.has_variable(current_general_scope, '#global', p[-1])):
+        if not (function_directory.has_variable('#global', '#global', p[-1])):
             raise VariableNotDefined(
                 "Variable " + p[-1] + " not defined in line " + str(p.lineno(1)))
         else:

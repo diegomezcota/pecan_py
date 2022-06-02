@@ -162,6 +162,9 @@ class FunctionDirectory:
             'vars_table'][attribute_name]['index']
         return (attribute_type, attribute_index)
     
+    # funcion para obtener las direcciones iniciales de los atributos separadas por tipo
+    # entradas: scope general (clase o global), scope interno (nombre del metodo/función) y nombre del objeto
+    # salida: mapa resultado en el que se definen las direcciones base
     def get_initial_attribute_addresses_type(self, general_name, internal_name, var_name):
         result_map = {"int" : None, "float" : None, "bool" : None, "string" : None}
         object_attributes = self.table[general_name][internal_name]['vars_table'][var_name]['attributes']

@@ -1,9 +1,9 @@
 program a;
 
 group mat = int[4][5];
-group vect = int[2];
 
 main() {
+    group vect = int[2];
     vect[0] = 1;
     vect[1] = 2;
     mat[vect[vect[0]] + vect[0]][vect[0]] = 18;

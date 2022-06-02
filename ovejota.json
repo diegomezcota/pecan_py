@@ -1,3 +1,378 @@
 {
-  "error": "test 14 : 'Animal#constructor' function call expected 2 params but received 0 in line 42"
+  "function_directory": {
+    "#global": {
+      "#global": {
+        "vars_table": {},
+        "param_signature": [],
+        "workspace": {
+          "variables_workspace": {
+            "int": 3,
+            "float": 0,
+            "string": 6,
+            "bool": 0
+          }
+        },
+        "function_type": "void"
+      },
+      "main": {
+        "vars_table": {},
+        "param_signature": [],
+        "workspace": {
+          "variables_workspace": {
+            "int": 0,
+            "float": 0,
+            "string": 0,
+            "bool": 0
+          },
+          "temps_workspace": {
+            "int": 0,
+            "float": 0,
+            "bool": 0,
+            "string": 0
+          }
+        },
+        "function_type": "void",
+        "start_quad": 29
+      }
+    },
+    "Animal": {
+      "#global": {
+        "vars_table": {
+          "nombre": {
+            "data_type": "string",
+            "index": 0
+          },
+          "edad": {
+            "data_type": "int",
+            "index": 0
+          },
+          "tipo": {
+            "data_type": "string",
+            "index": 1
+          }
+        },
+        "param_signature": [],
+        "workspace": {
+          "int": 1,
+          "float": 0,
+          "bool": 0,
+          "string": 2
+        }
+      },
+      "constructor": {
+        "vars_table": {},
+        "param_signature": [
+          "string",
+          "int",
+          "string"
+        ],
+        "workspace": {
+          "variables_workspace": {
+            "int": 1,
+            "float": 0,
+            "string": 2,
+            "bool": 0
+          },
+          "temps_workspace": {
+            "int": 0,
+            "float": 0,
+            "bool": 0,
+            "string": 0
+          }
+        },
+        "start_quad": 2
+      }
+    },
+    "Animal2": {
+      "#global": {
+        "vars_table": {
+          "nombre": {
+            "data_type": "string",
+            "index": 0
+          },
+          "edad": {
+            "data_type": "int",
+            "index": 0
+          },
+          "tipo": {
+            "data_type": "string",
+            "index": 1
+          }
+        },
+        "param_signature": [],
+        "workspace": {
+          "int": 1,
+          "float": 0,
+          "bool": 0,
+          "string": 2
+        }
+      },
+      "constructor": {
+        "vars_table": {},
+        "param_signature": [
+          "string",
+          "int",
+          "string"
+        ],
+        "workspace": {
+          "variables_workspace": {
+            "int": 1,
+            "float": 0,
+            "string": 2,
+            "bool": 0
+          },
+          "temps_workspace": {
+            "int": 0,
+            "float": 0,
+            "bool": 0,
+            "string": 0
+          }
+        },
+        "start_quad": 12
+      }
+    }
+  },
+  "quads": [
+    [
+      "SOLVE_GLOBAL_OBJ",
+      null,
+      null,
+      null
+    ],
+    [
+      "GOTOMAIN",
+      null,
+      null,
+      29
+    ],
+    [
+      "=",
+      14000,
+      null,
+      [
+        0,
+        "string"
+      ]
+    ],
+    [
+      "=",
+      8000,
+      null,
+      [
+        0,
+        "int"
+      ]
+    ],
+    [
+      "=",
+      14001,
+      null,
+      [
+        1,
+        "string"
+      ]
+    ],
+    [
+      "ENDFUNC",
+      null,
+      null,
+      null
+    ],
+    [
+      "ERA_OBJ_MET",
+      "a",
+      {
+        "int": 0,
+        "float": null,
+        "bool": null,
+        "string": 6000
+      },
+      "Animal#constructor"
+    ],
+    [
+      "PARAM",
+      30000,
+      null,
+      0
+    ],
+    [
+      "PARAM",
+      24001,
+      null,
+      1
+    ],
+    [
+      "PARAM",
+      30000,
+      null,
+      2
+    ],
+    [
+      "GOSUB_OBJ",
+      "Animal#constructor",
+      "a",
+      2
+    ],
+    [
+      "GO_BACK_TO_SOLVE_GLOBAL_OBJ",
+      null,
+      null,
+      null
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      6000
+    ],
+    [
+      "=",
+      14000,
+      null,
+      [
+        0,
+        "string"
+      ]
+    ],
+    [
+      "=",
+      8000,
+      null,
+      [
+        0,
+        "int"
+      ]
+    ],
+    [
+      "=",
+      14001,
+      null,
+      [
+        1,
+        "string"
+      ]
+    ],
+    [
+      "ENDFUNC",
+      null,
+      null,
+      null
+    ],
+    [
+      "ERA_OBJ_MET",
+      "lambda",
+      {
+        "int": 1,
+        "float": null,
+        "bool": null,
+        "string": 6002
+      },
+      "Animal#constructor"
+    ],
+    [
+      "PARAM",
+      30001,
+      null,
+      0
+    ],
+    [
+      "PARAM",
+      24002,
+      null,
+      1
+    ],
+    [
+      "PARAM",
+      30002,
+      null,
+      2
+    ],
+    [
+      "GOSUB_OBJ",
+      "Animal#constructor",
+      "lambda",
+      2
+    ],
+    [
+      "GO_BACK_TO_SOLVE_GLOBAL_OBJ",
+      null,
+      null,
+      null
+    ],
+    [
+      "ERA_OBJ_MET",
+      "nala",
+      {
+        "int": 2,
+        "float": null,
+        "bool": null,
+        "string": 6004
+      },
+      "Animal2#constructor"
+    ],
+    [
+      "PARAM",
+      30003,
+      null,
+      0
+    ],
+    [
+      "PARAM",
+      24003,
+      null,
+      1
+    ],
+    [
+      "PARAM",
+      30004,
+      null,
+      2
+    ],
+    [
+      "GOSUB_OBJ",
+      "Animal2#constructor",
+      "nala",
+      12
+    ],
+    [
+      "GO_BACK_TO_SOLVE_GLOBAL_OBJ",
+      null,
+      null,
+      null
+    ],
+    [
+      "WRITE",
+      null,
+      null,
+      6002
+    ]
+  ],
+  "constants_summary": {
+    "int": 4,
+    "float": 0,
+    "bool": 0,
+    "string": 5
+  },
+  "constants_table": {
+    "int": {
+      "1": 24000,
+      "9": 24001,
+      "4": 24002,
+      "5": 24003
+    },
+    "float": {},
+    "bool": {},
+    "string": {
+      "a": 30000,
+      "Lambda": 30001,
+      "gato": 30002,
+      "Nala": 30003,
+      "perro": 30004
+    }
+  },
+  "global_objects_constructors_start_quads": [
+    6,
+    17,
+    23
+  ]
 }

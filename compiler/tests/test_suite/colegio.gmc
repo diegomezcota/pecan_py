@@ -1,0 +1,48 @@
+program colegio;
+
+class Alumno {
+    var string nombre;
+    var int edad;
+    var bool menor_de_edad;
+    var bool esta_enfermo;
+};
+
+constructor Alumno(string nombre, int edad) {
+    $nombre = nombre;
+    $edad = edad;
+    $menor_de_edad = edad < 18;
+    $esta_enfermo = false;
+}
+
+obj diego = Alumno("Diego Gomez Cota", 17);
+obj mariana = Alumno("Mariana Martinez Celis Gonzales", 18);
+
+function viajar() returns void {
+    diego.esta_enfermo = diego.menor_de_edad; 
+    mariana.esta_enfermo = mariana.menor_de_edad; 
+    return;
+}
+
+function contestarLista(bool estaEnfermo) returns string {
+    var string respuesta;
+    if (estaEnfermo) {
+        respuesta = "Esta enferm@, no vino :(";
+    } else {
+        respuesta = "Presente!";
+    }
+    return respuesta;
+}
+
+function tomarLista() returns void {
+    write("TOMANDO LISTA...");
+    write("Diego?...");
+    write(contestarLista(diego.esta_enfermo));
+    write("Mariana?...");
+    write(contestarLista(mariana.esta_enfermo));
+    return;
+}
+
+main() {
+    viajar();
+    tomarLista();
+}
