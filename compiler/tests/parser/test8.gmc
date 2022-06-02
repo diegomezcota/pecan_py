@@ -1,5 +1,7 @@
 program a;
 
+group i = int[10];
+
 class Animal {
     var string nombre;
     var int edad;
@@ -10,6 +12,7 @@ constructor Animal(string nombre, int edad) {
     $nombre = nombre;
     $edad = edad;
     $tipo = "trips";
+    write(i[0]);
 }
 
 // hay que bloquear la definicion del mismo tipo en un metodo de la clase
@@ -32,7 +35,7 @@ constructor Animal(string nombre, int edad) {
 }
 
 
-obj shori = Animal("Shori", 4);
+obj gato = Animal("Lambda", 4);
 obj trips = Animal("Trips", 5);
 
 main() {
@@ -40,5 +43,5 @@ main() {
     obj lucas = Animal("Pelucas", 15);
     brunis.set_nombre("Calypso");
     write("PASANDO LISTA");
-    write(brunis.get_nombre(), lucas.get_nombre(), shori.get_nombre(), trips.get_nombre());
+    write(brunis.get_nombre(), lucas.get_nombre(), trips.get_nombre());
 }
