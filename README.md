@@ -101,3 +101,11 @@ Añadición de métodos de ayuda para separar bloques contiguos de memoria.
 
 ### virtual_machine.py
 Implementación de función para pointers que nos ayuda a hacer el indexamiento indirecto. Ejecución de los códigos de operación de funciones, apoyándonos con un stack de memoria.
+
+## Avance 8: Avance de Documentación y Ejecución de aplicación particular
+
+### pecan_parser.py, function_directory.py
+Generación de código intermedio y chequeos semánticos para soportar toda la funcionalidad de objetos. Manejo de scopes, salvar workspaces de memoria necesaria y creación de cuádruplos específicos que nos ayudaron a hacer el direccionamiento correcto para el futuro acceso y modificación en la memoria de ejecución.
+
+### virtual_machine.py, Memory.py
+Ejecución de código de objetos, resolver cuádruplos de constructores globales, métodos específicos de redireccionamiento de memoria de un objeto entre scopes, chequeos que preveen errores de ejecución como stack overflow.
